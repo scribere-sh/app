@@ -1,0 +1,30 @@
+{
+	"editor.semanticTokenColorCustomizations": {
+		"enabled": true
+	},
+
+	"[svelte]": {
+		"editor.defaultFormatter": "svelte.svelte-vscode"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+
+	"svelte.enable-ts-plugin": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+
+	"tailwindCSS.includeLanguages": {
+		"svelte": "html"
+	},
+	"tailwindCSS.emmetCompletions": true,
+
+	"eslint.useFlatConfig": true,
+	"eslint.validate": ["javascript", "typescript", "svelte"],
+	"tailwindCSS.classFunctions": ["tv", "cn"],
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	}
+}

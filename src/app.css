@@ -1,0 +1,66 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@plugin '@tailwindcss/typography';
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@layer theme, base, components, utilities;
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+	--background: #eee;
+	--foreground: #111;
+
+	--sidebar: 24;
+
+	@variant dark {
+		--background: #111;
+		--foreground: #eee;
+	}
+}
+
+@theme {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+
+	--color-primary: grey;
+	--color-primary-foreground: white;
+
+	--spacing-sidebar: calc(var(--spacing) * var(--sidebar));
+
+	/* animations */
+
+	--animate-accordion-down: accordion-down 0.2s ease-out;
+	--animate-accordion-up: accordion-up 0.2s ease-out;
+	--animate-caret-blink: caret-blink 1.25s ease-out infinite;
+	--animate-spinner-stroke: spinner-stroke 1.5s linear infinite;
+
+	/* keyframes */
+
+	@keyframes spinner-stroke {
+		0% {
+			stroke-dasharray: 1px, 200px;
+			stroke-dashoffset: 0;
+		}
+
+		50% {
+			stroke-dasharray: 100px, 200px;
+			stroke-dashoffset: -15px;
+		}
+
+		100% {
+			stroke-dasharray: 1px, 200px;
+			stroke-dashoffset: -126px;
+		}
+	}
+}
+
+@layer base {
+	a {
+		@apply underline underline-offset-2;
+	}
+}
