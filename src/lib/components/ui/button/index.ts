@@ -5,7 +5,7 @@ import type { HTMLAnchorAttributes, HTMLButtonAttributes } from 'svelte/elements
 import { tv, type VariantProps } from 'tailwind-variants';
 
 export const buttonVariants = tv({
-	base: 'inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer',
+	base: 'inline-flex select-none items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer',
 	variants: {
 		variant: {
 			default: 'bg-primary text-primary-foreground hover:bg-primary/90',
@@ -15,6 +15,10 @@ export const buttonVariants = tv({
 			secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/90',
 			ghost: 'hover:bg-accent hover:text-accent-foreground',
 			link: 'text-primary underline-offset-4 hover:underline'
+		},
+		rounded: {
+			default: 'rounded-md',
+			pill: 'rounded-full'
 		},
 		size: {
 			default: 'h-10 px-4 py-2',
@@ -27,17 +31,20 @@ export const buttonVariants = tv({
 	},
 	defaultVariants: {
 		variant: 'default',
+		rounded: 'default',
 		size: 'default'
 	}
 });
 
 export type ButtonVariant = VariantProps<typeof buttonVariants>['variant'];
 export type ButtonSize = VariantProps<typeof buttonVariants>['size'];
+export type ButtonRounded = VariantProps<typeof buttonVariants>['rounded'];
 
 export type ButtonProps = WithElementRef<HTMLAnchorAttributes> &
 	WithElementRef<HTMLButtonAttributes> & {
 		size?: ButtonSize;
 		variant?: ButtonVariant;
+		rounded?: ButtonRounded;
 	};
 
 export {
