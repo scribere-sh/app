@@ -16,7 +16,20 @@ export const PAGES = {
 /**
  * SERVERS
  */
-export const SERVERS = {};
+export const SERVERS = {
+	'GET /api/[...route]': (params: { route: (string | number)[] }) => {
+		return `/api/${params['route']?.join('/')}`;
+	},
+	'PUT /api/[...route]': (params: { route: (string | number)[] }) => {
+		return `/api/${params['route']?.join('/')}`;
+	},
+	'POST /api/[...route]': (params: { route: (string | number)[] }) => {
+		return `/api/${params['route']?.join('/')}`;
+	},
+	'DELETE /api/[...route]': (params: { route: (string | number)[] }) => {
+		return `/api/${params['route']?.join('/')}`;
+	}
+};
 
 /**
  * ACTIONS
@@ -139,8 +152,13 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
  */
 export type KIT_ROUTES = {
 	PAGES: { '/': never; '/sign-in': never };
-	SERVERS: Record<string, never>;
+	SERVERS: {
+		'GET /api/[...route]': 'route';
+		'PUT /api/[...route]': 'route';
+		'POST /api/[...route]': 'route';
+		'DELETE /api/[...route]': 'route';
+	};
 	ACTIONS: Record<string, never>;
 	LINKS: Record<string, never>;
-	Params: Record<string, never>;
+	Params: { route: never };
 };

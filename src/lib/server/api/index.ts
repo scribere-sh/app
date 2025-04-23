@@ -7,7 +7,7 @@ import serverTiming from '@elysiajs/server-timing';
 import { Elysia } from 'elysia';
 
 const apiPrefix = '/api';
-const apiHandler = new Elysia({ prefix: apiPrefix })
+export const apiHandler = new Elysia({ prefix: apiPrefix })
 	.use(
 		serverTiming({
 			enabled: dev
