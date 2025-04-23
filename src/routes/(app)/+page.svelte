@@ -11,7 +11,7 @@
 	const ping = eden.ping.get.createQuery();
 </script>
 
-<h1 class="capitalize text-foreground text-4xl font-extrabold">
+<h1 class="text-foreground text-4xl font-extrabold capitalize">
 	{#if $ping.isSuccess}
 		Welcome to SvelteKit
 	{:else if $ping.isError}
@@ -23,7 +23,7 @@
 
 <div class="mt-4 flex flex-row gap-4">
 	<Button class="capitalize" tabindex={0} onclick={toggleMode}>
-		Let there be {mode.current ? mode.current === 'dark' ? 'light' : 'darkness' : '...'}
+		Let there be {mode.current ? (mode.current === 'dark' ? 'light' : 'darkness') : '...'}
 	</Button>
 
 	<Button
@@ -50,7 +50,9 @@
 				/>
 			</div>
 			<AlertDialog.Footer>
-				<AlertDialog.Cancel variant="outline"><span class="font-extrabold">R.I.P</span> Rick May</AlertDialog.Cancel>
+				<AlertDialog.Cancel variant="outline"
+					><span class="font-extrabold">R.I.P</span> Rick May</AlertDialog.Cancel
+				>
 			</AlertDialog.Footer>
 		</AlertDialog.Content>
 	</AlertDialog.Root>
