@@ -64,7 +64,13 @@ sw.addEventListener('fetch', (event) => {
 				throw new Error('invalid response from fetch');
 			}
 
-			if (response.status === 200) {
+			if (
+				response.status === 200 
+				// Vary header = uncacheable response
+				&& !(response.headers.get('vary') ?? '').includes('*')
+				// Prevents chrome extensions from being weird
+				&& ['http', 'https'].includes(new URL(response.url).protocol)
+			) {
 				cache.put(event.request, response.clone());
 			}
 

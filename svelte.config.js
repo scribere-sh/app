@@ -7,7 +7,11 @@ import { resolve } from 'path';
 const config = {
 	preprocess: vitePreprocess(),
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({
+			platformProxy: {
+				configPath: "./wrangler.jsonc"
+			}
+		}),
 		alias: {
 			$ui: resolve('./src/lib/components/ui'),
 			$blk: resolve('./src/lib/components/blocks'),
