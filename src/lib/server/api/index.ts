@@ -19,11 +19,15 @@ const apiHandler = new Elysia({
 	 * @see https://elysiajs.com/blog/elysia-06#dynamic-mode
 	 */
 	aot: false
-}).get('/ping', ({ set }) => {
-	set.status = 201;
+})
+	/**
+	 * A basic ping handler to test stuff
+	 */
+	.get('/ping', ({ set }) => {
+		set.status = 201;
 
-	return;
-});
+		return;
+	});
 
 export type Api = typeof apiHandler;
 
