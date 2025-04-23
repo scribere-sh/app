@@ -15,8 +15,8 @@ const apiHandler = new Elysia({ prefix: apiPrefix })
 	)
 	.get(
 		'/ping',
-		() => {
-			return 'pong';
+		({ set }) => {
+			set.status = 201;
 		},
 		{
 			beforeHandle: async () => {
