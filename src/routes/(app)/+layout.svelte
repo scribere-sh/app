@@ -1,9 +1,9 @@
 <script lang="ts">
-	import AppSidebar from '$lib/components/app-sidebar.svelte';
+	import AppSidebar from '$blk/app-sidebar';
 
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
 
-	import { setContext as setEdenContext } from '$lib/eden.js';
+	import { setContext as setEdenContext } from '$lib/eden';
 
 	let { children, data } = $props();
 

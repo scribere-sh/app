@@ -1,0 +1,23 @@
+:root {
+	--sidebar-width: 24;
+
+	@variant default {
+		--background: #eee;
+		--foreground: #111;
+	}
+
+	@variant dark {
+		--background: #111;
+		--foreground: #eee;
+	}
+
+	@variant gruvbox {
+		--background: #f9f5d7;
+		--foreground: #3c3836;
+	}
+
+	@variant gruvbox-dark {
+		--background: #1d2021;
+		--foreground: #ebdbb2;
+	}
+}

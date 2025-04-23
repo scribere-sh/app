@@ -3,25 +3,15 @@
 
 @plugin '@tailwindcss/typography';
 
-@import 'tailwindcss/theme.css' layer(theme);
-@import 'tailwindcss/preflight.css' layer(base);
-@import 'tailwindcss/utilities.css' layer(utilities);
+@import './themes.css' layer(theme);
 
-@layer theme, base, components, utilities;
+@layer theme, base;
 
+@custom-variant default (&:where(*));
 @custom-variant dark (&:where(.dark, .dark *));
 
-:root {
-	--background: #eee;
-	--foreground: #111;
-
-	--sidebar: 24;
-
-	@variant dark {
-		--background: #111;
-		--foreground: #eee;
-	}
-}
+@custom-variant gruvbox (&:where([data-theme=gruvbox]:not(.dark), [data-theme=gruvbox]:not(.dark) *));
+@custom-variant gruvbox-dark (&:where([data-theme=gruvbox].dark, [data-theme=gruvbox].dark *));
 
 @theme {
 	--color-background: var(--background);
@@ -30,7 +20,7 @@
 	--color-primary: grey;
 	--color-primary-foreground: white;
 
-	--spacing-sidebar: calc(var(--spacing) * var(--sidebar));
+	--spacing-sidebar: calc(var(--spacing) * var(--sidebar-width));
 
 	/* animations */
 
@@ -60,7 +50,15 @@
 }
 
 @layer base {
+	* {
+		@apply transition-colors duration-200 ease-out text-foreground;
+	}
+
 	a {
 		@apply underline underline-offset-2;
+	}
+
+	html {
+		@apply bg-background;
 	}
 }

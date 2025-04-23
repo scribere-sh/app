@@ -9,6 +9,7 @@ import { contentTypeHandle, initializeDehydratedState } from '$srv/api/helpers';
 export const handle: Handle = sequence(
 	apiServerHandler,
 	oauthServerHandle,
+
 	contentTypeHandle,
 	initializeDehydratedState
 );

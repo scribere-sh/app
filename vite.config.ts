@@ -22,6 +22,8 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			$ui: resolve('./src/lib/components/ui'),
+			$blk: resolve('./src/lib/components/blocks'),
+			
 			$srv: resolve('./src/lib/server'),
 			$tb: resolve('./src/lib/server/db/schema')
 		}

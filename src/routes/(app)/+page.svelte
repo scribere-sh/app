@@ -4,29 +4,36 @@
 	import Button, { buttonVariants } from '$ui/button';
 	import LoadingSpinner from '$ui/loading-spinner';
 
-	import { toggleMode, mode } from 'mode-watcher';
+	import { toggleMode, mode, theme, setTheme } from 'mode-watcher';
 
 	import { eden } from '$lib/eden';
 
 	const ping = eden.ping.get.createQuery();
 </script>
 
-<div class="prose dark:prose-invert">
+<h1 class="capitalize text-foreground text-4xl font-extrabold">
 	{#if $ping.isSuccess}
-		<h1>Welcome to SvelteKit</h1>
+		Welcome to SvelteKit
 	{:else if $ping.isError}
-		<h1>Failed to Ping</h1>
+		Failed to Ping
 	{:else}
-		<h1>
-			<LoadingSpinner class="size-10" />
-		</h1>
+		<LoadingSpinner class="size-10" />
 	{/if}
-</div>
+</h1>
 
 <div class="mt-4 flex flex-row gap-4">
-	<Button class="capitalize" tabindex={0} onclick={toggleMode}
-		>Let there be {mode.current === 'dark' ? 'light' : 'darkness'}</Button
+	<Button class="capitalize" tabindex={0} onclick={toggleMode}>
+		Let there be {mode.current ? mode.current === 'dark' ? 'light' : 'darkness' : '...'}
+	</Button>
+
+	<Button
+		class="capitalize"
+		onclick={() => {
+			setTheme(theme.current === 'gruvbox' ? 'default' : 'gruvbox');
+		}}
 	>
+		Gruvbox? - {theme.current === 'gruvbox' ? 'yes' : 'no'}
+	</Button>
 
 	<AlertDialog.Root>
 		<AlertDialog.Trigger class={buttonVariants()}>Alert</AlertDialog.Trigger>
@@ -36,8 +43,14 @@
 				<AlertDialog.Title>Alert</AlertDialog.Title>
 				<AlertDialog.Description>Sentry Ahead</AlertDialog.Description>
 			</AlertDialog.Header>
+			<div class="grid aspect-square place-items-center">
+				<img
+					src="https://vignette.wikia.nocookie.net/teamfortress/images/e/e0/Soldier_with_the_Stainless_Pot_TF2.png/revision/latest?cb=20130803193645"
+					alt="soldier tf2"
+				/>
+			</div>
 			<AlertDialog.Footer>
-				<AlertDialog.Cancel variant="outline">👍</AlertDialog.Cancel>
+				<AlertDialog.Cancel variant="outline"><span class="font-extrabold">R.I.P</span> Rick May</AlertDialog.Cancel>
 			</AlertDialog.Footer>
 		</AlertDialog.Content>
 	</AlertDialog.Root>

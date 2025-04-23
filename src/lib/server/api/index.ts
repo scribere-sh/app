@@ -1,6 +1,8 @@
-import { dev } from '$app/environment';
-import serverTiming from '@elysiajs/server-timing';
 import type { Handle } from '@sveltejs/kit';
+
+import { dev } from '$app/environment';
+
+import serverTiming from '@elysiajs/server-timing';
 
 import { Elysia } from 'elysia';
 
