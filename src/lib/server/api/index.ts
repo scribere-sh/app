@@ -17,11 +17,8 @@ const apiHandler = new Elysia({ prefix: apiPrefix })
 		'/ping',
 		({ set }) => {
 			set.status = 201;
-		},
-		{
-			beforeHandle: async () => {
-				await new Promise((res) => setTimeout(res, 2000));
-			}
+
+			return;
 		}
 	);
 
