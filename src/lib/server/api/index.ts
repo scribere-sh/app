@@ -1,18 +1,9 @@
 import type { Handle } from '@sveltejs/kit';
 
-import { dev } from '$app/environment';
-
-import serverTiming from '@elysiajs/server-timing';
-
 import { Elysia } from 'elysia';
 
 const apiPrefix = '/api';
-export const apiHandler = new Elysia({ prefix: apiPrefix })
-	.use(
-		serverTiming({
-			enabled: dev
-		})
-	)
+const apiHandler = new Elysia({ prefix: apiPrefix })
 	.get(
 		'/ping',
 		({ set }) => {
