@@ -2,7 +2,7 @@
 	"name": "app.scribere.sh",
 	"private": true,
 	"type": "module",
-	"packageManager": "pnpm@10.9.0",
+	"packageManager": "bun@1.2.10",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
