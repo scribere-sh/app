@@ -1,7 +1,7 @@
 <div align="center">
-    <img src=".assets/logo.svg" style="max-height: 12em; max-width: 80vw">
-    <div style="font-size: 3em">Scribere</div>
-    <a href="https://app.scribere.sh">app.scribere.sh</a>
+    <img src=".assets/logo.svg" height="250px">
+    <h1>Scribere</h1>
+    <a href="https://app.scribere.sh"><em>app.scribere.sh</em></a>
 </div>
 
 <br />
@@ -88,9 +88,10 @@ However if you would like to test how cloudflare would run it locally, we can si
 
 <details>
 <summary><strong>Install & Setup <code>wrangler</code></strong></summary>
-Assuming you're using Bun for this project, you can install wrangler globally using the following command.
 
 <br/>
+    
+Assuming you're using Bun for this project, you can install wrangler globally using the following command.
 
 ```sh
 bun install -g wrangler
@@ -103,6 +104,8 @@ wrangler login
 ```
 
 Once this is complete, you can continue with the production simulation
+
+<br/>
 
 </details>
 
@@ -118,5 +121,5 @@ You can then run wrangler to start the local cloudflare worker environment with 
 wrangler dev
 ```
 
-> [!WARN]
+> [!WARNING]
 > This will connect to the production R2 Instance and Production ARGON2 worker.
