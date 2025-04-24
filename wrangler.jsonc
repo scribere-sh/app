@@ -1,18 +1,18 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	
+
 	// Project Name
 	"name": "scribere-app",
 
 	// Required Compat stuff
 	"compatibility_date": "2025-02-27",
 	"compatibility_flags": ["nodejs_compat"],
-	
+
 	// Workers Bindings
 	"main": ".svelte-kit/cloudflare/_worker.js",
 	"assets": {
 		"binding": "ASSETS",
-		"directory": ".svelte-kit/cloudflare",
+		"directory": ".svelte-kit/cloudflare"
 	},
 
 	// Asks CF to place it in SYD so it's closer to our DB

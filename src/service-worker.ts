@@ -65,11 +65,11 @@ sw.addEventListener('fetch', (event) => {
 			}
 
 			if (
-				response.status === 200 
+				response.status === 200 &&
 				// Vary header = uncacheable response
-				&& !(response.headers.get('vary') ?? '').includes('*')
+				!(response.headers.get('vary') ?? '').includes('*') &&
 				// Prevents chrome extensions from being weird
-				&& ['http', 'https'].includes(new URL(response.url).protocol)
+				['http', 'https'].includes(new URL(response.url).protocol)
 			) {
 				cache.put(event.request, response.clone());
 			}

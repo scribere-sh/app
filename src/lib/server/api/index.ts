@@ -4,7 +4,7 @@ import { dev } from '$app/environment';
 
 import { Elysia } from 'elysia';
 
-import { cors } from '@elysiajs/cors'
+import { cors } from '@elysiajs/cors';
 import { serverTiming } from '@elysiajs/server-timing';
 
 const apiPrefix = '/api';
@@ -15,7 +15,7 @@ const apiHandler = new Elysia({
 	prefix: apiPrefix,
 	/**
 	 * Disable ahead of time complication because it break cloudflare pages.
-	 * 
+	 *
 	 * We can use it in dev tho
 	 *
 	 * This caused me untold pain for ages.
@@ -28,10 +28,12 @@ const apiHandler = new Elysia({
 	aot: dev
 })
 	.use(serverTiming())
-	.use(cors({
-		methods: ["GET", "POST", "PUT", "DELETE"],
-		origin: true
-	}))
+	.use(
+		cors({
+			methods: ['GET', 'POST', 'PUT', 'DELETE'],
+			origin: true
+		})
+	)
 	.onError(({ error }) => {
 		console.error(error);
 	})

@@ -9,7 +9,7 @@ const config = {
 	kit: {
 		adapter: adapter({
 			platformProxy: {
-				configPath: "./wrangler.jsonc"
+				configPath: './wrangler.jsonc'
 			}
 		}),
 		alias: {
