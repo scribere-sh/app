@@ -48,6 +48,6 @@ jobs:
         if: success() || failure()
         with:
           name: Vitest Reports
-          reporter: junit
+          reporter: jest-junit
           path: ./junit.xml
           token: ${{ github.token }}
