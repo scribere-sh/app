@@ -28,14 +28,12 @@ export default defineConfig({
 			$tb: resolve('./src/lib/server/db/schema')
 		}
 	},
-    // @ts-expect-error it does exist
+	// @ts-expect-error it does exist
 	test: {
 		workspace: [
 			{
 				extends: './vite.config.ts',
-				plugins: [
-                    svelteTesting()
-                ],
+				plugins: [svelteTesting()],
 				test: {
 					name: 'client',
 					environment: 'jsdom',
