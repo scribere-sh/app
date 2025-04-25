@@ -20,6 +20,7 @@
   - [**Drizzle ORM**](#drizzle-orm)
 - [Development](#development)
 - [Building](#building)
+- [Note to aliases](#note-to-aliases)
 
 <br />
 
@@ -32,7 +33,6 @@
 This program application is built to run on [Cloudflare Workers](https://workers.cloudflare.com/) and uses [Bun](https://bun.sh/docs) as a package manager (due to the simplicity of installing it on the Yoobee devices without admin permissions).
 
 **In order to run this application you will need to [install bun](https://bun.sh/docs/installation).**
-
 
 ### Libraries
 
@@ -65,16 +65,16 @@ It provides a comprehensive toolset and is for the most part, database agnostic,
 Getting a useable development environment is a simple process.
 
 1. **Create `.env` file**
-    
-    Make a copy of the [`.env.example`](./.env.example) file and rename it to `.env`. This file is well documented and will explain what values you need to put here.
 
-    This file **MUST** never be checked into source control or shared with anyone else as it contains API Keys.
+   Make a copy of the [`.env.example`](./.env.example) file and rename it to `.env`. This file is well documented and will explain what values you need to put here.
+
+   This file **MUST** never be checked into source control or shared with anyone else as it contains API Keys.
 
 2. **Install Dependencies**
 
    Run `bun install` to download all dependencies for this project and save them to the `node_modules` folder.
 
-   The installation process is slow at first but Bun has some incredible [caching techniques](https://bun.sh/docs/install/cache) and subsequent installations will be significantly faster. 
+   The installation process is slow at first but Bun has some incredible [caching techniques](https://bun.sh/docs/install/cache) and subsequent installations will be significantly faster.
 
 3. **Start Development Server**
 
@@ -123,3 +123,25 @@ wrangler dev
 
 > [!WARNING]
 > This will connect to the production R2 Instance and Production ARGON2 worker.
+
+### Note to aliases
+
+This repository contains a bunch of aliases to make some otherwise long import paths much shorter. For the most part these are useable, but `drizzle-kit` doesn't understand them. As such they may not be used within `./src/lib/server/db`.
+
+Anywhere else they should work just fine.
+
+- `$ui ` &rarr; `./src/lib/components/ui`
+
+  Reusable UI Components
+
+- `$blk` &rarr; `./src/lib/components/blocks`
+
+  Single use block components that need a place to stay
+
+- `$srv` &rarr; `./src/lib/server`
+
+  Server-only modules, importing these into client code will trigger an error.
+
+- `$tb ` &rarr; `./src/lib/server/db/schema`
+
+  DrizzleORM table objects, use these querying the database.

@@ -21,7 +21,10 @@
 
 {#if state === 'loading'}
 	<svg
-		class={cn('aspect-square size-4 animate-[spin_2s_linear_infinite] stroke-current', className)}
+		class={cn(
+			'aspect-square size-4 animate-[spin_2s_linear_infinite] stroke-current',
+			className
+		)}
 		{...rest}
 		viewBox="22 22 44 44"
 	>

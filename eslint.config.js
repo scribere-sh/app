@@ -6,6 +6,8 @@ import globals from 'globals';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript-eslint';
 import svelteConfig from './svelte.config.js';
+import tsdoc from 'eslint-plugin-tsdoc';
+import drizzle from 'eslint-plugin-drizzle';
 
 const gitignorePath = fileURLToPath(new URL('./.gitignore', import.meta.url));
 
@@ -16,6 +18,28 @@ export default ts.config(
 	...svelte.configs.recommended,
 	prettier,
 	...svelte.configs.prettier,
+	{
+		files: ['**/*.ts'],
+		plugins: {
+			tsdoc,
+			drizzle
+		},
+		rules: {
+			'tsdoc/syntax': 'warn',
+			'drizzle/enforce-delete-with-where': [
+				'error',
+				{
+					drizzleObjectName: ['db', 'tx_db']
+				}
+			],
+			'drizzle/enforce-update-with-where': [
+				'error',
+				{
+					drizzleObjectName: ['db', 'tx_db']
+				}
+			]
+		}
+	},
 	{
 		languageOptions: {
 			globals: { ...globals.browser, ...globals.node }

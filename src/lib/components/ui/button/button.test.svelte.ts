@@ -16,8 +16,6 @@ describe('Button', () => {
 
 			const button = screen.getByTestId('button');
 
-			console.debug(button);
-
 			expect(button.innerHTML).toContain(InnerText);
 			expect(button.nodeName).toEqual('BUTTON');
 		});
@@ -37,8 +35,6 @@ describe('Button', () => {
 			});
 
 			const button = screen.getByTestId('button');
-
-			console.debug(button);
 
 			expect(button.innerHTML).toContain(InnerText);
 			expect(button).toHaveAttribute('href', TestLink);

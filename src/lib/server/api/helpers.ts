@@ -2,7 +2,7 @@ import type { Handle } from '@sveltejs/kit';
 
 /**
  * Eden reads 'content-type' header, so this needs to be allowed in order to enable pre-fetching.
- * @see https://github.com/elysiajs/eden/blob/main/src/fetch/index.ts#L53
+ * @see {@link https://github.com/elysiajs/eden/blob/main/src/fetch/index.ts#L53}
  */
 export const contentTypeHandle: Handle = async ({ event, resolve }) => {
 	const response = await resolve(event, {

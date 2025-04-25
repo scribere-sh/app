@@ -11,7 +11,7 @@
 	let disableTransitions = $state(true);
 
 	onMount(() => {
-		// FOUC / Transition minimisation
+		// FOUC / Transition minimisation on first load
 		disableTransitions = false;
 	});
 </script>

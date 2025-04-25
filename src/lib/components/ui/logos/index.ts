@@ -3,4 +3,6 @@ import GitHub from './github.svelte';
 import Google from './google.svelte';
 import Microsoft from './microsoft.svelte';
 
-export { Atlassian, GitHub, Microsoft, Google };
+import Scribere from './scribere.svelte';
+
+export { Atlassian, GitHub, Microsoft, Google, Scribere };

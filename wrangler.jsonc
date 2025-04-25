@@ -15,6 +15,11 @@
 		"directory": ".svelte-kit/cloudflare"
 	},
 
+	// i need to see stuff happen
+	"observability": {
+		"enabled": true
+	},
+
 	// Asks CF to place it in SYD so it's closer to our DB
 	"placement": {
 		"mode": "smart",
@@ -48,6 +53,13 @@
 			"binding": "R2",
 			"bucket_name": "cdn-scribere-sh",
 			"preview_bucket_name": "cdn-scribere-sh-dev"
+		}
+	],
+	// KV Namespace for signing keys
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "96399a918bc14e719079a37568db7837"
 		}
 	]
 }

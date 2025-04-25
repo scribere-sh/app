@@ -10,17 +10,19 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"format:ci": "prettier --check .",
 		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint .",
+		"lint": "eslint .",
+		"test:ci": "vitest --run --reporter=junit --outputFile=junit.xml",
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run",
 		"deploy": "wrangler deploy",
 		"db:push": "drizzle-kit push",
-		"db:migrate": "drizzle-kit migrate",
-		"db:studio": "drizzle-kit studio"
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20250423.0",
+		"@cloudflare/workers-types": "^4.20250425.0",
 		"@elysiajs/server-timing": "^1.2.1",
 		"@eslint/compat": "^1.2.8",
 		"@eslint/js": "^9.25.1",
@@ -39,7 +41,9 @@
 		"drizzle-kit": "^0.31.0",
 		"eslint": "^9.25.1",
 		"eslint-config-prettier": "^10.1.2",
+		"eslint-plugin-drizzle": "^0.2.3",
 		"eslint-plugin-svelte": "^3.5.1",
+		"eslint-plugin-tsdoc": "^0.4.0",
 		"formsnap": "^2.0.1",
 		"globals": "^16.0.0",
 		"jsdom": "^26.1.0",
@@ -57,7 +61,7 @@
 		"vite": "^6.3.2",
 		"vite-plugin-kit-routes": "^0.8.4",
 		"vitest": "^3.1.2",
-		"wrangler": "^4.12.1"
+		"wrangler": "^4.13.2"
 	},
 	"dependencies": {
 		"@ap0nia/eden-svelte-query": "^1.7.0",
@@ -66,10 +70,12 @@
 		"@oslojs/binary": "^1.0.0",
 		"@oslojs/crypto": "^1.0.1",
 		"@oslojs/encoding": "^1.1.0",
+		"@oslojs/jwt": "^0.3.0",
 		"@oslojs/otp": "^1.1.0",
 		"@pilcrowjs/object-parser": "^0.0.4",
 		"@tanstack/svelte-query": "^5.74.4",
 		"arctic": "^3.6.0",
+		"arktype": "^2.1.20",
 		"drizzle-orm": "^0.42.0",
 		"elysia": "^1.2.25",
 		"id128": "^1.6.6",
@@ -77,7 +83,6 @@
 		"paneforge": "^1.0.0-next.5",
 		"svelte-sonner": "^0.3.28",
 		"sveltekit-superforms": "^2.24.1",
-		"uqr": "^0.1.2",
-		"zod": "^3.24.3"
+		"uqr": "^0.1.2"
 	}
 }

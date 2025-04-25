@@ -1,6 +1,7 @@
 {
 	"extends": "./.svelte-kit/tsconfig.json",
 	"compilerOptions": {
+		"incremental": true,
 		"lib": ["WebWorker"],
 		"allowJs": true,
 		"checkJs": true,

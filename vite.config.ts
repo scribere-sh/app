@@ -28,16 +28,19 @@ export default defineConfig({
 			$tb: resolve('./src/lib/server/db/schema')
 		}
 	},
+    // @ts-expect-error it does exist
 	test: {
 		workspace: [
 			{
 				extends: './vite.config.ts',
-				plugins: [svelteTesting()],
+				plugins: [
+                    svelteTesting()
+                ],
 				test: {
 					name: 'client',
 					environment: 'jsdom',
 					clearMocks: true,
-					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+					include: ['src/**/*.{test,spec}.svelte.{js,ts}'],
 					exclude: ['src/lib/server/**'],
 					setupFiles: ['./vitest-setup-client.ts']
 				}
@@ -48,7 +51,7 @@ export default defineConfig({
 					name: 'server',
 					environment: 'node',
 					include: ['src/**/*.{test,spec}.{js,ts}'],
-					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
+					exclude: ['src/**/*.{test,spec}.svelte.{js,ts}']
 				}
 			}
 		]

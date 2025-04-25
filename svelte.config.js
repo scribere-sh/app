@@ -20,7 +20,7 @@ const config = {
 			$tb: resolve('./src/lib/server/db/schema')
 		},
 		version: {
-			pollInterval: 10_000
+			pollInterval: 30_000
 		}
 	}
 };

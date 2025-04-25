@@ -1,0 +1,53 @@
+name: Test
+
+on:
+  push:
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Cache node_modules
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ./node_modules
+          key: test-${{ hashFiles('./bun.lock') }}
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.10
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: bun install
+
+      - name: Run Tests
+        run: bun run test:ci
+
+      - name: Upload Test Artifact
+        uses: actions/upload-artifact@v4
+        if: success() || failure()
+        with:
+          name: Test Reports
+          path: ./junit.xml
+
+      - name: Test Reports
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Vitest Reports
+          reporter: junit
+          path: ./junit.xml
+          token: ${{ github.token }}

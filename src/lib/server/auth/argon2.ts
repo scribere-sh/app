@@ -1,11 +1,10 @@
 import { dev } from '$app/environment';
 import { getRequestEvent } from '$app/server';
 import { env } from '$env/dynamic/private';
+import { type } from 'arktype';
 
-import z from 'zod';
-
-const createArgon2ResponseSchema = z.object({
-	hash: z.string()
+const createArgon2ResponseType = type({
+	hash: 'string'
 });
 
 /**
@@ -17,11 +16,11 @@ const createArgon2ResponseSchema = z.object({
  * This has shown to have no issue consistently producing hashes
  * while getting around Yoobee security bs.
  *
- * > **This function can only be called by a SvelteKit handler due
- * > to the use of {@link getRequestEvent | `getRequestEvent()`}**
+ * **This function can only be called by a SvelteKit handler due
+ * to the use of {@link getRequestEvent | `getRequestEvent()`}.**
  *
- * @param to_hash the data to hash as a string
- * @returns an `argon2id` hash of the provided string
+ * @param to_hash - the data to hash as a string
+ * @returns an `argon2id` hash of the {@link to_hash | provided string}
  */
 export const createArgon2 = async (to_hash: string): Promise<string> => {
 	const {
@@ -42,7 +41,7 @@ export const createArgon2 = async (to_hash: string): Promise<string> => {
 	let response;
 
 	if (dev) {
-		// in development we use fetch to a remote worker, because any mention 
+		// in development we use fetch to a remote worker, because any mention
 		// of the use of a hasher causes cloudflare to spontaneously combust.
 		const { ARGON2_WORKER_DOMAIN } = env;
 
@@ -73,13 +72,13 @@ export const createArgon2 = async (to_hash: string): Promise<string> => {
 	try {
 		const object = JSON.parse(text);
 
-		const objectValidationResult = createArgon2ResponseSchema.safeParse(object);
+		const objectValidationResult = createArgon2ResponseType(object);
 
-		if (objectValidationResult.success) {
-			return objectValidationResult.data.hash;
+		if (objectValidationResult instanceof type.errors) {
+			console.error(objectValidationResult);
+			throw new Error(objectValidationResult.summary);
 		} else {
-			console.error(objectValidationResult.error);
-			throw objectValidationResult.error;
+			return objectValidationResult.hash;
 		}
 	} catch (e) {
 		console.error(e);
@@ -87,10 +86,25 @@ export const createArgon2 = async (to_hash: string): Promise<string> => {
 	}
 };
 
-const verifyArgon2ResponseSchema = z.object({
-	matches: z.boolean()
+const verifyArgon2ResponseType = type({
+	matches: 'boolean'
 });
 
+/**
+ * Takes a stored `argon2id` hash and a test subject and checks if
+ * they match.
+ *
+ * Since cloudflare is really REALLY limited at the free tier (and kinda
+ * slow). This function calls a separate and bound worker (or a remote
+ * worker) in dev.
+ *
+ * **This function can only be called by a SvelteKit handler due
+ * to the use of {@link getRequestEvent | `getRequestEvent()`}.**
+ *
+ * @param hash - the stored hash to compare against
+ * @param subject - the data to be checked
+ * @returns whether the {@link subject} matches the {@link hash}.
+ */
 export const verifyArgon2 = async (hash: string, subject: string): Promise<boolean> => {
 	const {
 		fetch,
@@ -136,13 +150,13 @@ export const verifyArgon2 = async (hash: string, subject: string): Promise<boole
 	try {
 		const object = JSON.parse(text);
 
-		const objectValidationResult = verifyArgon2ResponseSchema.safeParse(object);
+		const objectValidationResult = verifyArgon2ResponseType(object);
 
-		if (objectValidationResult.success) {
-			return objectValidationResult.data.matches;
+		if (objectValidationResult instanceof type.errors) {
+			console.error(objectValidationResult);
+			throw new Error(objectValidationResult.summary);
 		} else {
-			console.error(objectValidationResult.error);
-			throw objectValidationResult.error;
+			return objectValidationResult.matches;
 		}
 	} catch (e) {
 		console.error(e);

@@ -7,6 +7,8 @@ import { Elysia } from 'elysia';
 import { cors } from '@elysiajs/cors';
 import { serverTiming } from '@elysiajs/server-timing';
 
+import Env from './env';
+
 const apiPrefix = '/api';
 const apiHandler = new Elysia({
 	/**
@@ -22,8 +24,8 @@ const apiHandler = new Elysia({
 	 *
 	 * Every Elysia instance must use this option.
 	 *
-	 * @see https://github.com/elysiajs/elysia/issues/58
-	 * @see https://elysiajs.com/blog/elysia-06#dynamic-mode
+	 * @see {@link https://github.com/elysiajs/elysia/issues/58}
+	 * @see {@link https://elysiajs.com/blog/elysia-06#dynamic-mode}
 	 */
 	aot: dev
 })
@@ -34,13 +36,16 @@ const apiHandler = new Elysia({
 			origin: true
 		})
 	)
+	.use(Env)
 	.onError(({ error }) => {
 		console.error(error);
 	})
 	/**
 	 * A basic ping handler to test stuff
 	 */
-	.get('/ping', ({ set }) => {
+	.get('/ping', ({ set, user }) => {
+		console.log({ user });
+
 		set.status = 'OK';
 	});
 
