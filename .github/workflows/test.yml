@@ -35,6 +35,9 @@ jobs:
 
       - name: Run Tests
         run: bun run test:ci
+        env:
+          LOCAL_SIGNING_KEY: ${{ secrets.LOCAL_SIGNING_KEY }}
+          LOCAL_SIGNING_KEY_KID: ${{ secrets.LOCAL_SIGNING_KEY_KID }}
 
       - name: Upload Test Artifact
         uses: actions/upload-artifact@v4
