@@ -39,9 +39,7 @@ export interface OnboardingEmailProps {
 	onboardingUrl: string;
 }
 
-export function Email({ onboardingUrl }: OnboardingEmailProps) {
-	const resolvedUrl = onboardingUrl ?? 'https://example.com';
-
+export default function Email({ onboardingUrl }: OnboardingEmailProps) {
 	return (
 		<Root>
 			<Preview>Welcome to Scribere</Preview>
@@ -62,7 +60,7 @@ export function Email({ onboardingUrl }: OnboardingEmailProps) {
 
 				<Text>Click the link below to get started!</Text>
 
-				<Button href={resolvedUrl} style={{ margin: '2rem 0' }}>
+				<Button href={onboardingUrl} style={{ margin: '2rem 0' }}>
 					Click Here to get Started
 				</Button>
 
@@ -70,8 +68,8 @@ export function Email({ onboardingUrl }: OnboardingEmailProps) {
 					or if that doesn't work, copy-paste the link below
 				</Text>
 
-				<Link href={resolvedUrl} style={{ fontFamily: 'monospace', fontSize: '14px' }}>
-					{resolvedUrl}
+				<Link href={onboardingUrl} style={{ fontFamily: 'monospace', fontSize: '14px' }}>
+					{onboardingUrl}
 				</Link>
 			</Container>
 
@@ -84,4 +82,7 @@ export function Email({ onboardingUrl }: OnboardingEmailProps) {
 	);
 }
 
-export default Email;
+// preview props
+Email.PreviewProps = {
+	onboardingUrl: 'https://example.com'
+} satisfies Parameters<typeof Email>[0];

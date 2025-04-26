@@ -9,14 +9,12 @@
 
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms';
-	import { arktypeClient } from 'sveltekit-superforms/adapters';
 
 	import { toast } from 'svelte-sonner';
 
 	import * as Form from '$ui/form';
 	import { Input } from '$ui/input';
 
-	import { schema } from './form';
 	import LoadingSpinner from '$ui/loading-spinner';
 	import { cn } from '$lib/utils';
 	import { route } from '$lib/routes';
@@ -30,8 +28,6 @@
 	let { form: _form, disabled = $bindable(false) }: FormProps = $props();
 
 	const form = superForm(_form, {
-		validators: arktypeClient(schema),
-
 		onSubmit: () => {
 			disabled = true;
 		},

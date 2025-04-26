@@ -8,7 +8,7 @@ import { or } from 'drizzle-orm';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { arktype } from 'sveltekit-superforms/adapters';
 
-import { schema } from './form';
+import { type } from 'arktype';
 
 import { db } from '$srv/db';
 import { usersTable } from '$tb/user';
@@ -23,9 +23,11 @@ import { route } from '$lib/routes';
 
 const SIX_DAYS_IN_SECONDS = 6 * 24 * 60 * 60;
 
-/**
- * Default values for form
- */
+const schema = type({
+	identifier: 'string.email | /^[a-z0-9.-]{3,30}$/',
+	password: 'string'
+});
+
 const defaults: typeof schema.infer = {
 	identifier: '',
 	password: ''
