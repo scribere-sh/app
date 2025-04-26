@@ -1,7 +1,7 @@
-import { getRequestEvent } from '$app/server';
-import { generateTokenString } from './auth/token';
+import { getRequestEvent } from "$app/server";
+import { generateTokenString } from "./auth/token";
 
-const CSRF_TOKEN_NAME = 'csrf';
+const CSRF_TOKEN_NAME = "csrf";
 
 /**
  * initialises a CSRF session, set the cookie and return the token for
@@ -13,21 +13,21 @@ const CSRF_TOKEN_NAME = 'csrf';
  * generates a session-valid token that can be used for CSRF protection
  */
 export const initCsrf = (): string => {
-	const { cookies } = getRequestEvent();
+    const { cookies } = getRequestEvent();
 
-	const currentCookie = cookies.get(CSRF_TOKEN_NAME);
-	if (currentCookie) return currentCookie;
+    const currentCookie = cookies.get(CSRF_TOKEN_NAME);
+    if (currentCookie) return currentCookie;
 
-	const csrfToken = generateTokenString(32);
+    const csrfToken = generateTokenString(32);
 
-	cookies.set(CSRF_TOKEN_NAME, csrfToken, {
-		path: '/',
-		httpOnly: true,
-		sameSite: 'strict',
-		secure: import.meta.env.PROD
-	});
+    cookies.set(CSRF_TOKEN_NAME, csrfToken, {
+        path: "/",
+        httpOnly: true,
+        sameSite: "strict",
+        secure: import.meta.env.PROD,
+    });
 
-	return csrfToken;
+    return csrfToken;
 };
 
 /**
@@ -38,11 +38,11 @@ export const initCsrf = (): string => {
  * to the use of {@link getRequestEvent | `getRequestEvent()`}.**
  */
 export const validateCsrf = (formToken: string): boolean => {
-	const { cookies } = getRequestEvent();
+    const { cookies } = getRequestEvent();
 
-	const csrfTokenCookieValue = cookies.get(CSRF_TOKEN_NAME);
+    const csrfTokenCookieValue = cookies.get(CSRF_TOKEN_NAME);
 
-	return csrfTokenCookieValue === formToken;
+    return csrfTokenCookieValue === formToken;
 };
 
 /**
@@ -55,7 +55,7 @@ export const validateCsrf = (formToken: string): boolean => {
  * to the use of {@link getRequestEvent | `getRequestEvent()`}.**
  */
 export const cleanupCsrf = () => {
-	const { cookies } = getRequestEvent();
+    const { cookies } = getRequestEvent();
 
-	cookies.delete(CSRF_TOKEN_NAME, { path: '/' });
+    cookies.delete(CSRF_TOKEN_NAME, { path: "/" });
 };

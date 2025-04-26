@@ -90,7 +90,7 @@ However if you would like to test how cloudflare would run it locally, we can si
 <summary><strong>Install & Setup <code>wrangler</code></strong></summary>
 
 <br/>
-    
+
 Assuming you're using Bun for this project, you can install wrangler globally using the following command.
 
 ```sh
@@ -130,7 +130,7 @@ This repository contains a bunch of aliases to make some otherwise long import p
 
 Anywhere else they should work just fine.
 
-- `$ui ` &rarr; `./src/lib/components/ui`
+- `$ui` &rarr; `./src/lib/components/ui`
 
   Reusable UI Components
 
@@ -142,6 +142,6 @@ Anywhere else they should work just fine.
 
   Server-only modules, importing these into client code will trigger an error.
 
-- `$tb ` &rarr; `./src/lib/server/db/schema`
+- `$tb` &rarr; `./src/lib/server/db/schema`
 
   DrizzleORM table objects, use these querying the database.

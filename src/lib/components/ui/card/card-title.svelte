@@ -1,26 +1,26 @@
 <script lang="ts">
-	import type { WithElementRef } from 'bits-ui';
-	import type { HTMLAttributes } from 'svelte/elements';
+    import type { WithElementRef } from "bits-ui";
+    import type { HTMLAttributes } from "svelte/elements";
 
-	import { cn } from '$lib/utils';
+    import { cn } from "$lib/utils";
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		level = 3,
-		children,
-		...rest
-	}: WithElementRef<HTMLAttributes<HTMLDivElement>> & {
-		level?: 1 | 2 | 3 | 4 | 5 | 6;
-	} = $props();
+    let {
+        ref = $bindable(null),
+        class: className,
+        level = 3,
+        children,
+        ...rest
+    }: WithElementRef<HTMLAttributes<HTMLDivElement>> & {
+        level?: 1 | 2 | 3 | 4 | 5 | 6;
+    } = $props();
 </script>
 
 <div
-	role="heading"
-	aria-level={level}
-	bind:this={ref}
-	class={cn('text-2xl leading-none font-semibold tracking-tight', className)}
-	{...rest}
+    role="heading"
+    aria-level={level}
+    bind:this={ref}
+    class={cn("text-2xl leading-none font-semibold tracking-tight", className)}
+    {...rest}
 >
-	{@render children?.()}
+    {@render children?.()}
 </div>

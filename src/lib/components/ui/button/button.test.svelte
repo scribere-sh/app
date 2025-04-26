@@ -1,17 +1,17 @@
 <script lang="ts">
-	import type { WithoutChildren } from 'bits-ui';
-	import type { ButtonProps } from '.';
+    import type { WithoutChildren } from "bits-ui";
+    import type { ButtonProps } from ".";
 
-	import Button from './button.svelte';
+    import Button from "./button.svelte";
 
-	const {
-		testString,
-		...rest
-	}: WithoutChildren<ButtonProps> & {
-		testString?: string;
-	} = $props();
+    const {
+        testString,
+        ...rest
+    }: WithoutChildren<ButtonProps> & {
+        testString?: string;
+    } = $props();
 </script>
 
 <Button {...rest}>
-	{testString}
+    {testString}
 </Button>

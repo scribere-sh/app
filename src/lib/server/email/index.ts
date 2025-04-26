@@ -1,3 +1,3 @@
-import { sendOnboardingEmail } from './onboarding.tsx';
+import { sendOnboardingEmail } from "./onboarding.tsx";
 
 export { sendOnboardingEmail };

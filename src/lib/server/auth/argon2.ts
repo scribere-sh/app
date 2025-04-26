@@ -1,10 +1,10 @@
-import { dev } from '$app/environment';
-import { getRequestEvent } from '$app/server';
-import { env } from '$env/dynamic/private';
-import { type } from 'arktype';
+import { dev } from "$app/environment";
+import { getRequestEvent } from "$app/server";
+import { env } from "$env/dynamic/private";
+import { type } from "arktype";
 
 const createArgon2ResponseType = type({
-	hash: 'string'
+    hash: "string",
 });
 
 /**
@@ -25,71 +25,71 @@ const createArgon2ResponseType = type({
  * @returns an `argon2id` hash of the {@link to_hash | provided string}
  */
 export const createArgon2 = async (to_hash: string): Promise<string> => {
-	const {
-		platform,
-		fetch,
-		request: { signal }
-	} = getRequestEvent();
+    const {
+        platform,
+        fetch,
+        request: { signal },
+    } = getRequestEvent();
 
-	const body = JSON.stringify({
-		password: to_hash,
-		options: {
-			timeCost: 2,
-			memoryCost: 19456,
-			parallelism: 1
-		}
-	});
+    const body = JSON.stringify({
+        password: to_hash,
+        options: {
+            timeCost: 2,
+            memoryCost: 19456,
+            parallelism: 1,
+        },
+    });
 
-	let response;
+    let response;
 
-	if (dev) {
-		// in development we use fetch to a remote worker, because any mention
-		// of the use of a hasher causes cloudflare to spontaneously combust.
-		const { ARGON2_WORKER_DOMAIN } = env;
+    if (dev) {
+        // in development we use fetch to a remote worker, because any mention
+        // of the use of a hasher causes cloudflare to spontaneously combust.
+        const { ARGON2_WORKER_DOMAIN } = env;
 
-		if (!ARGON2_WORKER_DOMAIN) {
-			throw new Error('Unable to contact argon2 worker');
-		}
+        if (!ARGON2_WORKER_DOMAIN) {
+            throw new Error("Unable to contact argon2 worker");
+        }
 
-		response = await fetch(`https://${ARGON2_WORKER_DOMAIN}/hash`, {
-			method: 'POST',
-			body,
-			signal
-		});
-	} else {
-		if (!platform) {
-			throw new Error('Unable to access platform API');
-		}
+        response = await fetch(`https://${ARGON2_WORKER_DOMAIN}/hash`, {
+            method: "POST",
+            body,
+            signal,
+        });
+    } else {
+        if (!platform) {
+            throw new Error("Unable to access platform API");
+        }
 
-		response = await platform.env.ARGON2.fetch('http://internal/hash', {
-			method: 'POST',
-			body,
-			// @ts-expect-error weird cloudflare stuff
-			signal
-		});
-	}
+        response = await platform.env.ARGON2.fetch("http://internal/hash", {
+            method: "POST",
+            body,
+            // @ts-expect-error weird cloudflare stuff
+            signal,
+        });
+    }
 
-	const text = await response.text();
+    const text = await response.text();
 
-	try {
-		const object = JSON.parse(text);
+    try {
+        const object = JSON.parse(text);
 
-		const objectValidationResult = createArgon2ResponseType(object);
+        const objectValidationResult = createArgon2ResponseType(object);
 
-		if (objectValidationResult instanceof type.errors) {
-			console.error(objectValidationResult);
-			throw new Error(objectValidationResult.summary);
-		} else {
-			return objectValidationResult.hash;
-		}
-	} catch (e) {
-		console.error(e);
-		throw e;
-	}
+        if (objectValidationResult instanceof type.errors) {
+            console.error(objectValidationResult);
+            throw new Error(objectValidationResult.summary);
+        } else {
+            return objectValidationResult.hash;
+        }
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
 };
 
 const verifyArgon2ResponseType = type({
-	matches: 'boolean'
+    matches: "boolean",
 });
 
 /**
@@ -110,60 +110,60 @@ const verifyArgon2ResponseType = type({
  * @returns whether the {@link subject} matches the {@link hash}.
  */
 export const verifyArgon2 = async (hash: string, subject: string): Promise<boolean> => {
-	const {
-		fetch,
-		platform,
-		request: { signal }
-	} = getRequestEvent();
+    const {
+        fetch,
+        platform,
+        request: { signal },
+    } = getRequestEvent();
 
-	const body = JSON.stringify({
-		password: subject,
-		hash
-	});
+    const body = JSON.stringify({
+        password: subject,
+        hash,
+    });
 
-	let response;
+    let response;
 
-	if (dev) {
-		// in development we use fetch to a remote worker, because I said so.
-		const { ARGON2_WORKER_DOMAIN } = env;
+    if (dev) {
+        // in development we use fetch to a remote worker, because I said so.
+        const { ARGON2_WORKER_DOMAIN } = env;
 
-		if (!ARGON2_WORKER_DOMAIN) {
-			throw new Error('Unable to contact argon2 worker');
-		}
+        if (!ARGON2_WORKER_DOMAIN) {
+            throw new Error("Unable to contact argon2 worker");
+        }
 
-		response = await fetch(`https://${ARGON2_WORKER_DOMAIN}/verify`, {
-			method: 'POST',
-			body,
-			signal
-		});
-	} else {
-		if (!platform) {
-			throw new Error('Unable to access platform API');
-		}
+        response = await fetch(`https://${ARGON2_WORKER_DOMAIN}/verify`, {
+            method: "POST",
+            body,
+            signal,
+        });
+    } else {
+        if (!platform) {
+            throw new Error("Unable to access platform API");
+        }
 
-		response = await platform.env.ARGON2.fetch('http://internal/verify', {
-			method: 'POST',
-			body,
-			// @ts-expect-error weird cloudflare stuff
-			signal
-		});
-	}
+        response = await platform.env.ARGON2.fetch("http://internal/verify", {
+            method: "POST",
+            body,
+            // @ts-expect-error weird cloudflare stuff
+            signal,
+        });
+    }
 
-	const text = await response.text();
+    const text = await response.text();
 
-	try {
-		const object = JSON.parse(text);
+    try {
+        const object = JSON.parse(text);
 
-		const objectValidationResult = verifyArgon2ResponseType(object);
+        const objectValidationResult = verifyArgon2ResponseType(object);
 
-		if (objectValidationResult instanceof type.errors) {
-			console.error(objectValidationResult);
-			throw new Error(objectValidationResult.summary);
-		} else {
-			return objectValidationResult.matches;
-		}
-	} catch (e) {
-		console.error(e);
-		throw e;
-	}
+        if (objectValidationResult instanceof type.errors) {
+            console.error(objectValidationResult);
+            throw new Error(objectValidationResult.summary);
+        } else {
+            return objectValidationResult.matches;
+        }
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
 };

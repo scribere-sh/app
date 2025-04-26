@@ -1,28 +1,28 @@
 <script lang="ts">
-	import ChevronRight from '@lucide/svelte/icons/chevron-right';
-	import type { WithElementRef } from 'bits-ui';
-	import type { HTMLLiAttributes } from 'svelte/elements';
+    import ChevronRight from "@lucide/svelte/icons/chevron-right";
+    import type { WithElementRef } from "bits-ui";
+    import type { HTMLLiAttributes } from "svelte/elements";
 
-	import { cn } from '$lib/utils';
+    import { cn } from "$lib/utils";
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		children,
-		...rest
-	}: WithElementRef<HTMLLiAttributes> = $props();
+    let {
+        ref = $bindable(null),
+        class: className,
+        children,
+        ...rest
+    }: WithElementRef<HTMLLiAttributes> = $props();
 </script>
 
 <li
-	role="presentation"
-	aria-hidden="true"
-	class={cn('[&>svg]:size-3.5', className)}
-	bind:this={ref}
-	{...rest}
+    role="presentation"
+    aria-hidden="true"
+    class={cn("[&>svg]:size-3.5", className)}
+    bind:this={ref}
+    {...rest}
 >
-	{#if children}
-		{@render children?.()}
-	{:else}
-		<ChevronRight />
-	{/if}
+    {#if children}
+        {@render children?.()}
+    {:else}
+        <ChevronRight />
+    {/if}
 </li>

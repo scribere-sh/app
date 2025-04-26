@@ -1,19 +1,23 @@
 <script lang="ts">
-	import Dot from '@lucide/svelte/icons/dot';
-	import type { WithElementRef } from 'bits-ui';
-	import type { HTMLAttributes } from 'svelte/elements';
+    import Dot from "@lucide/svelte/icons/dot";
+    import type { WithElementRef } from "bits-ui";
+    import type { HTMLAttributes } from "svelte/elements";
 
-	let {
-		ref = $bindable(null),
-		children,
-		...rest
-	}: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
+    let {
+        ref = $bindable(null),
+        children,
+        ...rest
+    }: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
 </script>
 
-<div bind:this={ref} role="separator" {...rest}>
-	{#if children}
-		{@render children?.()}
-	{:else}
-		<Dot />
-	{/if}
+<div
+    bind:this={ref}
+    role="separator"
+    {...rest}
+>
+    {#if children}
+        {@render children?.()}
+    {:else}
+        <Dot />
+    {/if}
 </div>

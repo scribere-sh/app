@@ -1,10 +1,10 @@
-import type { Api } from '$srv/api';
+import type { Api } from "$srv/api";
 
 import {
-	createEdenTreatySvelteQuery,
-	type InferTreatyQueryInput,
-	type InferTreatyQueryOutput
-} from '@ap0nia/eden-svelte-query';
+    createEdenTreatySvelteQuery,
+    type InferTreatyQueryInput,
+    type InferTreatyQueryOutput,
+} from "@ap0nia/eden-svelte-query";
 
 /**
  * For convenience sake I've chopped off the .api bit otherwise it would be EVERYWHERE lmao.

@@ -1,16 +1,16 @@
 {
-	"recommendations": [
-		"arktypeio.arkdark",
-		"oven.bun-vscode",
-		"fill-labs.dependi",
-		"editorconfig.editorconfig",
-		"dbaeumer.vscode-eslint",
-		"andrejunges.handlebars",
-		"esbenp.prettier-vscode",
-		"svelte.svelte-vscode",
-		"ardenivanov.svelte-intellisense",
-		"bradlc.vscode-tailwindcss",
-		"vitest.explorer",
-		"hbenl.vscode-test-explorer"
-	]
+    "recommendations": [
+        "arktypeio.arkdark",
+        "oven.bun-vscode",
+        "fill-labs.dependi",
+        "editorconfig.editorconfig",
+        "dbaeumer.vscode-eslint",
+        "andrejunges.handlebars",
+        "esbenp.prettier-vscode",
+        "svelte.svelte-vscode",
+        "ardenivanov.svelte-intellisense",
+        "bradlc.vscode-tailwindcss",
+        "vitest.explorer",
+        "hbenl.vscode-test-explorer"
+    ]
 }

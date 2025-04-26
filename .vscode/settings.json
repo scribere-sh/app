@@ -1,34 +1,32 @@
 {
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "dprint.dprint",
 
-	"[svelte]": {
-		"editor.defaultFormatter": "svelte.svelte-vscode",
+    "[svelte]": {
+        // interpret markdown-style h1's as titles to put in the minimap
+        "editor.minimap.markSectionHeaderRegex": "#\\s+(?<label>.*)$"
+    },
+    "[typescript]": {
+        "editor.quickSuggestions": {
+            "strings": "on"
+        },
+        // interpret markdown-style h1's as titles to put in the minimap
+        "editor.minimap.markSectionHeaderRegex": "#\\s+(?<label>.*)$"
+    },
+    "[html]": {
+        "editor.minimap.markSectionHeaderRegex": "#\\s+(?<label>.*)$"
+    },
 
-		// interpret markdown-style h1's as titles to put in the minimap
-		"editor.minimap.markSectionHeaderRegex": "#\\s+(?<label>.*)$"
-	},
-	"[typescript]": {
-		"editor.quickSuggestions": {
-			"strings": "on"
-		},
-		// interpret markdown-style h1's as titles to put in the minimap
-		"editor.minimap.markSectionHeaderRegex": "#\\s+(?<label>.*)$"
-	},
-	"[html]": {
-		"editor.minimap.markSectionHeaderRegex": "#\\s+(?<label>.*)$"
-	},
+    "svelte.enable-ts-plugin": true,
 
-	"svelte.enable-ts-plugin": true,
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
 
-	"typescript.tsdk": "node_modules/typescript/lib",
-	"typescript.enablePromptUseWorkspaceTsdk": true,
+    "tailwindCSS.includeLanguages": {
+        "svelte": "html"
+    },
+    "tailwindCSS.classFunctions": ["tv", "cn"],
+    "tailwindCSS.emmetCompletions": true,
 
-	"tailwindCSS.includeLanguages": {
-		"svelte": "html"
-	},
-	"tailwindCSS.classFunctions": ["tv", "cn"],
-	"tailwindCSS.emmetCompletions": true,
-
-	"eslint.useFlatConfig": true,
-	"eslint.validate": ["javascript", "typescript", "svelte"]
+    "eslint.useFlatConfig": true,
+    "eslint.validate": ["javascript", "typescript", "svelte"]
 }

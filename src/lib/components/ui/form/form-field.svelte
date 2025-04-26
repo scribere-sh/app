@@ -1,32 +1,53 @@
-<script lang="ts" module>
-	import type { FormPath as _FormPath } from 'sveltekit-superforms';
+<script
+    lang="ts"
+    module
+>
+    import type { FormPath as _FormPath } from "sveltekit-superforms";
 
-	type T = Record<string, unknown>;
-	type U = _FormPath<T>;
+    type T = Record<string, unknown>;
+    type U = _FormPath<T>;
 </script>
 
-<script lang="ts" generics="T extends Record<string, unknown>, U extends _FormPath<T>">
-	import * as FormPrimitive from 'formsnap';
-	import type { WithElementRef, WithoutChildren } from 'bits-ui';
-	import type { HTMLAttributes } from 'svelte/elements';
+<script
+    lang="ts"
+    generics="T extends Record<string, unknown>, U extends _FormPath<T>"
+>
+    import type { WithElementRef, WithoutChildren } from "bits-ui";
+    import * as FormPrimitive from "formsnap";
+    import type { HTMLAttributes } from "svelte/elements";
 
-	import { cn } from '$lib/utils';
+    import { cn } from "$lib/utils";
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		form,
-		name,
-		children: childrenProp,
-		...rest
-	}: FormPrimitive.FieldProps<T, U> &
-		WithoutChildren<WithElementRef<HTMLAttributes<HTMLDivElement>>> = $props();
+    let {
+        ref = $bindable(null),
+        class: className,
+        form,
+        name,
+        children: childrenProp,
+        ...rest
+    }:
+        & FormPrimitive.FieldProps<T, U>
+        & WithoutChildren<
+            WithElementRef<HTMLAttributes<HTMLDivElement>>
+        > = $props();
 </script>
 
-<FormPrimitive.Field {form} {name}>
-	{#snippet children({ constraints, errors, tainted, value })}
-		<div bind:this={ref} class={cn('flex flex-col gap-2', className)} {...rest}>
-			{@render childrenProp?.({ constraints, errors, tainted, value: value as T[U] })}
-		</div>
-	{/snippet}
+<FormPrimitive.Field
+    {form}
+    {name}
+>
+    {#snippet children({ constraints, errors, tainted, value })}
+        <div
+            bind:this={ref}
+            class={cn("flex flex-col gap-2", className)}
+            {...rest}
+        >
+            {@render childrenProp?.({
+                constraints,
+                errors,
+                tainted,
+                value: value as T[U],
+            })}
+        </div>
+    {/snippet}
 </FormPrimitive.Field>

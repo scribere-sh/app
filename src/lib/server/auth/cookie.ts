@@ -1,6 +1,6 @@
-import { getRequestEvent } from '$app/server';
+import { getRequestEvent } from "$app/server";
 
-export const TOKEN_COOKIE_NAME = 'token';
+export const TOKEN_COOKIE_NAME = "token";
 
 /**
  * # setSecureToken
@@ -15,13 +15,13 @@ export const TOKEN_COOKIE_NAME = 'token';
  * @param expires - expiry date
  */
 export const setSecureToken = (name: string, value: string, expires: Date) => {
-	const { cookies } = getRequestEvent();
+    const { cookies } = getRequestEvent();
 
-	cookies.set(name, value, {
-		path: '/',
-		secure: import.meta.env.PROD,
-		expires,
-		httpOnly: true,
-		sameSite: 'lax'
-	});
+    cookies.set(name, value, {
+        path: "/",
+        secure: import.meta.env.PROD,
+        expires,
+        httpOnly: true,
+        sameSite: "lax",
+    });
 };

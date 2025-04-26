@@ -1,12 +1,12 @@
-import OnboardingTemplate from './toxic-waste/onboarding.tsx';
-import { resend } from './resend.ts';
+import { resend } from "./resend.ts";
+import OnboardingTemplate from "./toxic-waste/onboarding.tsx";
 
 export const sendOnboardingEmail = async (emailAddress: string, onboardingLink: string) => {
-	return await resend.emails.send({
-		from: 'noreply@scribere.sh',
-		to: emailAddress,
+    return await resend.emails.send({
+        from: "noreply@scribere.sh",
+        to: emailAddress,
 
-		subject: 'Scribere Onboarding',
-		react: <OnboardingTemplate onboardingUrl={onboardingLink} />
-	});
+        subject: "Scribere Onboarding",
+        react: <OnboardingTemplate onboardingUrl={onboardingLink} />,
+    });
 };

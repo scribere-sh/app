@@ -1,4 +1,4 @@
-import { encodeBase32LowerCaseNoPadding, decodeBase32 } from '@oslojs/encoding';
+import { decodeBase32, encodeBase32LowerCaseNoPadding } from "@oslojs/encoding";
 
 /**
  * # generateTokenBytes
@@ -9,10 +9,10 @@ import { encodeBase32LowerCaseNoPadding, decodeBase32 } from '@oslojs/encoding';
  * @returns a {@link Uint8Array} with cryptographically-secure random values
  */
 export const generateTokenBytes = (length: number) => {
-	const bytes = new Uint8Array(length);
-	crypto.getRandomValues(bytes);
+    const bytes = new Uint8Array(length);
+    crypto.getRandomValues(bytes);
 
-	return bytes;
+    return bytes;
 };
 
 /**
@@ -24,8 +24,8 @@ export const generateTokenBytes = (length: number) => {
  * @returns a token-esque string
  */
 export const generateTokenString = (length: number) => {
-	const bytes = generateTokenBytes(length);
-	return encodeTokenBytes(bytes);
+    const bytes = generateTokenBytes(length);
+    return encodeTokenBytes(bytes);
 };
 
 /**
@@ -37,7 +37,7 @@ export const generateTokenString = (length: number) => {
  * @returns the provided bytes encoded in base32
  */
 export const encodeTokenBytes = (bytes: Uint8Array) => {
-	return encodeBase32LowerCaseNoPadding(bytes);
+    return encodeBase32LowerCaseNoPadding(bytes);
 };
 
 /**
@@ -49,5 +49,5 @@ export const encodeTokenBytes = (bytes: Uint8Array) => {
  * @returns the bytes represented by the token
  */
 export const decodeTokenString = (token: string) => {
-	return decodeBase32(token);
+    return decodeBase32(token);
 };

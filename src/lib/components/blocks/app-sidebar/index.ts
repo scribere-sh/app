@@ -1,4 +1,4 @@
-import AppSidebar from './app-sidebar.svelte';
+import AppSidebar from "./app-sidebar.svelte";
 
 export { AppSidebar };
 

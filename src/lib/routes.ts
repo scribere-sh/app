@@ -9,10 +9,10 @@
  * PAGES
  */
 export const PAGES = {
-	'/': `/`,
-	'/auth/onboarding': `/auth/onboarding`,
-	'/auth/register': `/auth/register`,
-	'/auth/sign-in': `/auth/sign-in`
+    "/": `/`,
+    "/auth/onboarding": `/auth/onboarding`,
+    "/auth/register": `/auth/register`,
+    "/auth/sign-in": `/auth/sign-in`,
 };
 
 /**
@@ -24,8 +24,8 @@ export const SERVERS = {};
  * ACTIONS
  */
 export const ACTIONS = {
-	'default /auth/register': `/auth/register`,
-	'default /auth/sign-in': `/auth/sign-in`
+    "default /auth/register": `/auth/register`,
+    "default /auth/sign-in": `/auth/sign-in`,
 };
 
 /**
@@ -39,38 +39,38 @@ type ParamValue = string | number | undefined;
  * Append search params to a string
  */
 export const appendSp = (
-	sp?: Record<string, ParamValue | ParamValue[]>,
-	prefix: '?' | '&' = '?'
+    sp?: Record<string, ParamValue | ParamValue[]>,
+    prefix: "?" | "&" = "?",
 ) => {
-	if (sp === undefined) return '';
+    if (sp === undefined) return "";
 
-	const params = new URLSearchParams();
-	const append = (n: string, v: ParamValue) => {
-		if (v !== undefined) {
-			params.append(n, String(v));
-		}
-	};
+    const params = new URLSearchParams();
+    const append = (n: string, v: ParamValue) => {
+        if (v !== undefined) {
+            params.append(n, String(v));
+        }
+    };
 
-	let anchor = '';
-	for (const [name, val] of Object.entries(sp)) {
-		if (name === '__KIT_ROUTES_ANCHOR__' && val !== undefined) {
-			anchor = `#${val}`;
-			continue;
-		}
-		if (Array.isArray(val)) {
-			for (const v of val) {
-				append(name, v);
-			}
-		} else {
-			append(name, val);
-		}
-	}
+    let anchor = "";
+    for (const [name, val] of Object.entries(sp)) {
+        if (name === "__KIT_ROUTES_ANCHOR__" && val !== undefined) {
+            anchor = `#${val}`;
+            continue;
+        }
+        if (Array.isArray(val)) {
+            for (const v of val) {
+                append(name, v);
+            }
+        } else {
+            append(name, val);
+        }
+    }
 
-	const formatted = params.toString();
-	if (formatted || anchor) {
-		return `${prefix}${formatted}${anchor}`.replace('?#', '#');
-	}
-	return '';
+    const formatted = params.toString();
+    if (formatted || anchor) {
+        return `${prefix}${formatted}${anchor}`.replace("?#", "#");
+    }
+    return "";
 };
 
 /**
@@ -82,12 +82,12 @@ export const appendSp = (
  * ```
  */
 export const currentSp = () => {
-	const params = new URLSearchParams(window.location.search);
-	const record: Record<string, string> = {};
-	for (const [key, value] of params.entries()) {
-		record[key] = value;
-	}
-	return record;
+    const params = new URLSearchParams(window.location.search);
+    const record: Record<string, string> = {};
+    for (const [key, value] of params.entries()) {
+        record[key] = value;
+    }
+    return record;
 };
 
 /* type helpers for route function */
@@ -98,11 +98,10 @@ type FunctionParams<T> = T extends (...args: infer P) => any ? P : never;
 const AllObjs = { ...PAGES, ...ACTIONS, ...SERVERS, ...LINKS };
 type AllTypes = typeof AllObjs;
 
-export type Routes = keyof AllTypes extends `${string}/${infer Route}`
-	? `/${Route}`
-	: keyof AllTypes;
+export type Routes = keyof AllTypes extends `${string}/${infer Route}` ? `/${Route}`
+    : keyof AllTypes;
 export const routes = [
-	...new Set(Object.keys(AllObjs).map((route) => /^\/.*|[^ ]?\/.*$/.exec(route)?.[0] ?? route))
+    ...new Set(Object.keys(AllObjs).map((route) => /^\/.*|[^ ]?\/.*$/.exec(route)?.[0] ?? route)),
 ] as Routes[];
 
 /**
@@ -114,17 +113,17 @@ export const routes = [
  * ```
  */
 export function route<T extends FunctionKeys<AllTypes>>(
-	key: T,
-	...params: FunctionParams<AllTypes[T]>
+    key: T,
+    ...params: FunctionParams<AllTypes[T]>
 ): string;
 export function route<T extends NonFunctionKeys<AllTypes>>(key: T): string;
 export function route<T extends keyof AllTypes>(key: T, ...params: any[]): string {
-	if ((AllObjs[key] as any) instanceof Function) {
-		const element = (AllObjs as any)[key] as (...args: any[]) => string;
-		return element(...params);
-	} else {
-		return AllObjs[key] as string;
-	}
+    if ((AllObjs[key] as any) instanceof Function) {
+        const element = (AllObjs as any)[key] as (...args: any[]) => string;
+        return element(...params);
+    } else {
+        return AllObjs[key] as string;
+    }
 }
 
 /**
@@ -143,14 +142,14 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
  * ```
  */
 export type KIT_ROUTES = {
-	PAGES: {
-		'/': never;
-		'/auth/onboarding': never;
-		'/auth/register': never;
-		'/auth/sign-in': never;
-	};
-	SERVERS: Record<string, never>;
-	ACTIONS: { 'default /auth/register': never; 'default /auth/sign-in': never };
-	LINKS: Record<string, never>;
-	Params: Record<string, never>;
+    PAGES: {
+        "/": never;
+        "/auth/onboarding": never;
+        "/auth/register": never;
+        "/auth/sign-in": never;
+    };
+    SERVERS: Record<string, never>;
+    ACTIONS: { "default /auth/register": never; "default /auth/sign-in": never };
+    LINKS: Record<string, never>;
+    Params: Record<string, never>;
 };

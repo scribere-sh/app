@@ -1,13 +1,13 @@
 // used in tsdoc
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { KVNamespace } from '@cloudflare/workers-types';
+import type { KVNamespace } from "@cloudflare/workers-types";
 
-import { dev } from '$app/environment';
-import { env } from '$env/dynamic/private';
+import { dev } from "$app/environment";
+import { env } from "$env/dynamic/private";
 
-import { sha256 } from '@oslojs/crypto/sha2';
+import { sha256 } from "@oslojs/crypto/sha2";
 
-import { getRequestEvent } from '$app/server';
+import { getRequestEvent } from "$app/server";
 
 /**
  * # getCurrentSigningKID
@@ -20,17 +20,17 @@ import { getRequestEvent } from '$app/server';
  * @returns the value of `current` within the {@link KVNamespace}
  */
 export const getCurrentSigningKID = async () => {
-	if (dev) {
-		return env.LOCAL_SIGNING_KEY_KID;
-	}
+    if (dev) {
+        return env.LOCAL_SIGNING_KEY_KID;
+    }
 
-	const { platform } = getRequestEvent();
-	if (!platform) throw new Error('Unable to access Platform APIs');
+    const { platform } = getRequestEvent();
+    if (!platform) throw new Error("Unable to access Platform APIs");
 
-	const KV = platform.env.KV;
+    const KV = platform.env.KV;
 
-	// as of 26 Apr 2025 @ 00:00:00 UTC this will be a safe operation
-	return (await KV.get('current'))!;
+    // as of 26 Apr 2025 @ 00:00:00 UTC this will be a safe operation
+    return (await KV.get("current"))!;
 };
 
 /**
@@ -45,24 +45,24 @@ export const getCurrentSigningKID = async () => {
  * @returns the key arraybuffer from the {@link KVNamespace}
  */
 export const getSigningKey = async (kid: string) => {
-	if (dev) {
-		// allows us to simulate bad tokens
-		if (kid === env.LOCAL_SIGNING_KEY_KID) {
-			return sha256(new TextEncoder().encode(env.LOCAL_SIGNING_KEY));
-		}
+    if (dev) {
+        // allows us to simulate bad tokens
+        if (kid === env.LOCAL_SIGNING_KEY_KID) {
+            return sha256(new TextEncoder().encode(env.LOCAL_SIGNING_KEY));
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	const { platform } = getRequestEvent();
-	if (!platform) throw new Error('Unable to access Platform APIs');
+    const { platform } = getRequestEvent();
+    if (!platform) throw new Error("Unable to access Platform APIs");
 
-	const KV = platform.env.KV;
+    const KV = platform.env.KV;
 
-	const key = await KV.get(kid, 'arrayBuffer');
+    const key = await KV.get(kid, "arrayBuffer");
 
-	if (key) return new Uint8Array(key);
-	return key;
+    if (key) return new Uint8Array(key);
+    return key;
 };
 
 /**
@@ -77,11 +77,11 @@ export const getSigningKey = async (kid: string) => {
  * @returns if the 2 supplied {@link Uint8Array}'s are equal
  */
 export const uint8ArrayStrictEqual = (lhs: Uint8Array, rhs: Uint8Array) => {
-	if (lhs.byteLength !== rhs.byteLength) return false;
+    if (lhs.byteLength !== rhs.byteLength) return false;
 
-	for (let i = 0; i < lhs.byteLength; i++) {
-		if (lhs[i] !== rhs[i]) return false;
-	}
+    for (let i = 0; i < lhs.byteLength; i++) {
+        if (lhs[i] !== rhs[i]) return false;
+    }
 
-	return true;
+    return true;
 };

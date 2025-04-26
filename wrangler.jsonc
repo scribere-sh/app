@@ -1,65 +1,65 @@
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
+    "$schema": "node_modules/wrangler/config-schema.json",
 
-	// Project Name
-	"name": "scribere-app",
+    // Project Name
+    "name": "scribere-app",
 
-	// Required Compat stuff
-	"compatibility_date": "2025-02-27",
-	"compatibility_flags": ["nodejs_compat"],
+    // Required Compat stuff
+    "compatibility_date": "2025-02-27",
+    "compatibility_flags": ["nodejs_compat"],
 
-	// Workers Bindings
-	"main": ".svelte-kit/cloudflare/_worker.js",
-	"assets": {
-		"binding": "ASSETS",
-		"directory": ".svelte-kit/cloudflare"
-	},
+    // Workers Bindings
+    "main": ".svelte-kit/cloudflare/_worker.js",
+    "assets": {
+        "binding": "ASSETS",
+        "directory": ".svelte-kit/cloudflare",
+    },
 
-	// i need to see stuff happen
-	"observability": {
-		"enabled": true
-	},
+    // i need to see stuff happen
+    "observability": {
+        "enabled": true,
+    },
 
-	// Asks CF to place it in SYD so it's closer to our DB
-	"placement": {
-		"mode": "smart",
-		// not AKL because the DB is in Sydney
-		"hint": "SYD"
-	},
+    // Asks CF to place it in SYD so it's closer to our DB
+    "placement": {
+        "mode": "smart",
+        // not AKL because the DB is in Sydney
+        "hint": "SYD",
+    },
 
-	// Variables
-	"vars": {
-		// Private Secrets - Managed in CF UI
-		// - "RESEND_API_KEY"
-		// - "TURSO_URL"
-		// - "TURSO_API_KEY"
+    // Variables
+    "vars": {
+        // Private Secrets - Managed in CF UI
+        // - "RESEND_API_KEY"
+        // - "TURSO_URL"
+        // - "TURSO_API_KEY"
 
-		// Sender email and name
-		"SENDER_EMAIL": "noreply@scribere.sh",
-		"SENDER_NAME": "Scribere"
-	},
+        // Sender email and name
+        "SENDER_EMAIL": "noreply@scribere.sh",
+        "SENDER_NAME": "Scribere",
+    },
 
-	// Binding to our ARGON2 Worker
-	"services": [
-		{
-			"binding": "ARGON2",
-			"service": "scribere-argon2"
-		}
-	],
+    // Binding to our ARGON2 Worker
+    "services": [
+        {
+            "binding": "ARGON2",
+            "service": "scribere-argon2",
+        },
+    ],
 
-	// Bucket for our files
-	"r2_buckets": [
-		{
-			"binding": "R2",
-			"bucket_name": "cdn-scribere-sh",
-			"preview_bucket_name": "cdn-scribere-sh-dev"
-		}
-	],
-	// KV Namespace for signing keys
-	"kv_namespaces": [
-		{
-			"binding": "KV",
-			"id": "96399a918bc14e719079a37568db7837"
-		}
-	]
+    // Bucket for our files
+    "r2_buckets": [
+        {
+            "binding": "R2",
+            "bucket_name": "cdn-scribere-sh",
+            "preview_bucket_name": "cdn-scribere-sh-dev",
+        },
+    ],
+    // KV Namespace for signing keys
+    "kv_namespaces": [
+        {
+            "binding": "KV",
+            "id": "96399a918bc14e719079a37568db7837",
+        },
+    ],
 }

@@ -1,6 +1,6 @@
-import LoadingSpinner from './loading-spinner.svelte';
+import LoadingSpinner from "./loading-spinner.svelte";
 
-export type SpinnerState = 'loading' | 'complete' | 'error';
+export type SpinnerState = "loading" | "complete" | "error";
 
 export { LoadingSpinner };
 

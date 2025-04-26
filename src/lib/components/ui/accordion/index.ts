@@ -1,19 +1,19 @@
-import Content from './accordion-content.svelte';
-import Item from './accordion-item.svelte';
-import Trigger from './accordion-trigger.svelte';
+import Content from "./accordion-content.svelte";
+import Item from "./accordion-item.svelte";
+import Trigger from "./accordion-trigger.svelte";
 
-import { Accordion as AccordionPrimitive } from 'bits-ui';
+import { Accordion as AccordionPrimitive } from "bits-ui";
 
 const Root = AccordionPrimitive.Root;
 
 export {
-	Root,
-	Content,
-	Item,
-	Trigger,
-	//
-	Root as AccordionRoot,
-	Content as AccordionContent,
-	Item as AccordionItem,
-	Trigger as AccordionTrigger
+    Content,
+    Content as AccordionContent,
+    Item,
+    Item as AccordionItem,
+    Root,
+    //
+    Root as AccordionRoot,
+    Trigger,
+    Trigger as AccordionTrigger,
 };

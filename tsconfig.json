@@ -1,19 +1,19 @@
 {
-	"extends": "./.svelte-kit/tsconfig.json",
-	"compilerOptions": {
-		"incremental": true,
-		"lib": ["WebWorker"],
-		"allowJs": true,
-		"checkJs": true,
-		"jsx": "react-jsx",
-		"jsxImportSource": "react",
-		"allowImportingTsExtensions": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
-		"strict": true,
-		"moduleResolution": "bundler"
-	}
+    "extends": "./.svelte-kit/tsconfig.json",
+    "compilerOptions": {
+        "incremental": true,
+        "lib": ["WebWorker"],
+        "allowJs": true,
+        "checkJs": true,
+        "jsx": "react-jsx",
+        "jsxImportSource": "react",
+        "allowImportingTsExtensions": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "moduleResolution": "bundler"
+    }
 }
