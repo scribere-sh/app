@@ -1,6 +1,5 @@
 import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
-import prettier from "eslint-config-prettier";
 import drizzle from "eslint-plugin-drizzle";
 import svelte from "eslint-plugin-svelte";
 import tsdoc from "eslint-plugin-tsdoc";

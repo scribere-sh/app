@@ -25,6 +25,7 @@
 
         "formatComments": true,
         "maxAttrsPerLine": 1,
+        "preferAttrsSingleLine": false,
 
         "whitespaceSensitivity": "css",
 
