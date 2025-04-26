@@ -1,11 +1,11 @@
 import type { Actions, PageServerLoad } from './$types';
 
-import { fail, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
 import { eq } from 'drizzle-orm';
 import { or } from 'drizzle-orm';
 
-import { setError, superValidate } from 'sveltekit-superforms';
+import { setError, superValidate, fail } from 'sveltekit-superforms';
 import { arktype } from 'sveltekit-superforms/adapters';
 
 import { type } from 'arktype';
@@ -18,6 +18,7 @@ import { passwordsTable } from '$tb/auth';
 import { verifyArgon2 } from '$srv/auth/argon2';
 import { signJWT } from '$srv/auth/jwt';
 import { setSecureToken, TOKEN_COOKIE_NAME } from '$srv/auth/cookie';
+import { initCsrf, validateCsrf, cleanupCsrf } from '$srv/csrf';
 
 import { route } from '$lib/routes';
 
@@ -25,18 +26,21 @@ const SIX_DAYS_IN_SECONDS = 6 * 24 * 60 * 60;
 
 const schema = type({
 	identifier: 'string.email | /^[a-z0-9.-]{3,30}$/',
-	password: 'string'
+	password: 'string',
+	csrf: 'string'
 });
 
 const defaults: typeof schema.infer = {
 	identifier: '',
-	password: ''
+	password: '',
+	csrf: ''
 };
 
 export const load = (async () => {
 	const form = await superValidate(arktype(schema, { defaults }));
+	const csrf = initCsrf();
 
-	return { form };
+	return { form, csrf };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
@@ -45,6 +49,10 @@ export const actions: Actions = {
 
 		if (!form.valid) {
 			return fail(400, { form });
+		}
+
+		if (!validateCsrf(form.data.csrf)) {
+			return fail(400, { form, message: 'CSRF Error' });
 		}
 
 		const { 0: query, length } = await db
@@ -111,6 +119,7 @@ export const actions: Actions = {
 
 		const expiryDate = new Date(expiry_s * 1000);
 
+		cleanupCsrf();
 		setSecureToken(TOKEN_COOKIE_NAME, signedJwt, expiryDate);
 
 		return redirect(303, route('/'));

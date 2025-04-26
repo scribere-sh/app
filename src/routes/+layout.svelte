@@ -18,6 +18,6 @@
 
 <ModeWatcher defaultTheme="default" {disableTransitions} />
 
-<Toaster />
+<Toaster richColors />
 
 {@render children()}

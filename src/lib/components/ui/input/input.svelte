@@ -8,7 +8,9 @@
 
 	type Props = WithElementRef<
 		Omit<HTMLInputAttributes, 'type'> &
-			({ type: 'file'; files?: FileList } | { type?: InputType; files?: undefined })
+			({ type: 'file'; files?: FileList } | { type?: InputType; files?: undefined }) & {
+				error?: boolean;
+			}
 	>;
 
 	let {
@@ -16,6 +18,7 @@
 		value = $bindable(),
 		type,
 		files = $bindable(),
+		error = false,
 		class: className,
 		...rest
 	}: Props = $props();
@@ -26,6 +29,7 @@
 		bind:this={ref}
 		class={cn(
 			'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-base file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+			error && 'border-red-400 focus-visible:ring-red-400',
 			className
 		)}
 		type="file"
@@ -38,6 +42,7 @@
 		bind:this={ref}
 		class={cn(
 			'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-base file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+			error && 'border-red-400 focus-visible:ring-red-400',
 			className
 		)}
 		{type}

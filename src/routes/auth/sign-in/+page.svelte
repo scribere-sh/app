@@ -2,13 +2,13 @@
 	import type { PageProps } from './$types';
 
 	import * as Card from '$ui/card';
+	import { Button } from '$ui/button';
 
 	import LoginForm from './form.svelte';
-	import { Button } from '$ui/button';
 	import { route } from '$lib/routes';
 
 	const { data }: PageProps = $props();
-	const { form } = data;
+	const { form, csrf } = data;
 </script>
 
 <!-- even out the spacing -->
@@ -23,7 +23,7 @@
 			>
 		</Card.Header>
 		<Card.Content>
-			<LoginForm {form} />
+			<LoginForm {form} {csrf} />
 		</Card.Content>
 	</div>
 
@@ -37,7 +37,9 @@
 </Card.Root>
 
 <div class="mt-8 flex h-24 w-32 flex-col items-center justify-center gap-4">
-	<Button href={route('/')} variant="link" class="text-foreground w-full">Sign Up</Button>
+	<Button href={route('/auth/register')} variant="link" class="text-foreground w-full">
+		Register
+	</Button>
 
 	<Button href={route('/')} variant="link" class="text-foreground w-full">
 		Forgot Password?

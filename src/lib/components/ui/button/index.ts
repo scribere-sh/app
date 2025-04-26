@@ -9,6 +9,7 @@ export const buttonVariants = tv({
 	variants: {
 		variant: {
 			default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+			foreground: 'bg-foreground text-background hover:bg-foreground/90',
 			destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
 			'destructive-ghost': 'hover:bg-destructive/90 hover:text-destructive-foreground',
 			outline:

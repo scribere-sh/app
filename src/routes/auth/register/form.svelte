@@ -37,7 +37,7 @@
 
 			if (result.type === 'error') {
 				console.error(result);
-				toast.error(`Failed to login: ${result.error.message}`);
+				toast.error(`Failed to register: ${result.error.message}`);
 			} else if (result.type === 'failure') {
 				console.error(result);
 				if (
@@ -45,7 +45,7 @@
 					typeof result.data !== 'undefined' &&
 					'message' in result.data
 				) {
-					toast.error(`Failed to login: ${result.data!.message}`);
+					toast.error(`Failed to register: ${result.data!.message}`);
 				}
 			}
 		}
@@ -54,51 +54,32 @@
 	const { form: data, enhance, errors } = form;
 </script>
 
-<form method="POST" action={route('default /auth/sign-in')} use:enhance class="flex flex-col gap-4">
+<form
+	action={route('default /auth/register')}
+	use:enhance
+	method="POST"
+	class="flex flex-col gap-4"
+>
 	<input type="hidden" name="csrf" value={csrf} />
 
-	<Form.Field {form} name="identifier">
+	<Form.Field {form} name="email">
 		<Form.Control>
 			{#snippet children({ props })}
 				<div class="flex h-6 items-center justify-between">
-					<Form.Label error={$errors.identifier !== undefined}>
-						Handle or Email Address
-					</Form.Label>
+					<Form.Label error={$errors.email !== undefined}>Email Address</Form.Label>
 					<Form.FieldErrors />
 				</div>
 
 				<Input
 					{...props}
 					{disabled}
-					error={$errors.identifier !== undefined}
+					error={$errors.email !== undefined}
 					type="text"
-					autocomplete="username"
-					placeholder="email@contoso.com / john.doe123"
+					autocomplete="email"
+					placeholder="email@contoso.com"
 					required
-					bind:value={$data.identifier}
+					bind:value={$data.email}
 					bind:ref={firstFieldRef}
-				/>
-			{/snippet}
-		</Form.Control>
-	</Form.Field>
-
-	<Form.Field {form} name="password">
-		<Form.Control>
-			{#snippet children({ props })}
-				<div class="flex items-center justify-between">
-					<Form.Label error={$errors.password !== undefined}>Password</Form.Label>
-					<Form.FieldErrors />
-				</div>
-
-				<Input
-					{...props}
-					{disabled}
-					error={$errors.password !== undefined}
-					type="password"
-					autocomplete="current-password"
-					placeholder="****************"
-					required
-					bind:value={$data.password}
 				/>
 			{/snippet}
 		</Form.Control>
@@ -108,7 +89,7 @@
 		{#if disabled}
 			<LoadingSpinner class="stroke-background" />
 		{:else}
-			Sign In
+			Register
 		{/if}
 	</Form.Button>
 </form>
