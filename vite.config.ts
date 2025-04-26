@@ -16,7 +16,7 @@ export default defineConfig({
             exportObjects: true,
             format: "route(path)",
             generated_file_path: "src/lib/routes.ts",
-            post_update_run: "prettier --write ./src/lib/routes.ts",
+            post_update_run: "dprint fmt ./src/lib/routes.ts",
         }),
     ],
     resolve: {

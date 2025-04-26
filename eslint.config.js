@@ -15,8 +15,6 @@ export default ts.config(
     js.configs.recommended,
     ...ts.configs.recommended,
     ...svelte.configs.recommended,
-    prettier,
-    ...svelte.configs.prettier,
     {
         files: ["**/*.{ts,tsx}"],
         plugins: {
