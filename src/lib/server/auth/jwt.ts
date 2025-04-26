@@ -9,6 +9,9 @@ import { SHA256 } from '@oslojs/crypto/sha2';
 
 import { type } from 'arktype';
 
+/**
+ * # jwtPayloadType
+ */
 export const jwtPayloadType = type({
 	/**
 	 * **`sub`**ject - user id
@@ -54,6 +57,8 @@ export const jwtPayloadType = type({
 export type JWTPayload = typeof jwtPayloadType.infer;
 
 /**
+ * # signJWT
+ *
  * Sign a token payload
  *
  * **This function can only be called by a SvelteKit handler due
@@ -96,6 +101,8 @@ const jwtHeaderSchema = type({
 type JWTHeader = typeof jwtHeaderSchema.infer;
 
 /**
+ * # verifyJWT
+ *
  * Verify a JWT
  *
  * **This function can only be called by a SvelteKit handler due

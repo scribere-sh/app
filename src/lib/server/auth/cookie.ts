@@ -3,6 +3,8 @@ import { getRequestEvent } from '$app/server';
 export const TOKEN_COOKIE_NAME = 'token';
 
 /**
+ * # setSecureToken
+ *
  * Set a cookie in the event, this cookie is a secure httpOnly cookie, useful for tokens
  *
  * **This function can only be called by a SvelteKit handler due

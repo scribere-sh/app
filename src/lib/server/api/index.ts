@@ -41,6 +41,8 @@ const apiHandler = new Elysia({
 		console.error(error);
 	})
 	/**
+	 * # GET /api/ping
+	 *
 	 * A basic ping handler to test stuff
 	 */
 	.get('/ping', ({ set, user }) => {

@@ -8,6 +8,8 @@ const createArgon2ResponseType = type({
 });
 
 /**
+ * # createArgon2
+ *
  * Create an `argon2id` hash of the input data. Since cloudflare
  * is really REALLY limited at the free tier (and kinda slow).
  * This function calls a separate and bound worker (or a remote
@@ -91,6 +93,8 @@ const verifyArgon2ResponseType = type({
 });
 
 /**
+ * # verifyArgon2
+ *
  * Takes a stored `argon2id` hash and a test subject and checks if
  * they match.
  *

@@ -10,6 +10,8 @@ import { sha256 } from '@oslojs/crypto/sha2';
 import { getRequestEvent } from '$app/server';
 
 /**
+ * # getCurrentSigningKID
+ *
  * Get the currently used signing key from the KV Namespace
  *
  * **This function can only be called by a SvelteKit handler due
@@ -32,6 +34,8 @@ export const getCurrentSigningKID = async () => {
 };
 
 /**
+ * # getSigningKey
+ *
  * Lookup a signing key within the KV Namespace
  *
  * **This function can only be called by a SvelteKit handler due
@@ -62,6 +66,8 @@ export const getSigningKey = async (kid: string) => {
 };
 
 /**
+ * # uint8ArrayStrictEqual
+ *
  * compare 2 {@link Uint8Array}'s and their contents,
  * because this functionality isn't buit in for some
  * reason.

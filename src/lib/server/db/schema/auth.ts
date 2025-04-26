@@ -105,6 +105,9 @@ export const totpSecretsTable = sqliteTable(
 	]
 );
 
+/**
+ * # OAuth2 Providers
+ */
 export const oauthProvidersTable = sqliteTable(
 	'oauthProviders',
 	{

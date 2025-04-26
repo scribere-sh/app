@@ -1,6 +1,8 @@
 import { encodeBase32LowerCaseNoPadding, decodeBase32 } from '@oslojs/encoding';
 
 /**
+ * # generateTokenBytes
+ *
  * Generate a bunch of bytes.
  *
  * @param length - the amount of bytes to generate
@@ -14,6 +16,8 @@ export const generateTokenBytes = (length: number) => {
 };
 
 /**
+ * # generateTokenString
+ *
  * Generate a bunch of bytes using {@link generateTokenBytes} then encode them using {@link encodeTokenBytes}
  *
  * @param length - the amount of bytes to generate
@@ -25,6 +29,8 @@ export const generateTokenString = (length: number) => {
 };
 
 /**
+ * # encodeTokenBytes
+ *
  * Encode bytes in base32
  *
  * @param bytes - the bytes to encode to a string
@@ -35,6 +41,8 @@ export const encodeTokenBytes = (bytes: Uint8Array) => {
 };
 
 /**
+ * # decodeTokenString
+ *
  * Decode bytes from a base32 string
  *
  * @param token - a base32 encoded string

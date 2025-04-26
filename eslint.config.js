@@ -19,7 +19,7 @@ export default ts.config(
 	prettier,
 	...svelte.configs.prettier,
 	{
-		files: ['**/*.ts'],
+		files: ['**/*.{ts,tsx}'],
 		plugins: {
 			tsdoc,
 			drizzle
