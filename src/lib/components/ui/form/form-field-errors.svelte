@@ -16,13 +16,13 @@
 	} = $props();
 </script>
 
-<FormPrimitive.FieldErrors bind:ref class={cn('text-xs', className)} {...rest}>
+<FormPrimitive.FieldErrors bind:ref class={cn('text-xs font-medium', className)} {...rest}>
 	{#snippet children({ errors, errorProps })}
 		{#if childrenProp}
 			{@render childrenProp({ errors, errorProps })}
 		{:else}
 			{#each errors as error (error)}
-				<div {...errorProps} in:fly={{ x: 10 }} class={cn('text-red-300', errorClasses)}>
+				<div {...errorProps} in:fly={{ x: 10 }} class={cn('text-red-400', errorClasses)}>
 					{error}
 				</div>
 			{/each}
