@@ -1,16 +1,25 @@
 import type { Actions } from "./$types";
 
+import { env } from "$env/dynamic/private";
+
 import { fail, setError, superValidate } from "sveltekit-superforms";
 import { arktype } from "sveltekit-superforms/adapters";
 
 import { type } from "arktype";
 
-import { initCsrf, validateCsrf } from "$srv/csrf";
+import { sha256 } from "@oslojs/crypto/sha2";
+import { eq, lt } from "drizzle-orm";
 
-import { eq } from "drizzle-orm";
+import { generateTokenString } from "$srv/auth/token";
+import { initCsrf, validateCsrf } from "$srv/csrf";
+import { sendOnboardingEmail } from "$srv/email";
 
 import { db } from "$srv/db";
-import { emailAddressesTable, emailLowerCase } from "$tb/email";
+import { emailAddressesTable, emailLowerCase, emailOnboardingsTable } from "$tb/email";
+
+import { route } from "$lib/routes";
+
+// # Load
 
 const schema = type({
     email: "string.email",
@@ -26,8 +35,12 @@ export const load = async () => {
     const form = await superValidate(arktype(schema, { defaults }));
     const csrf = initCsrf();
 
-    return { form, csrf };
+    return { form, csrf, accepting: env.ACCEPTING_REGISTRATIONS === "true" };
 };
+
+// # Action
+
+const THIRTY_MINUTES_IN_MILLISECONDS = 30 * 60 * 1000;
 
 export const actions: Actions = {
     default: async ({ request }) => {
@@ -41,20 +54,78 @@ export const actions: Actions = {
             return fail(400, { form, message: "CSRF Error" });
         }
 
-        const { length: emailAddressFoundCount } = await db
-            .select({
-                email: emailAddressesTable.email,
-            })
-            .from(emailAddressesTable)
-            .where(eq(emailLowerCase(emailAddressesTable.email), form.data.email.toLowerCase()))
-            .limit(1);
+        const { 1: { length: emailAddressFoundCount }, 2: { length: emailOnboardingsFoundCount } } = await db.batch([
+            // delete expired challenges
+            db
+                .delete(emailOnboardingsTable)
+                .where(lt(emailOnboardingsTable.expires, new Date())),
+            // select current email addresses
+            db
+                .select({
+                    email: emailAddressesTable.email,
+                })
+                .from(emailAddressesTable)
+                .where(eq(emailLowerCase(emailAddressesTable.email), form.data.email.toLowerCase()))
+                .limit(1),
+            // select onboarding emails
+            db
+                .select({
+                    email: emailOnboardingsTable.email,
+                })
+                .from(emailOnboardingsTable)
+                .where(eq(emailLowerCase(emailOnboardingsTable.email), form.data.email.toLowerCase()))
+                .limit(1),
+        ]);
 
+        // user with this email already in system
         if (emailAddressFoundCount > 0) {
-            return setError(form, "email", "email already exists", { status: 400 });
+            return setError(form, "email", "email in use", { status: 403 });
         }
 
-        return setError(form, "email", "well fuck you", { status: 400 });
+        // an onboarding email has already been set
+        if (emailOnboardingsFoundCount > 0) {
+            return setError(form, "email", "email already sent", { status: 403 });
+        }
 
-        // cleanupCsrf();
+        // allows us to toggle if we're accepting registrations
+        // to prevent spamming.
+        if (env.ACCEPTING_REGISTRATIONS !== "true") {
+            setError(form, "email", "not accepting registrations");
+            return fail(418, { form, message: "not accepting registrations" });
+        }
+
+        // create a challengeToken
+        const challengeToken = generateTokenString(32);
+
+        // create a Token Verifier
+        //
+        // the onboarding page must check this
+        const challegeVerifier = sha256(new TextEncoder().encode(
+            `${form.data.email}:${challengeToken}`,
+        ));
+
+        // generate the URL to be placed within the email
+        const challengeURL = new URL(request.url);
+        challengeURL.pathname = route("/auth/onboarding");
+        challengeURL.searchParams.set("email", encodeURIComponent(form.data.email));
+        challengeURL.searchParams.set("token", encodeURIComponent(challengeToken));
+
+        const emailSendResult = await sendOnboardingEmail(form.data.email, challengeURL.toString());
+
+        if (emailSendResult.error || !emailSendResult.data) {
+            console.error(emailSendResult);
+            return fail(500, { form, message: "Failed to send onboarding email." });
+        }
+
+        await db
+            .insert(emailOnboardingsTable)
+            .values({
+                email: form.data.email,
+                emailRef: emailSendResult.data.id,
+                challenge: challegeVerifier,
+                expires: new Date(Date.now() + THIRTY_MINUTES_IN_MILLISECONDS),
+            });
+
+        return { email: form.data.email };
     },
 };

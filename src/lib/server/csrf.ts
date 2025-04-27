@@ -15,8 +15,9 @@ const CSRF_TOKEN_NAME = "csrf";
 export const initCsrf = (): string => {
     const { cookies } = getRequestEvent();
 
-    const currentCookie = cookies.get(CSRF_TOKEN_NAME);
-    if (currentCookie) return currentCookie;
+    // disabled for the time being
+    // const currentCookie = cookies.get(CSRF_TOKEN_NAME);
+    // if (currentCookie) return currentCookie;
 
     const csrfToken = generateTokenString(32);
 
@@ -49,7 +50,8 @@ export const validateCsrf = (formToken: string): boolean => {
  * Clean up the CSRF cookie.
  *
  * Run this if you're about to redirect the user elsewhere and
- * a CSRF token is no longer needed.
+ * a CSRF token is no longer needed. If the form used results
+ * in a success, don't bother cleaning this up.
  *
  * **This function can only be called by a SvelteKit handler due
  * to the use of {@link getRequestEvent | `getRequestEvent()`}.**

@@ -1,5 +1,5 @@
 import { type SQL, sql } from "drizzle-orm";
-import { type AnySQLiteColumn, index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { type AnySQLiteColumn, blob, index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 import { usersTable } from "./user";
 
@@ -74,10 +74,7 @@ export const emailOnboardingsTable = sqliteTable(
          * @see {@link usersTable.id}
          */
         email: text({ mode: "text" })
-            .notNull()
-            .references(() => emailAddressesTable.email, {
-                onDelete: "cascade",
-            }),
+            .notNull(),
 
         /**
          * This should be some form of verifiable fingerprint of a
@@ -86,7 +83,12 @@ export const emailOnboardingsTable = sqliteTable(
          * going full `argon2` here may be a bit overkill, a simple
          * salted hash may do the trick.
          */
-        challenge: text({ mode: "text" }).notNull(),
+        challenge: blob().notNull(),
+
+        /**
+         * Resend ID for the sent onboarding email
+         */
+        emailRef: text({ mode: "text" }).notNull(),
 
         /**
          * The expiry date of this validation challenge, the expiry

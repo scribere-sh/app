@@ -48,6 +48,10 @@ export default function Email({ onboardingUrl }: OnboardingEmailProps) {
                     You're receiving this email because someone (<em>hopefully you</em>), wants to sign up for Scribere.
                 </Text>
 
+                <Text>
+                    You'll want to be quick, this link expires in <strong>30 minutes</strong>.
+                </Text>
+
                 <Text>Click the link below to get started!</Text>
 
                 <Button href={onboardingUrl} style={{ margin: "2rem 0" }}>

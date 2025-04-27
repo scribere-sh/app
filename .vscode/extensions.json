@@ -10,6 +10,7 @@
         "bradlc.vscode-tailwindcss",
         "vitest.explorer",
         "hbenl.vscode-test-explorer",
-        "dprint.dprint"
+        "dprint.dprint",
+        "csstools.postcss"
     ]
 }

@@ -14,7 +14,7 @@
 <!-- even out the spacing -->
 <div class="h-24"></div>
 
-<Card.Root class="flex flex-row items-center gap-2 backdrop-brightness-95">
+<Card.Root class="flex flex-row items-center gap-2 animate-in fade-in">
     <div class="w-96">
         <Card.Header>
             <Card.Title>Sign In</Card.Title>

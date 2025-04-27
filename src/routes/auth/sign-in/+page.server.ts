@@ -22,7 +22,7 @@ import { cleanupCsrf, initCsrf, validateCsrf } from "$srv/csrf";
 
 import { route } from "$lib/routes";
 
-const SIX_DAYS_IN_SECONDS = 6 * 24 * 60 * 60;
+// # Load
 
 const schema = type({
     identifier: "string.email | /^[a-z0-9.-]{3,30}$/",
@@ -42,6 +42,10 @@ export const load = (async () => {
 
     return { form, csrf };
 }) satisfies PageServerLoad;
+
+// # Action
+
+const SIX_DAYS_IN_SECONDS = 6 * 24 * 60 * 60;
 
 export const actions: Actions = {
     default: async ({ request }) => {

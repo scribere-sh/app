@@ -61,10 +61,10 @@
 </script>
 
 <form
-    method="POST"
     action={route("default /auth/sign-in")}
-    use:enhance
+    method="POST"
     class="flex flex-col gap-4"
+    use:enhance
 >
     <input
         type="hidden"
