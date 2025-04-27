@@ -37,22 +37,13 @@
     <!-- Theme Options -->
     <DropdownMenu.Content {...props}>
         <DropdownMenu.Item onclick={() => setMode("light")}>
-            <Sun
-                size="0.8rem"
-                class="mr-4"
-            />&nbsp;Light
+            <Sun size="0.8rem" class="mr-4" />&nbsp;Light
         </DropdownMenu.Item>
         <DropdownMenu.Item onclick={() => setMode("dark")}>
-            <Moon
-                size="0.8rem"
-                class="mr-4"
-            />&nbsp;Dark
+            <Moon size="0.8rem" class="mr-4" />&nbsp;Dark
         </DropdownMenu.Item>
         <DropdownMenu.Item onclick={resetMode}>
-            <Settings
-                size="0.8rem"
-                class="mr-4"
-            />&nbsp;System
+            <Settings size="0.8rem" class="mr-4" />&nbsp;System
         </DropdownMenu.Item>
     </DropdownMenu.Content>
 </DropdownMenu.Root>

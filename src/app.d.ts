@@ -4,6 +4,10 @@ import type { ExecutionContext, Fetcher, KVNamespace, R2Bucket } from "@cloudfla
 
 declare global {
     namespace App {
+        interface Error {
+            message?: string;
+        }
+
         interface Locals {
             dehydrated: DehydratedState;
 

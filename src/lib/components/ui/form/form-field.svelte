@@ -1,7 +1,4 @@
-<script
-    lang="ts"
-    module
->
+<script lang="ts" module>
     import type { FormPath as _FormPath } from "sveltekit-superforms";
 
     type T = Record<string, unknown>;
@@ -32,10 +29,7 @@
         > = $props();
 </script>
 
-<FormPrimitive.Field
-    {form}
-    {name}
->
+<FormPrimitive.Field {form} {name}>
     {#snippet children({ constraints, errors, tainted, value })}
         <div
             bind:this={ref}

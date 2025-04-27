@@ -24,8 +24,7 @@
         "svelteDirectiveShorthand": true,
 
         "formatComments": true,
-        "maxAttrsPerLine": 1,
-        "preferAttrsSingleLine": false,
+        "preferAttrsSingleLine": true,
 
         "whitespaceSensitivity": "css",
 

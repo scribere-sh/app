@@ -1,7 +1,4 @@
-<script
-    lang="ts"
-    module
->
+<script lang="ts" module>
     import type { FormPathLeaves as _FormPathLeaves } from "sveltekit-superforms";
 
     type T = Record<string, unknown>;
@@ -32,16 +29,9 @@
         & FormPrimitive.ElementFieldProps<T, U> = $props();
 </script>
 
-<FormPrimitive.ElementField
-    {form}
-    {name}
->
+<FormPrimitive.ElementField {form} {name}>
     {#snippet children({ constraints, errors, tainted, value })}
-        <div
-            bind:this={ref}
-            class={cn("space-y-2", className)}
-            {...rest}
-        >
+        <div bind:this={ref} class={cn("space-y-2", className)} {...rest}>
             {@render childrenProp?.({
                 constraints,
                 errors,

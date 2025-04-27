@@ -1,7 +1,4 @@
-<script
-    lang="ts"
-    module
->
+<script lang="ts" module>
     import type { FormPath as _FormPath } from "sveltekit-superforms";
 
     type T = Record<string, unknown>;

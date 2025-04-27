@@ -42,11 +42,7 @@
             started</Card.Description>
     </Card.Header>
     <Card.Content>
-        <RegisterForm
-            {form}
-            {csrf}
-            {accepting}
-        />
+        <RegisterForm {form} {csrf} {accepting} />
     </Card.Content>
 </Card.Root>
 

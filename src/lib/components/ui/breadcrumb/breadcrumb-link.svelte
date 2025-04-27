@@ -26,10 +26,7 @@
 {#if child}
     {@render child({ props: attrs })}
 {:else}
-    <a
-        bind:this={ref}
-        {...attrs}
-    >
+    <a bind:this={ref} {...attrs}>
         {@render children?.()}
     </a>
 {/if}

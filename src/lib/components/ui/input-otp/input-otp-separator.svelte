@@ -10,11 +10,7 @@
     }: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
 </script>
 
-<div
-    bind:this={ref}
-    role="separator"
-    {...rest}
->
+<div bind:this={ref} role="separator" {...rest}>
     {#if children}
         {@render children?.()}
     {:else}

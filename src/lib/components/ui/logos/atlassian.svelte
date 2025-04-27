@@ -30,16 +30,8 @@
             gradientUnits="userSpaceOnUse"
             gradientTransform="translate(-0.0039818,-33.961454)"
         >
-            <stop
-                offset="0"
-                stop-color="#0052cc"
-                id="stop4"
-            />
-            <stop
-                offset="0.92"
-                stop-color="#2684ff"
-                id="stop6"
-            />
+            <stop offset="0" stop-color="#0052cc" id="stop4" />
+            <stop offset="0.92" stop-color="#2684ff" id="stop6" />
         </linearGradient>
     </defs>
 

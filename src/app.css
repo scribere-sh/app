@@ -29,6 +29,8 @@
     --color-primary: grey;
     --color-primary-foreground: white;
 
+    --color-mutex: grey;
+
     --spacing-sidebar: calc(
         var(--spacing) *
             var(--sidebar-width)

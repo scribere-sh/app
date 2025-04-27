@@ -22,11 +22,7 @@
 </h1>
 
 <div class="mt-4 flex flex-row gap-4">
-    <Button
-        class="capitalize"
-        tabindex={0}
-        onclick={toggleMode}
-    >
+    <Button class="capitalize" tabindex={0} onclick={toggleMode}>
         Let there be {
             mode.current
             ? (mode.current === "dark" ? "light" : "darkness")
@@ -68,10 +64,7 @@
 </div>
 
 <div class="flex h-[300px] w-[500px] items-center justify-center">
-    <Accordion.Root
-        type="single"
-        class="w-full sm:max-w-[70%]"
-    >
+    <Accordion.Root type="single" class="w-full sm:max-w-[70%]">
         <Accordion.Item value="item-1">
             <Accordion.Trigger>Is it accessible?</Accordion.Trigger>
             <Accordion.Content>Yes. It adheres to the WAI-ARIA design

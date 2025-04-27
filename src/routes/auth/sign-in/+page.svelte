@@ -17,15 +17,15 @@
 <Card.Root class="flex flex-row items-center gap-2 animate-in fade-in">
     <div class="w-96">
         <Card.Header>
-            <Card.Title>Sign In</Card.Title>
-            <Card.Description>Or use the providers to the right if you linked
-                them.</Card.Description>
+            <Card.Title>
+                Sign In
+            </Card.Title>
+            <Card.Description>
+                Or use the providers to the right if you linked them.
+            </Card.Description>
         </Card.Header>
         <Card.Content>
-            <LoginForm
-                {form}
-                {csrf}
-            />
+            <LoginForm {form} {csrf} />
         </Card.Content>
     </div>
 
@@ -49,11 +49,7 @@
         Register
     </Button>
 
-    <Button
-        href={route("/")}
-        variant="link"
-        class="text-foreground w-full"
-    >
+    <Button href={route("/")} variant="link" class="text-foreground w-full">
         Forgot Password?
     </Button>
 </div>

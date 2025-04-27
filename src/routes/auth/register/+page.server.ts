@@ -32,8 +32,8 @@ const defaults: typeof schema.infer = {
 };
 
 export const load = async () => {
-    const form = await superValidate(arktype(schema, { defaults }));
     const csrf = initCsrf();
+    const form = await superValidate(arktype(schema, { defaults }));
 
     return { form, csrf, accepting: env.ACCEPTING_REGISTRATIONS === "true" };
 };
@@ -45,13 +45,16 @@ const THIRTY_MINUTES_IN_MILLISECONDS = 30 * 60 * 1000;
 export const actions: Actions = {
     default: async ({ request }) => {
         const form = await superValidate(request, arktype(schema, { defaults }));
+        const csrf = form.data.csrf;
 
         if (!form.valid) {
-            return fail(400, { form });
+            console.error("form is invalid");
+            return fail(400, { form, csrf });
         }
 
         if (!validateCsrf(form.data.csrf)) {
-            return fail(400, { form, message: "CSRF Error" });
+            console.error("csrf error");
+            return fail(400, { form, csrf, message: "CSRF Error" });
         }
 
         const { 1: { length: emailAddressFoundCount }, 2: { length: emailOnboardingsFoundCount } } = await db.batch([
@@ -79,17 +82,22 @@ export const actions: Actions = {
 
         // user with this email already in system
         if (emailAddressFoundCount > 0) {
-            return setError(form, "email", "email in use", { status: 403 });
+            console.error("email is in use");
+            setError(form, "email", "email in use");
+            return fail(403, { form, csrf });
         }
 
         // an onboarding email has already been set
         if (emailOnboardingsFoundCount > 0) {
-            return setError(form, "email", "email already sent", { status: 403 });
+            console.error("email already sent");
+            setError(form, "email", "email already sent");
+            return fail(403, { form, csrf });
         }
 
         // allows us to toggle if we're accepting registrations
         // to prevent spamming.
         if (env.ACCEPTING_REGISTRATIONS !== "true") {
+            console.error("no accepting");
             setError(form, "email", "not accepting registrations");
             return fail(418, { form, message: "not accepting registrations" });
         }
@@ -114,7 +122,7 @@ export const actions: Actions = {
 
         if (emailSendResult.error || !emailSendResult.data) {
             console.error(emailSendResult);
-            return fail(500, { form, message: "Failed to send onboarding email." });
+            return fail(500, { form, csrf, message: "Failed to send onboarding email." });
         }
 
         await db
@@ -122,7 +130,7 @@ export const actions: Actions = {
             .values({
                 email: form.data.email,
                 emailRef: emailSendResult.data.id,
-                challenge: challegeVerifier,
+                challenge: Buffer.from(challegeVerifier),
                 expires: new Date(Date.now() + THIRTY_MINUTES_IN_MILLISECONDS),
             });
 

@@ -18,10 +18,7 @@
     } = $props();
 </script>
 
-<AccordionPrimitive.Header
-    {level}
-    class="flex"
->
+<AccordionPrimitive.Header {level} class="flex">
     <AccordionPrimitive.Trigger
         bind:ref
         class={cn(

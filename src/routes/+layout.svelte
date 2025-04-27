@@ -16,10 +16,7 @@
     });
 </script>
 
-<ModeWatcher
-    defaultTheme="default"
-    {disableTransitions}
-/>
+<ModeWatcher defaultTheme="default" {disableTransitions} />
 
 <Toaster richColors />
 

@@ -17,10 +17,7 @@
 
 <!-- red with errors 'data-[fs-error]:text-destructive' -->
 
-<FormPrimitive.Label
-    {...rest}
-    bind:ref
->
+<FormPrimitive.Label {...rest} bind:ref>
     {#snippet child({ props })}
         <Label
             {...props}

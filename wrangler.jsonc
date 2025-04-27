@@ -31,8 +31,8 @@
     "vars": {
         // Private Secrets - Managed in CF UI
         // - "RESEND_API_KEY"
-        // - "TURSO_URL"
-        // - "TURSO_API_KEY"
+        // - "DATABASE_URL"
+        // - "DATABASE_API_TOKEN"
 
         // Sender email and name
         "SENDER_EMAIL": "noreply@scribere.sh",
@@ -43,7 +43,7 @@
     "services": [
         {
             "binding": "ARGON2",
-            "service": "scribere-argon2",
+            "service": "scribere-argon2-worker",
         },
     ],
 

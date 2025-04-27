@@ -1,7 +1,4 @@
-<script
-    lang="ts"
-    module
->
+<script lang="ts" module>
     export const TOAST_DURATION_MS = 5000;
 </script>
 

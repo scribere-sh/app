@@ -1,7 +1,4 @@
-<script
-    lang="ts"
-    module
->
+<script lang="ts" module>
     import type { PageData } from "./$types";
 
     export interface FormProps {
@@ -18,9 +15,9 @@
 
     import * as Form from "$ui/form";
     import { Input } from "$ui/input";
+    import LoadingSpinner from "$ui/loading-spinner";
 
     import { route } from "$lib/routes";
-    import LoadingSpinner from "$ui/loading-spinner";
 
     let firstFieldRef: HTMLElement | null = $state(null);
 
@@ -66,16 +63,9 @@
     class="flex flex-col gap-4"
     use:enhance
 >
-    <input
-        type="hidden"
-        name="csrf"
-        value={csrf}
-    />
+    <input type="hidden" name="csrf" value={csrf} />
 
-    <Form.Field
-        {form}
-        name="identifier"
-    >
+    <Form.Field {form} name="identifier">
         <Form.Control>
             {#snippet children({ props })}
                 <div class="flex h-6 items-center justify-between">
@@ -100,10 +90,7 @@
         </Form.Control>
     </Form.Field>
 
-    <Form.Field
-        {form}
-        name="password"
-    >
+    <Form.Field {form} name="password">
         <Form.Control>
             {#snippet children({ props })}
                 <div class="flex items-center justify-between">
@@ -126,11 +113,7 @@
         </Form.Control>
     </Form.Field>
 
-    <Form.Button
-        {disabled}
-        variant="foreground"
-        class="w-full"
-    >
+    <Form.Button {disabled} variant="foreground" class="w-full">
         {#if disabled}
             <LoadingSpinner class="stroke-background" />
         {:else}

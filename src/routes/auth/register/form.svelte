@@ -1,7 +1,4 @@
-<script
-    lang="ts"
-    module
->
+<script lang="ts" module>
     import type { PageData } from "./$types";
 
     export interface FormProps {
@@ -41,6 +38,7 @@
             disabled = true;
         },
         onResult: ({ result }) => {
+            console.debug(result);
             if (result.type !== "redirect") disabled = false;
 
             if (result.type === "error") {
@@ -79,16 +77,9 @@
         class="flex flex-col gap-4"
         use:enhance
     >
-        <input
-            type="hidden"
-            name="csrf"
-            value={csrf}
-        />
+        <input type="hidden" name="csrf" value={csrf} />
 
-        <Form.Field
-            {form}
-            name="email"
-        >
+        <Form.Field {form} name="email">
             <Form.Control>
                 {#snippet children({ props })}
                     <div class="flex h-6 items-center justify-between">

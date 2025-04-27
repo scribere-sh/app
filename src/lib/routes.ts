@@ -24,6 +24,7 @@ export const SERVERS = {};
  * ACTIONS
  */
 export const ACTIONS = {
+    "default /auth/onboarding": `/auth/onboarding`,
     "default /auth/register": `/auth/register`,
     "default /auth/sign-in": `/auth/sign-in`,
 };
@@ -140,7 +141,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 export type KIT_ROUTES = {
     PAGES: { "/": never; "/auth/onboarding": never; "/auth/register": never; "/auth/sign-in": never };
     SERVERS: Record<string, never>;
-    ACTIONS: { "default /auth/register": never; "default /auth/sign-in": never };
+    ACTIONS: { "default /auth/onboarding": never; "default /auth/register": never; "default /auth/sign-in": never };
     LINKS: Record<string, never>;
     Params: Record<string, never>;
 };

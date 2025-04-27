@@ -83,7 +83,7 @@ export const emailOnboardingsTable = sqliteTable(
          * going full `argon2` here may be a bit overkill, a simple
          * salted hash may do the trick.
          */
-        challenge: blob().notNull(),
+        challenge: blob({ mode: "buffer" }).notNull(),
 
         /**
          * Resend ID for the sent onboarding email
@@ -94,7 +94,7 @@ export const emailOnboardingsTable = sqliteTable(
          * The expiry date of this validation challenge, the expiry
          * time should be given to the user as well and enforced.
          */
-        expires: integer({ mode: "timestamp" }),
+        expires: integer({ mode: "timestamp" }).notNull(),
     },
     (table) => [
         /**

@@ -54,6 +54,9 @@ export const createArgon2 = async (to_hash: string): Promise<string> => {
         response = await fetch(`https://${ARGON2_WORKER_DOMAIN}/hash`, {
             method: "POST",
             body,
+            headers: {
+                "Authorization": env.ARGON2_AUTHORIZATION_HEADER,
+            },
             signal,
         });
     } else {
@@ -134,6 +137,9 @@ export const verifyArgon2 = async (hash: string, subject: string): Promise<boole
         response = await fetch(`https://${ARGON2_WORKER_DOMAIN}/verify`, {
             method: "POST",
             body,
+            headers: {
+                "Authorization": env.ARGON2_AUTHORIZATION_HEADER,
+            },
             signal,
         });
     } else {

@@ -1,5 +1,6 @@
-import { Body, Head, Html } from "@react-email/components";
 import * as React from "react";
+
+import { Body, Head, Html } from "@react-email/components";
 
 const bodyStyle: React.CSSProperties = {
     fontFamily: "\"Google Sans\",Roboto,RobotoDraft,Helvetica,Arial,sans-serif",
