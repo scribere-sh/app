@@ -26,6 +26,13 @@
 
 ---
 
+> [!NOTE]
+> This is an assesment for our [Bachelors in Software Engineering (BSE)](https://www.yoobee.ac.nz/courses/technology/bachelor-of-software-engineering) at [Yoobee College of Creative Innovation](https://www.yoobee.ac.nz/).
+> 
+> As such this repository is under the MIT License as a learning resource.
+
+---
+
 <br />
 
 ### Tools
