@@ -21,6 +21,7 @@
     import { Input } from "$ui/input";
     import LoadingSpinner from "$ui/loading-spinner";
 
+    import { FormDebug } from "$blk/form-debug";
     import { route } from "$lib/routes";
 
     let fieldRefs: Record<FocussableKey, HTMLElement | null> = $state({
@@ -62,7 +63,17 @@
     });
 
     const { form: data, enhance, errors } = form;
+
+    $effect(() => {
+        // accounts for any use cases where any of these
+        // get overwritten for some reason
+        $data.csrf = csrf;
+        $data.email = email;
+        $data.challenge = challenge;
+    });
 </script>
+
+<FormDebug {data} label="Onboarding" />
 
 <form
     action={route("default /auth/onboarding")}
@@ -86,6 +97,7 @@
                 <Input
                     {...props}
                     {disabled}
+                    error={$errors.display !== undefined}
                     type="text"
                     autocomplete="nickname"
                     placeholder="Jane Doe"
@@ -109,6 +121,7 @@
                 <Input
                     {...props}
                     {disabled}
+                    error={$errors.handle !== undefined}
                     type="text"
                     autocomplete="username"
                     placeholder="xx_jane.doe_xx"
@@ -132,6 +145,7 @@
                 <Input
                     {...props}
                     {disabled}
+                    error={$errors.password !== undefined}
                     type="password"
                     autocomplete="new-password"
                     placeholder="************"
@@ -145,7 +159,7 @@
         <Form.FieldErrors />
     </Form.Field>
 
-    <Form.Field {form} name="password">
+    <Form.Field {form} name="confirm_password">
         <Form.Control>
             {#snippet children({ props })}
                 <Form.Label error={$errors.confirm_password !== undefined}>
@@ -155,6 +169,7 @@
                 <Input
                     {...props}
                     {disabled}
+                    error={$errors.confirm_password !== undefined}
                     type="password"
                     autocomplete="new-password"
                     placeholder="************"

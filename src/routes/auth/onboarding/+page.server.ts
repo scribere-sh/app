@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from "./$types";
 
 import { type } from "arktype";
 
-import { superValidate } from "sveltekit-superforms";
+import { fail, setError, superValidate } from "sveltekit-superforms";
 import { arktype } from "sveltekit-superforms/adapters";
 
 import { db } from "$srv/db";
@@ -12,7 +12,7 @@ import { eq } from "drizzle-orm";
 
 import { uint8ArrayStrictEqual } from "$srv/auth/key";
 
-import { initCsrf } from "$srv/csrf";
+import { initCsrf, validateCsrf } from "$srv/csrf";
 import { sha256 } from "@oslojs/crypto/sha2";
 
 const schema = type({
@@ -48,12 +48,12 @@ const schema = type({
     /**
      * Password
      */
-    password: "string",
+    password: "string > 12",
 
     /**
      * Confirm Password
      */
-    confirm_password: "string",
+    confirm_password: "string > 12",
 });
 
 const defaults: typeof schema.infer = {
@@ -114,7 +114,26 @@ export const load = (async ({ url }) => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     default: async ({ request }) => {
+        const form = await superValidate(request, arktype(schema, { defaults }));
+        const csrf = form.data.csrf;
+
+        if (!form.valid) {
+            return fail(400, { form });
+        }
+
+        if (form.data.password !== form.data.confirm_password) {
+            setError(form, "password", "passwords don't match");
+            setError(form, "confirm_password", "passwords don't match");
+
+            return fail(400, { form });
+        }
+
+        if (!validateCsrf(form.data.csrf)) {
+            console.error("csrf error");
+            return fail(400, { form, csrf, message: "CSRF Error" });
+        }
+
+        console.log(form);
     },
 };

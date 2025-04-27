@@ -33,7 +33,9 @@
             {#if indeterminate}
                 <Minus class="size-3.5" />
             {:else}
-                <Check class={cn("size-3.5", !checked && "text-transparent")} />
+                <Check
+                    class={cn("size-3.5", !checked && "stroke-transparent")}
+                />
             {/if}
         </div>
     {/snippet}

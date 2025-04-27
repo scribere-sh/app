@@ -17,6 +17,7 @@
     import { Input } from "$ui/input";
     import LoadingSpinner from "$ui/loading-spinner";
 
+    import { FormDebug } from "$blk/form-debug";
     import { route } from "$lib/routes";
 
     let firstFieldRef: HTMLElement | null = $state(null);
@@ -55,7 +56,13 @@
     });
 
     const { form: data, enhance, errors } = form;
+
+    $effect(() => {
+        $data.csrf = csrf;
+    });
 </script>
+
+<FormDebug {data} label="Sign In" />
 
 <form
     action={route("default /auth/sign-in")}
@@ -81,7 +88,7 @@
                     error={$errors.identifier !== undefined}
                     type="text"
                     autocomplete="username"
-                    placeholder="email@contoso.com / john.doe123"
+                    placeholder="email@example.com / john.doe123"
                     required
                     bind:value={$data.identifier}
                     bind:ref={firstFieldRef}

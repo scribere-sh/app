@@ -21,6 +21,7 @@
 
     import TriangleAlert from "@lucide/svelte/icons/triangle-alert";
 
+    import { FormDebug } from "$blk/form-debug";
     import { route } from "$lib/routes";
     import { cn } from "$lib/utils";
 
@@ -68,7 +69,13 @@
     let success = $state(false);
 
     const { form: data, enhance, errors } = form;
+
+    $effect(() => {
+        $data.csrf = csrf;
+    });
 </script>
+
+<FormDebug {data} label="Register" />
 
 <Tooltip.Provider>
     <form
@@ -119,7 +126,7 @@
                         error={$errors.email !== undefined}
                         type="text"
                         autocomplete="email"
-                        placeholder="email@contoso.com"
+                        placeholder="email@example.com"
                         required
                         bind:value={$data.email}
                         bind:ref={firstFieldRef}

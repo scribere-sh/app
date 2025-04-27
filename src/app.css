@@ -19,64 +19,45 @@
     [data-theme=gruvbox].dark *));
 
 @theme {
-    --color-background: var(
-        --background
-    );
-    --color-foreground: var(
-        --foreground
-    );
+    /* colours */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
 
     --color-primary: grey;
     --color-primary-foreground: white;
 
-    --color-mutex: grey;
+    --color-muted: var(--muted);
+    --color-input: var(--input);
 
-    --spacing-sidebar: calc(
-        var(--spacing) *
-            var(--sidebar-width)
-    );
+    /* spacing */
 
-    --spacing-auth-header: calc(
-        var(--spacing) *
-            var(--auth-header-height)
-    );
-    --spacing-auth-footer: calc(
-        var(--spacing) *
-            var(--auth-footer-height)
-    );
+    --spacing-sidebar: calc(var(--spacing) * var(--sidebar-width));
+
+    --spacing-auth-header: calc(var(--spacing) * var(--auth-header-height));
+    --spacing-auth-footer: calc(var(--spacing) * var(--auth-footer-height));
 
     /* animations */
 
-    --animate-accordion-down: accordion-down
-        0.2s ease-out;
-    --animate-accordion-up: accordion-up
-        0.2s ease-out;
-    --animate-caret-blink: caret-blink
-        1.25s ease-out infinite;
-    --animate-spinner-stroke: spinner-stroke
-        1.5s linear infinite;
+    --animate-accordion-down: accordion-down 0.2s ease-out;
+    --animate-accordion-up: accordion-up 0.2s ease-out;
+    --animate-caret-blink: caret-blink 1.25s ease-out infinite;
+    --animate-spinner-stroke: spinner-stroke 1.5s linear infinite;
 
     /* keyframes */
 
     @keyframes spinner-stroke {
         0% {
-            stroke-dasharray:
-                1px,
-                200px;
+            stroke-dasharray: 1px, 200px;
             stroke-dashoffset: 0;
         }
 
         50% {
-            stroke-dasharray:
-                100px,
-                200px;
+            stroke-dasharray: 100px, 200px;
             stroke-dashoffset: -15px;
         }
 
         100% {
-            stroke-dasharray:
-                1px,
-                200px;
+            stroke-dasharray: 1px, 200px;
             stroke-dashoffset: -126px;
         }
     }
@@ -84,18 +65,14 @@
 
 @layer base {
     * {
-        @apply text-foreground
-            transition-colors
-            duration-200 ease-out;
+        @apply text-foreground transition-colors duration-200 ease-out;
     }
 
     a {
-        @apply underline
-            underline-offset-2;
+        @apply underline underline-offset-2;
     }
 
     html {
-        @apply bg-background
-            overflow-hidden;
+        @apply bg-background overflow-hidden;
     }
 }

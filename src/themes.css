@@ -8,6 +8,10 @@
         --background: #eee;
         --foreground: #111;
 
+        --muted: #ddd;
+
+        --input: #c8c8c8;
+
         --logo-gradient-top: #edc9ff;
         --logo-gradient-bottom: #f2b79f;
     }
@@ -16,31 +20,35 @@
         --background: #111;
         --foreground: #eee;
 
+        --muted: #444;
+
+        --input: #333;
+
         --logo-gradient-top: #edc9ff;
         --logo-gradient-bottom: #f2b79f;
     }
 
     @variant gruvbox {
-        --background: #f9f5d7;
+        --background: #fbf1c7;
         --foreground: #3c3836;
 
-        --logo-gradient-top: var(
-            --foreground
-        );
-        --logo-gradient-bottom: var(
-            --foreground
-        );
+        --muted: #f9f5d7;
+
+        --input: #f2e5bc;
+
+        --logo-gradient-top: var(--foreground);
+        --logo-gradient-bottom: var(--foreground);
     }
 
     @variant gruvbox-dark {
-        --background: #1d2021;
+        --background: #282828;
         --foreground: #ebdbb2;
 
-        --logo-gradient-top: var(
-            --foreground
-        );
-        --logo-gradient-bottom: var(
-            --foreground
-        );
+        --muted: #1d2021;
+
+        --input: #3c3836
+
+        --logo-gradient-top: var(--foreground);
+        --logo-gradient-bottom: var(--foreground);
     }
 }

@@ -48,7 +48,8 @@
     },
     "excludes": [
         "**/node_modules",
-        "**/*-lock.json"
+        "**/*-lock.json",
+        "src/*.css"
     ],
     "plugins": [
         "https://plugins.dprint.dev/typescript-0.95.0.wasm",

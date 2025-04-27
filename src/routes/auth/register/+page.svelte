@@ -41,7 +41,7 @@
         <Card.Description>Enter your email address below to get
             started</Card.Description>
     </Card.Header>
-    <Card.Content>
+    <Card.Content class="w-96">
         <RegisterForm {form} {csrf} {accepting} />
     </Card.Content>
 </Card.Root>
