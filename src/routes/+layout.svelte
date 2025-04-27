@@ -3,7 +3,7 @@
 
     import { Toaster } from "$ui/sonner";
 
-    import { ModeWatcher } from "mode-watcher";
+    import { ModeWatcher, setTheme } from "mode-watcher";
     import { onMount } from "svelte";
 
     let { children } = $props();
@@ -13,6 +13,9 @@
     onMount(() => {
         // FOUC / Transition minimisation on first load
         disableTransitions = false;
+
+        window.setTheme = setTheme;
+        window.resetTheme = () => setTheme("default");
     });
 </script>
 

@@ -3,6 +3,11 @@ import type { DehydratedState } from "@tanstack/svelte-query";
 import type { ExecutionContext, Fetcher, KVNamespace, R2Bucket } from "@cloudflare/workers-types";
 
 declare global {
+    interface Window {
+        setTheme: (theme: string) => void;
+        resetTheme: () => void;
+    }
+
     namespace App {
         interface Error {
             message?: string;
