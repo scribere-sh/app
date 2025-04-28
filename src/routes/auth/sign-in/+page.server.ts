@@ -52,10 +52,12 @@ export const actions: Actions = {
         const form = await superValidate(request, arktype(schema, { defaults }));
 
         if (!form.valid) {
+            console.warn("form is invalid");
             return fail(400, { form });
         }
 
         if (!validateCsrf(form.data.csrf)) {
+            console.warn("csrf token was invalid");
             return fail(400, { form, message: "CSRF Error" });
         }
 
@@ -83,18 +85,18 @@ export const actions: Actions = {
             .limit(2);
 
         if (length > 1) {
-            // 2 users were found
-            console.error("an identifier has found multiple user ids");
+            // 2+ users were found
+            console.warn("identifier has found multiple user ids");
             return setError(form, "identifier", "multiple users found", { status: 500 });
         }
 
         if (length === 0) {
-            console.error("an identifier does not correlate to any user");
+            console.warn("identifier does not correlate to any user");
             return setError(form, "identifier", "no user found", { status: 404 });
         }
 
         if (!(await verifyArgon2(query.passwordHash, form.data.password))) {
-            // an invalid password was supplied
+            console.warn("provided password is invalid");
             return setError(form, "password", "invalid password", { status: 403 });
         }
 

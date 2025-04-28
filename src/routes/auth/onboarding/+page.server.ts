@@ -74,6 +74,7 @@ export const load = (async ({ url }) => {
     const challengeUrlEncoded = url.searchParams.get("token");
 
     if (!emailUrlEncoded || !challengeUrlEncoded) {
+        console.warn("missing required query parameters");
         error(400, { message: "Invalid Request" });
     }
 
@@ -94,6 +95,7 @@ export const load = (async ({ url }) => {
         );
 
     if (!challengeDetail) {
+        console.warn("challenge was supplied but doesn't match any stored challenge");
         error(400, { message: "No Challenge Found" });
     }
 
@@ -104,6 +106,7 @@ export const load = (async ({ url }) => {
     const storedChallengeVerifier = new Uint8Array(challengeDetail.challenge);
 
     if (!uint8ArrayStrictEqual(challegeVerifier, storedChallengeVerifier)) {
+        console.warn("challenge does not match stored challenge");
         error(403, { message: "Invalid Challenge" });
     }
 
@@ -119,19 +122,22 @@ export const actions: Actions = {
         const csrf = form.data.csrf;
 
         if (!form.valid) {
-            return fail(400, { form });
-        }
-
-        if (form.data.password !== form.data.confirm_password) {
-            setError(form, "password", "passwords don't match");
-            setError(form, "confirm_password", "passwords don't match");
-
+            console.warn("form is invalid");
             return fail(400, { form });
         }
 
         if (!validateCsrf(form.data.csrf)) {
-            console.error("csrf error");
+            console.warn("csrf token is invalid");
             return fail(400, { form, csrf, message: "CSRF Error" });
+        }
+
+        if (form.data.password !== form.data.confirm_password) {
+            console.warn("supplied password pair does not match");
+
+            setError(form, "password", "passwords don't match");
+            setError(form, "confirm_password", "passwords don't match");
+
+            return fail(400, { form });
         }
 
         console.log(form);

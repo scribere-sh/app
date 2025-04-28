@@ -48,12 +48,12 @@ export const actions: Actions = {
         const csrf = form.data.csrf;
 
         if (!form.valid) {
-            console.error("form is invalid");
+            console.warn("form is invalid");
             return fail(400, { form, csrf });
         }
 
         if (!validateCsrf(form.data.csrf)) {
-            console.error("csrf error");
+            console.warn("csrf token is invalid");
             return fail(400, { form, csrf, message: "CSRF Error" });
         }
 
@@ -82,14 +82,14 @@ export const actions: Actions = {
 
         // user with this email already in system
         if (emailAddressFoundCount > 0) {
-            console.error("email is in use");
+            console.warn("email is in use");
             setError(form, "email", "email in use");
             return fail(403, { form, csrf });
         }
 
         // an onboarding email has already been set
         if (emailOnboardingsFoundCount > 0) {
-            console.error("email already sent");
+            console.warn("email already sent");
             setError(form, "email", "email already sent");
             return fail(403, { form, csrf });
         }
@@ -97,7 +97,7 @@ export const actions: Actions = {
         // allows us to toggle if we're accepting registrations
         // to prevent spamming.
         if (env.ACCEPTING_REGISTRATIONS !== "true") {
-            console.error("no accepting");
+            console.warn("not accepting registrations at this time");
             setError(form, "email", "not accepting registrations");
             return fail(418, { form, message: "not accepting registrations" });
         }
