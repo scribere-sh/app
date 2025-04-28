@@ -55,7 +55,14 @@ export type Api = typeof apiHandler;
 
 export const apiServerHandler: Handle = async ({ event, resolve }) => {
     if (event.url.pathname.startsWith(apiPrefix)) {
-        return apiHandler.handle(event.request);
+        console.info("request is being passed to elysia handler for api");
+        const response = await apiHandler.handle(event.request);
+
+        if (!response.ok) {
+            console.warn(`elysia api handler returned code ${response.status}`);
+        }
+
+        return response;
     }
 
     return resolve(event);

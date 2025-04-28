@@ -32,17 +32,20 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
         // the oauth handle runs before this one, meaning
         // we don't need to check it here
         if (isAuthPath(event.url.pathname)) {
+            console.warn("token is invalid but it is being allowed through to an auth page");
             return resolve(event);
         }
 
         // API methods should NOT redirect to the sign-in
         // screen and should simply return a 401
         if (isAPIPath(event.url.pathname)) {
+            console.warn("event has no token and is attempting an API request, returning 401");
             return new Response(null, {
                 status: 401,
             });
         }
 
+        console.info("event has no token, redirected to sign in");
         return new Response(null, {
             status: 303,
             headers: {
@@ -75,12 +78,14 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
         //
         // the oauth handle runs before this one, meaning
         // we don't need to check it here
+        console.warn("token is invalid but it is being allowed through to an auth page");
         if (isAuthPath(event.url.pathname)) {
             return resolve(event);
         }
 
         // API methods should NOT redirect to the sign-in
         // screen and should simply return a 401
+        console.warn("token is invalid or expired and is attempting an API request, returning 401");
         if (isAPIPath(event.url.pathname)) {
             return new Response(null, {
                 status: 401,
@@ -94,6 +99,7 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
             && typeof payload.met === "string"
             && PROVIDER_NAMES.includes(payload.met as ProviderName)
         ) {
+            console.info("expired token contains \"met\" item which is a valid method, redirecting to oauth");
             return new Response(null, {
                 status: 303,
                 headers: {
@@ -102,6 +108,7 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
             });
         }
 
+        console.warn("token is invalid, redirecting to sign in");
         // if it is not there or invalid, we can just redirect to
         // the sign in page.
         return new Response(null, {
@@ -114,6 +121,7 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
 
     // if the expiration date is within 4 days, we should refresh it
     if (payload.exp - now_s < FOUR_DAYS_IN_SECONDS) {
+        console.info("token is expiring within 4 days, automatically renewing");
         // we work in milliseconds, tokens work in seconds
         const newExpiryDate = now_s + SIX_DAYS_IN_SECONDS;
 
@@ -146,5 +154,6 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
         handle: payload.han,
     };
 
+    console.info("token is valid, continuing");
     return resolve(event);
 };

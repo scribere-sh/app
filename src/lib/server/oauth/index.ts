@@ -31,19 +31,26 @@ const oauthHandler = new Elysia({ prefix: oauthPrefix })
             app
                 // #region Authorize
                 .get("/:provider", ({ params: { provider } }) => {
-                    console.log({ provider });
+                    console.info(`request is going to provider ${provider}, route is unimplemented`);
                 })
                 // #endregion
                 // #region Callback
                 .get("/:provider/callback", ({ params: { provider } }) => {
-                    console.log({ provider });
+                    console.info(`request is going to callback for provider ${provider}, route is unimplmented`);
                 }),
         // #endregion
     );
 
-export const oauthServerHandle: Handle = ({ event, resolve }) => {
+export const oauthServerHandle: Handle = async ({ event, resolve }) => {
     if (event.url.pathname.startsWith("/oauth")) {
-        return oauthHandler.handle(event.request);
+        console.info("request is being passed to elysia handler for oauth");
+        const response = await oauthHandler.handle(event.request);
+
+        if (!response.ok) {
+            console.warn(`elysia oauth handler returned code ${response.status}`);
+        }
+
+        return response;
     }
 
     return resolve(event);
