@@ -14,11 +14,9 @@ export const db = {
         if (!(DB_LOCALS_KEY in locals)) {
             console.debug("accessing platform API DB");
             if (!platform) throw new Error("unable to access platform APIs");
-            console.time("drizzle-init");
             // @ts-expect-error i know it's not defined that's why I'm defining it
             // this is the closes i'm getting to private object members
             locals[DB_LOCALS_KEY] = drizzle(platform.env.DB);
-            console.timeEnd("drizzle-init");
         }
 
         // @ts-expect-error see above
