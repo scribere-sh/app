@@ -20,13 +20,6 @@
         "enabled": true,
     },
 
-    // Asks CF to place it in SYD so it's closer to our DB
-    "placement": {
-        "mode": "smart",
-        // not AKL because the DB is in Sydney
-        "hint": "SYD",
-    },
-
     // Variables
     "vars": {
         // Private Secrets - Managed in CF UI
