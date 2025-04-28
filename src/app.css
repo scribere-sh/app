@@ -8,15 +8,10 @@
 @layer theme, base;
 
 @custom-variant default (&:where(*));
-@custom-variant dark (&:where(.dark,
-    .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
-@custom-variant gruvbox
-    (&:where([data-theme=gruvbox]:not(.dark),
-    [data-theme=gruvbox]:not(.dark) *));
-@custom-variant gruvbox-dark
-    (&:where([data-theme=gruvbox].dark,
-    [data-theme=gruvbox].dark *));
+@custom-variant gruvbox (&:where([data-theme=gruvbox]:not(.dark), [data-theme=gruvbox]:not(.dark) *));
+@custom-variant gruvbox-dark (&:where([data-theme=gruvbox].dark, [data-theme=gruvbox].dark *));
 
 @theme {
     /* colours */
