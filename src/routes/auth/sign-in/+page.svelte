@@ -11,9 +11,6 @@
     const { form, csrf } = data;
 </script>
 
-<!-- even out the spacing -->
-<div class="h-24"></div>
-
 <Card.Root class="flex flex-row items-center gap-2 animate-in fade-in">
     <div class="w-96">
         <Card.Header>

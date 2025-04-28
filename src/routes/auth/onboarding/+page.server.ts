@@ -81,7 +81,7 @@ export const load = (async ({ url }) => {
     const email = decodeURIComponent(emailUrlEncoded);
     const challenge = decodeURIComponent(challengeUrlEncoded);
 
-    const [challengeDetail] = await db()
+    const [challengeDetail] = await db.get
         .select({
             challenge: emailOnboardingsTable.challenge,
             expires: emailOnboardingsTable.expires,

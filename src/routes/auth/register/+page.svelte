@@ -32,24 +32,24 @@
     });
 </script>
 
-<!-- even out the spacing -->
-<div class="h-24"></div>
-
 <Card.Root class="animate-in fade-in">
     <Card.Header>
         <Card.Title>Register</Card.Title>
-        <Card.Description>Enter your email address below to get
-            started</Card.Description>
+        <Card.Description>
+            Enter your email address below to get started
+        </Card.Description>
     </Card.Header>
     <Card.Content class="w-96">
         <RegisterForm {form} {csrf} {accepting} />
     </Card.Content>
 </Card.Root>
 
-<div class="mt-8 flex h-24 w-32 flex-col items-center justify-center gap-4">
+<div class="mt-8 flex w-32 flex-col items-center justify-center gap-4">
     <Button
         href={route("/auth/sign-in")}
         variant="link"
         class="text-foreground w-full"
-    >Sign In</Button>
+    >
+        Sign In
+    </Button>
 </div>

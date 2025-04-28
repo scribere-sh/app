@@ -15,8 +15,8 @@
             y2="7.39"
             gradientUnits="userSpaceOnUse"
         >
-            <stop offset="0" stop-color="var(--logo-gradient-top)" />
-            <stop offset="1" stop-color="var(--logo-gradient-bottom)" />
+            <stop offset="0" stop-color="var(--logo-gradient-bottom)" />
+            <stop offset="1" stop-color="var(--logo-gradient-top)" />
         </linearGradient>
     </defs>
 

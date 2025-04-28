@@ -57,28 +57,30 @@ export const actions: Actions = {
             return fail(400, { form, csrf, message: "CSRF Error" });
         }
 
-        const { 1: { length: emailAddressFoundCount }, 2: { length: emailOnboardingsFoundCount } } = await db().batch([
-            // delete expired challenges
-            db()
-                .delete(emailOnboardingsTable)
-                .where(lt(emailOnboardingsTable.expires, new Date())),
-            // select current email addresses
-            db()
-                .select({
-                    email: emailAddressesTable.email,
-                })
-                .from(emailAddressesTable)
-                .where(eq(emailLowerCase(emailAddressesTable.email), form.data.email.toLowerCase()))
-                .limit(1),
-            // select onboarding emails
-            db()
-                .select({
-                    email: emailOnboardingsTable.email,
-                })
-                .from(emailOnboardingsTable)
-                .where(eq(emailLowerCase(emailOnboardingsTable.email), form.data.email.toLowerCase()))
-                .limit(1),
-        ]);
+        const { 1: { length: emailAddressFoundCount }, 2: { length: emailOnboardingsFoundCount } } = await db.get.batch(
+            [
+                // delete expired challenges
+                db.get
+                    .delete(emailOnboardingsTable)
+                    .where(lt(emailOnboardingsTable.expires, new Date())),
+                // select current email addresses
+                db.get
+                    .select({
+                        email: emailAddressesTable.email,
+                    })
+                    .from(emailAddressesTable)
+                    .where(eq(emailLowerCase(emailAddressesTable.email), form.data.email.toLowerCase()))
+                    .limit(1),
+                // select onboarding emails
+                db.get
+                    .select({
+                        email: emailOnboardingsTable.email,
+                    })
+                    .from(emailOnboardingsTable)
+                    .where(eq(emailLowerCase(emailOnboardingsTable.email), form.data.email.toLowerCase()))
+                    .limit(1),
+            ],
+        );
 
         // user with this email already in system
         if (emailAddressFoundCount > 0) {
@@ -125,7 +127,7 @@ export const actions: Actions = {
             return fail(500, { form, csrf, message: "Failed to send onboarding email." });
         }
 
-        await db()
+        await db.get
             .insert(emailOnboardingsTable)
             .values({
                 email: form.data.email,

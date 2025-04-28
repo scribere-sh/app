@@ -18,8 +18,15 @@
     --color-background: var(--background);
     --color-foreground: var(--foreground);
 
-    --color-primary: grey;
-    --color-primary-foreground: white;
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    /* Uncomment when set */
+    /* --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground); */
 
     --color-muted: var(--muted);
     --color-input: var(--input);

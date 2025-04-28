@@ -183,7 +183,7 @@
         <Form.FieldErrors />
     </Form.Field>
 
-    <Form.Button {disabled} variant="foreground" class="w-full">
+    <Form.Button {disabled} class="w-full">
         {#if disabled}
             <LoadingSpinner class="stroke-background" />
         {:else}

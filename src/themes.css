@@ -8,20 +8,24 @@
         --background: #eee;
         --foreground: #111;
 
-        --muted: #ddd;
+        --primary: var(--foreground);
+        --primary-foreground: var(--background);
 
+        --muted: #ddd;
         --input: #c8c8c8;
 
-        --logo-gradient-top: #edc9ff;
-        --logo-gradient-bottom: #f2b79f;
+        --logo-gradient-top: #dc96ff;
+        --logo-gradient-bottom: #efa689;
     }
 
     @variant dark {
         --background: #111;
         --foreground: #eee;
 
-        --muted: #444;
+        --primary: var(--foreground);
+        --primary-foreground: var(--background);
 
+        --muted: #444;
         --input: #333;
 
         --logo-gradient-top: #edc9ff;
@@ -32,8 +36,10 @@
         --background: #fbf1c7;
         --foreground: #3c3836;
 
-        --muted: #f9f5d7;
+        --primary: var(--foreground);
+        --primary-foreground: var(--background);
 
+        --muted: #f9f5d7;
         --input: #f2e5bc;
 
         --logo-gradient-top: var(--foreground);
@@ -44,8 +50,10 @@
         --background: #282828;
         --foreground: #ebdbb2;
 
-        --muted: #1d2021;
+        --primary: var(--foreground);
+        --primary-foreground: var(--background);
 
+        --muted: #1d2021;
         --input: #3c3836;
 
         --logo-gradient-top: var(--foreground);

@@ -61,7 +61,7 @@ export const actions: Actions = {
             return fail(400, { form, message: "CSRF Error" });
         }
 
-        const { 0: query, length } = await db()
+        const { 0: query, length } = await db.get
             .select({
                 userId: usersTable.id,
                 handle: usersTable.handle,

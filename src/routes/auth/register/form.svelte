@@ -137,7 +137,6 @@
 
         <Form.Button
             disabled={disabled || success || !accepting}
-            variant="foreground"
             class="w-full"
         >
             {#if disabled}
