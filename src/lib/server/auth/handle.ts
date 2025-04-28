@@ -32,7 +32,7 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
         // the oauth handle runs before this one, meaning
         // we don't need to check it here
         if (isAuthPath(event.url.pathname)) {
-            console.warn("token is invalid but it is being allowed through to an auth page");
+            console.warn("event has no token but it is being allowed through to an auth page");
             return resolve(event);
         }
 

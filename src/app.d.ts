@@ -1,6 +1,6 @@
 import type { DehydratedState } from "@tanstack/svelte-query";
 
-import type { ExecutionContext, Fetcher, KVNamespace, R2Bucket } from "@cloudflare/workers-types";
+import type { D1Database, ExecutionContext, Fetcher, KVNamespace, R2Bucket } from "@cloudflare/workers-types";
 
 declare global {
     interface Window {
@@ -41,6 +41,10 @@ declare global {
                  * Links to R2 File Bucket
                  */
                 R2: R2Bucket;
+                /**
+                 * Link to D1 Database
+                 */
+                DB: D1Database;
                 /**
                  * Doesn't work during vite dev, replace with normal fetch
                  */

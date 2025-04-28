@@ -1,21 +1,16 @@
-import { building, dev } from "$app/environment";
-import { createClient } from "@libsql/client";
-import { drizzle } from "drizzle-orm/libsql";
+import { getRequestEvent } from "$app/server";
+import { drizzle, type DrizzleD1Database } from "drizzle-orm/d1";
 
-import { env } from "$env/dynamic/private";
+export const db = (): DrizzleD1Database => {
+    const { platform, locals } = getRequestEvent();
 
-if (!building && !env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
-if (!dev && !building && !env.DATABASE_AUTH_TOKEN) {
-    throw new Error("DATABASE_AUTH_TOKEN is not set");
-}
+    if ("__db" in locals === false) {
+        console.debug("accessing platform API DB");
+        if (!platform) throw new Error("unable to access platform APIs");
+        // @ts-expect-error i know it's not defined there i don't want to put it in the app config
+        locals["__db"] = drizzle(platform.env.DB);
+    }
 
-const client = (
-    !building
-        ? createClient({
-            url: env.DATABASE_URL,
-            authToken: env.DATABASE_AUTH_TOKEN,
-        })
-        : null
-)!;
-
-export const db = (!building ? drizzle(client) : null)!;
+    // @ts-expect-error see above
+    return locals["__db"];
+};
