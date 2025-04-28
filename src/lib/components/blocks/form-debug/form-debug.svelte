@@ -32,8 +32,8 @@
 
     {#if show}
         <div
-            transition:fly={{ x: 10, duration: 200 }}
-            class="absolute right-4 top-auto bottom-auto"
+            transition:fly={{ x: -10, y: -10, duration: 200 }}
+            class="absolute left-4 top-4"
         >
             <Card.Root class="border-red-500 w-96 max-h-96">
                 <Card.Content>

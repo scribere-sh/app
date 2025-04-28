@@ -57,13 +57,13 @@ export const actions: Actions = {
             return fail(400, { form, csrf, message: "CSRF Error" });
         }
 
-        const { 1: { length: emailAddressFoundCount }, 2: { length: emailOnboardingsFoundCount } } = await db.batch([
+        const { 1: { length: emailAddressFoundCount }, 2: { length: emailOnboardingsFoundCount } } = await db().batch([
             // delete expired challenges
-            db
+            db()
                 .delete(emailOnboardingsTable)
                 .where(lt(emailOnboardingsTable.expires, new Date())),
             // select current email addresses
-            db
+            db()
                 .select({
                     email: emailAddressesTable.email,
                 })
@@ -71,7 +71,7 @@ export const actions: Actions = {
                 .where(eq(emailLowerCase(emailAddressesTable.email), form.data.email.toLowerCase()))
                 .limit(1),
             // select onboarding emails
-            db
+            db()
                 .select({
                     email: emailOnboardingsTable.email,
                 })
@@ -125,7 +125,7 @@ export const actions: Actions = {
             return fail(500, { form, csrf, message: "Failed to send onboarding email." });
         }
 
-        await db
+        await db()
             .insert(emailOnboardingsTable)
             .values({
                 email: form.data.email,

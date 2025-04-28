@@ -1,7 +1,7 @@
 {
     "version": "6",
     "dialect": "sqlite",
-    "id": "2274577c-4779-431f-8b7b-8ab9e22bd359",
+    "id": "2736a7f8-fd95-48b1-a36a-0a093f7d0e8f",
     "prevId": "00000000-0000-0000-0000-000000000000",
     "tables": {
         "oauthProviders": {
@@ -35,15 +35,22 @@
                     "name": "oauthProviders_userId_users_id_fk",
                     "tableFrom": "oauthProviders",
                     "tableTo": "users",
-                    "columnsFrom": ["userId"],
-                    "columnsTo": ["id"],
+                    "columnsFrom": [
+                        "userId"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
                     "onDelete": "cascade",
                     "onUpdate": "no action"
                 }
             },
             "compositePrimaryKeys": {
                 "composite": {
-                    "columns": ["userId", "provider"],
+                    "columns": [
+                        "userId",
+                        "provider"
+                    ],
                     "name": "composite"
                 }
             },
@@ -71,7 +78,9 @@
             "indexes": {
                 "userIdPasswordTableUniqueIndex": {
                     "name": "userIdPasswordTableUniqueIndex",
-                    "columns": ["userId"],
+                    "columns": [
+                        "userId"
+                    ],
                     "isUnique": true
                 }
             },
@@ -80,8 +89,12 @@
                     "name": "passwords_userId_users_id_fk",
                     "tableFrom": "passwords",
                     "tableTo": "users",
-                    "columnsFrom": ["userId"],
-                    "columnsTo": ["id"],
+                    "columnsFrom": [
+                        "userId"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
                     "onDelete": "cascade",
                     "onUpdate": "no action"
                 }
@@ -118,7 +131,9 @@
             "indexes": {
                 "userIdTotpSecretTableUniqueIndex": {
                     "name": "userIdTotpSecretTableUniqueIndex",
-                    "columns": ["userId"],
+                    "columns": [
+                        "userId"
+                    ],
                     "isUnique": true
                 }
             },
@@ -127,8 +142,12 @@
                     "name": "totpSecrets_userId_users_id_fk",
                     "tableFrom": "totpSecrets",
                     "tableTo": "users",
-                    "columnsFrom": ["userId"],
-                    "columnsTo": ["id"],
+                    "columnsFrom": [
+                        "userId"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
                     "onDelete": "cascade",
                     "onUpdate": "no action"
                 }
@@ -165,12 +184,16 @@
             "indexes": {
                 "userIdIndex": {
                     "name": "userIdIndex",
-                    "columns": ["userId"],
+                    "columns": [
+                        "userId"
+                    ],
                     "isUnique": false
                 },
                 "emailUniqueIndex": {
                     "name": "emailUniqueIndex",
-                    "columns": ["lower(\"email\")"],
+                    "columns": [
+                        "lower(\"email\")"
+                    ],
                     "isUnique": true
                 }
             },
@@ -179,8 +202,12 @@
                     "name": "emailAddresses_userId_users_id_fk",
                     "tableFrom": "emailAddresses",
                     "tableTo": "users",
-                    "columnsFrom": ["userId"],
-                    "columnsTo": ["id"],
+                    "columnsFrom": [
+                        "userId"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
                     "onDelete": "cascade",
                     "onUpdate": "no action"
                 }
@@ -201,6 +228,13 @@
                 },
                 "challenge": {
                     "name": "challenge",
+                    "type": "blob",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "emailRef": {
+                    "name": "emailRef",
                     "type": "text",
                     "primaryKey": false,
                     "notNull": true,
@@ -210,33 +244,27 @@
                     "name": "expires",
                     "type": "integer",
                     "primaryKey": false,
-                    "notNull": false,
+                    "notNull": true,
                     "autoincrement": false
                 }
             },
             "indexes": {
                 "emailValidationExpirationIndex": {
                     "name": "emailValidationExpirationIndex",
-                    "columns": ["expires"],
+                    "columns": [
+                        "expires"
+                    ],
                     "isUnique": false
                 },
                 "emailValidationsUniqueIndex": {
                     "name": "emailValidationsUniqueIndex",
-                    "columns": ["lower(\"email\")"],
+                    "columns": [
+                        "lower(\"email\")"
+                    ],
                     "isUnique": true
                 }
             },
-            "foreignKeys": {
-                "emailOnboardings_email_emailAddresses_email_fk": {
-                    "name": "emailOnboardings_email_emailAddresses_email_fk",
-                    "tableFrom": "emailOnboardings",
-                    "tableTo": "emailAddresses",
-                    "columnsFrom": ["email"],
-                    "columnsTo": ["email"],
-                    "onDelete": "cascade",
-                    "onUpdate": "no action"
-                }
-            },
+            "foreignKeys": {},
             "compositePrimaryKeys": {},
             "uniqueConstraints": {},
             "checkConstraints": {}
@@ -269,7 +297,9 @@
             "indexes": {
                 "usersHandleUniqueIndex": {
                     "name": "usersHandleUniqueIndex",
-                    "columns": ["handle"],
+                    "columns": [
+                        "handle"
+                    ],
                     "isUnique": true
                 }
             },

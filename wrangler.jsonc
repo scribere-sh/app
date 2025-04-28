@@ -62,4 +62,17 @@
             "id": "96399a918bc14e719079a37568db7837",
         },
     ],
+    // D1 Database
+    "d1_databases": [
+        {
+            "binding": "DB",
+
+            "database_name": "scribere",
+
+            "database_id": "07cb39e9-a08e-429d-bdfa-d77710a6215e",
+            "preview_database_id": "4ca531b5-3d73-43c7-aec9-7bd4c0834b45",
+
+            "migrations_dir": "./drizzle"
+        }
+    ]
 }

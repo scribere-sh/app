@@ -20,7 +20,7 @@
         "deploy": "wrangler deploy",
         "db:push": "drizzle-kit push",
         "db:generate": "drizzle-kit generate",
-        "db:migrate": "drizzle-kit migrate",
+        "db:migrate-dev": "wrangler d1 migrations apply DB --local",
         "email:dev": "email dev --dir src/lib/server/email/toxic-waste"
     },
     "devDependencies": {
