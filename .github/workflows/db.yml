@@ -25,3 +25,4 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: d1 migrations apply DB --remote
           packageManager: bun
+          wranglerVersion: 4.12.1
