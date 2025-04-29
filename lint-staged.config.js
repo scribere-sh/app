@@ -3,5 +3,5 @@
  * @type { import('lint-staged').Configuration }
  */
 export default {
-    "**/*.{js,ts,tsx,svelte,css,html,json,sql,yml}": ["dprint fmt --allow-no-files", "eslint"],
+    "**/*": ["dprint fmt --allow-no-files", "eslint"],
 };
