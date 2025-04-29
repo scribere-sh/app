@@ -1,19 +1,46 @@
 {
     "extends": "./.svelte-kit/tsconfig.json",
     "compilerOptions": {
-        "incremental": true,
-        "lib": ["WebWorker"],
+        "target": "ESNext",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "resolvePackageJsonExports": true,
+        "resolvePackageJsonImports": true,
+        "resolveJsonModule": true,
+        "allowArbitraryExtensions": true,
+
         "allowJs": true,
         "checkJs": true,
+
+        "declaration": false,
+        "declarationMap": false,
+        "sourceMap": true,
+        "outDir": "dist",
+        "inlineSources": true,
+        "preserveConstEnums": true,
+
+        "isolatedModules": true,
+        "verbatimModuleSyntax": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+
+        "incremental": false,
+        "lib": ["WebWorker"],
+
+        "strict": true,
+        "noImplicitAny": true,
+
         "jsx": "react-jsx",
         "jsxImportSource": "react",
         "allowImportingTsExtensions": true,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "resolveJsonModule": true,
+
+        "skipDefaultLibCheck": true,
         "skipLibCheck": true,
-        "sourceMap": true,
-        "strict": true,
-        "moduleResolution": "bundler"
+
+        "noErrorTruncation": true
     }
 }

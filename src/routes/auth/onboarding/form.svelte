@@ -17,6 +17,8 @@
 <script lang="ts">
     import { superForm } from "sveltekit-superforms";
 
+    import { toast } from "svelte-sonner";
+
     import * as Form from "$ui/form";
     import { Input } from "$ui/input";
     import LoadingSpinner from "$ui/loading-spinner";
@@ -59,6 +61,17 @@
         },
         onResult: ({ result }) => {
             if (result.type !== "redirect") disabled = false;
+            if (result.type === "failure") {
+                if (
+                    "data" in result
+                    && typeof result.data !== "undefined"
+                    && "message" in result.data
+                ) {
+                    toast.error(
+                        `Failed to register: ${result.data!.message}`,
+                    );
+                }
+            }
         },
     });
 

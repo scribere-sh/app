@@ -1,6 +1,15 @@
 import type { DehydratedState } from "@tanstack/svelte-query";
 
-import type { D1Database, ExecutionContext, Fetcher, KVNamespace, R2Bucket } from "@cloudflare/workers-types";
+import type {
+    CfProperties,
+    D1Database,
+    ExecutionContext,
+    Fetcher,
+    KVNamespace,
+    R2Bucket,
+} from "@cloudflare/workers-types";
+
+import type { User } from "$lib/schema/user";
 
 declare global {
     interface Window {
@@ -22,21 +31,31 @@ declare global {
              * but i don't want to assert when we're not in the auth system (which
              * is most of the time).
              */
-            user: {
-                id: string;
-                display_name: string;
-                handle: string;
+            user: User;
+
+            /**
+             * Details on the session
+             */
+            session: {
+                raw: Uint8Array;
+                encoded: string;
             };
         }
 
         interface Platform {
             context: ExecutionContext;
 
+            cf: CfProperties;
+
             env: {
                 /**
                  * KV Namespace for loading signing keys
                  */
                 KV: KVNamespace;
+                /**
+                 * KV Namespace for session validation
+                 */
+                SESSIONS: KVNamespace;
                 /**
                  * Links to R2 File Bucket
                  */

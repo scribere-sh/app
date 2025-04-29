@@ -57,30 +57,32 @@ export const actions: Actions = {
             return fail(400, { form, csrf, message: "CSRF Error" });
         }
 
-        const { 1: { length: emailAddressFoundCount }, 2: { length: emailOnboardingsFoundCount } } = await db.get.batch(
-            [
-                // delete expired challenges
-                db.get
-                    .delete(emailOnboardingsTable)
-                    .where(lt(emailOnboardingsTable.expires, new Date())),
-                // select current email addresses
-                db.get
-                    .select({
-                        email: emailAddressesTable.email,
-                    })
-                    .from(emailAddressesTable)
-                    .where(eq(emailLowerCase(emailAddressesTable.email), form.data.email.toLowerCase()))
-                    .limit(1),
-                // select onboarding emails
-                db.get
-                    .select({
-                        email: emailOnboardingsTable.email,
-                    })
-                    .from(emailOnboardingsTable)
-                    .where(eq(emailLowerCase(emailOnboardingsTable.email), form.data.email.toLowerCase()))
-                    .limit(1),
-            ],
-        );
+        // # - Query DB for email
+        const { 1: { length: emailAddressFoundCount }, 2: { length: emailOnboardingsFoundCount } } = await db.query
+            .batch(
+                [
+                    // delete expired challenges
+                    db.query
+                        .delete(emailOnboardingsTable)
+                        .where(lt(emailOnboardingsTable.expires, new Date())),
+                    // select current email addresses
+                    db.query
+                        .select({
+                            email: emailAddressesTable.email,
+                        })
+                        .from(emailAddressesTable)
+                        .where(eq(emailLowerCase(emailAddressesTable.email), form.data.email.toLowerCase()))
+                        .limit(1),
+                    // select onboarding emails
+                    db.query
+                        .select({
+                            email: emailOnboardingsTable.email,
+                        })
+                        .from(emailOnboardingsTable)
+                        .where(eq(emailLowerCase(emailOnboardingsTable.email), form.data.email.toLowerCase()))
+                        .limit(1),
+                ],
+            );
 
         // user with this email already in system
         if (emailAddressFoundCount > 0) {
@@ -104,6 +106,7 @@ export const actions: Actions = {
             return fail(418, { form, message: "not accepting registrations" });
         }
 
+        // # - Challenge Creation
         // create a challengeToken
         const challengeToken = generateTokenString(32);
 
@@ -127,15 +130,16 @@ export const actions: Actions = {
             return fail(500, { form, csrf, message: "Failed to send onboarding email." });
         }
 
-        await db.get
+        await db.query
             .insert(emailOnboardingsTable)
             .values({
                 email: form.data.email,
                 emailRef: emailSendResult.data.id,
-                challenge: Buffer.from(challegeVerifier),
+                challenge: challegeVerifier,
                 expires: new Date(Date.now() + THIRTY_MINUTES_IN_MILLISECONDS),
             });
 
+        // # - Success
         return { email: form.data.email };
     },
 };

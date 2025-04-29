@@ -22,6 +22,9 @@ const config = {
         version: {
             pollInterval: 30_000,
         },
+        csp: {
+            mode: "nonce",
+        },
     },
 };
 

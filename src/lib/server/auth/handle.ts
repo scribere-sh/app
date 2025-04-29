@@ -10,12 +10,13 @@ import { TOKEN_COOKIE_NAME } from "./cookie";
 import { PROVIDER_NAMES, type ProviderName } from "$srv/oauth/providers";
 
 import { route } from "$lib/routes";
+import { renewSession, verifySession } from "./session";
 
 // oauth hook runs beforehand, if it reaches here, its not an oauth check
 const isAuthPath = (path: string) => path.startsWith("/auth");
 const isAPIPath = (path: string) => path.startsWith("/api");
 
-const FOUR_DAYS_IN_SECONDS = 4 * 24 * 60 * 60;
+const FIVE_DAYS_IN_SECONDS = 5 * 24 * 60 * 60;
 
 const SIX_DAYS_IN_SECONDS = 6 * 24 * 60 * 60;
 
@@ -62,9 +63,10 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
         // failed to parse token body
         payload instanceof type.errors
         // token is expired
-        || payload.exp > now_s
+        || payload.exp < now_s
         // token is not yet valid (idk it's a part of the RFC)
-        || payload.nbf < now_s
+        || payload.nbf > now_s
+        // token session is invalid
     ) {
         // the token may contain an indication of the login method
         //
@@ -119,8 +121,46 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
         });
     }
 
-    // if the expiration date is within 4 days, we should refresh it
-    if (payload.exp - now_s < FOUR_DAYS_IN_SECONDS) {
+    // load the session keys from the KV namespace
+    const sessionData = await verifySession(payload.sid, payload.sub);
+
+    if (!sessionData) {
+        // delete invalid cookie
+        event.cookies.delete(TOKEN_COOKIE_NAME, { path: "/" });
+
+        // allow to enter sign in without needing anything
+        //
+        // the oauth handle runs before this one, meaning
+        // we don't need to check it here
+        if (isAuthPath(event.url.pathname)) {
+            console.warn("session is invalid but it is being allowed through to an auth page");
+            return resolve(event);
+        }
+
+        // API methods should NOT redirect to the sign-in
+        // screen and should simply return a 401
+        if (isAPIPath(event.url.pathname)) {
+            console.warn("session is invalid and is attempting an API request, returning 401");
+            return new Response(null, {
+                status: 401,
+            });
+        }
+
+        // redirect to sign-in
+        return new Response(null, {
+            status: 303,
+            headers: {
+                location: route("/auth/sign-in"),
+            },
+        });
+    }
+
+    // if the expiration date is within 5 days, we should refresh it
+    // better safe than sorry
+    //
+    // pretty much just renews the token every 24 hours, but allows for
+    // long weekends.
+    if (payload.exp - now_s < FIVE_DAYS_IN_SECONDS) {
         console.info("token is expiring within 4 days, automatically renewing");
         // we work in milliseconds, tokens work in seconds
         const newExpiryDate = now_s + SIX_DAYS_IN_SECONDS;
@@ -138,6 +178,8 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
 
         const newToken = await signJWT(newPayload);
 
+        await renewSession(sessionData.encoded);
+
         // set new token
         event.cookies.set(TOKEN_COOKIE_NAME, newToken, {
             path: "/",
@@ -148,9 +190,11 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
         });
     }
 
+    event.locals.session = sessionData;
+
     event.locals.user = {
         id: payload.sub,
-        display_name: payload.dis,
+        displayName: payload.dis,
         handle: payload.han,
     };
 

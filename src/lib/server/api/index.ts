@@ -1,15 +1,15 @@
 import type { Handle } from "@sveltejs/kit";
 
-import { dev } from "$app/environment";
-
+import ElysiaKit from "$srv/api/elysia-kit";
 import { Elysia } from "elysia";
 
 import { cors } from "@elysiajs/cors";
 import { serverTiming } from "@elysiajs/server-timing";
 
-import Env from "./env";
+import RootRoutes from "./routes/root";
 
 const apiPrefix = "/api";
+
 const apiHandler = new Elysia({
     /**
      * Prefix so elysia's router works correctly
@@ -18,8 +18,6 @@ const apiHandler = new Elysia({
     /**
      * Disable ahead of time complication because it break cloudflare pages.
      *
-     * We can use it in dev tho
-     *
      * This caused me untold pain for ages.
      *
      * Every Elysia instance must use this option.
@@ -27,7 +25,7 @@ const apiHandler = new Elysia({
      * @see {@link https://github.com/elysiajs/elysia/issues/58}
      * @see {@link https://elysiajs.com/blog/elysia-06#dynamic-mode}
      */
-    aot: dev,
+    aot: false,
 })
     .use(serverTiming())
     .use(
@@ -36,20 +34,8 @@ const apiHandler = new Elysia({
             origin: true,
         }),
     )
-    .use(Env)
-    .onError(({ error }) => {
-        console.error(error);
-    })
-    /**
-     * # GET /api/ping
-     *
-     * A basic ping handler to test stuff
-     */
-    .get("/ping", ({ set, user }) => {
-        console.log({ user });
-
-        set.status = "OK";
-    });
+    .use(ElysiaKit)
+    .use(RootRoutes);
 
 export type Api = typeof apiHandler;
 

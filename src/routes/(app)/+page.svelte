@@ -8,12 +8,12 @@
 
     import { eden } from "$lib/eden";
 
-    const ping = eden.ping.get.createQuery();
+    const ping = eden.api.ping.get.createQuery(undefined);
 </script>
 
 <h1 class="text-foreground text-4xl font-extrabold capitalize">
     {#if $ping.isSuccess}
-        Welcome to SvelteKit
+        Welcome to SvelteKit - {$ping.data.displayName}
     {:else if $ping.isError}
         Failed to Ping
     {:else}
@@ -91,3 +91,7 @@
     Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read
     the documentation
 </p>
+
+{#if $ping.isSuccess}
+    <pre class="font-mono">{JSON.stringify($ping.data, null, 2)}</pre>
+{/if}

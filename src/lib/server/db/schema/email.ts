@@ -83,7 +83,7 @@ export const emailOnboardingsTable = sqliteTable(
          * going full `argon2` here may be a bit overkill, a simple
          * salted hash may do the trick.
          */
-        challenge: blob({ mode: "buffer" }).notNull(),
+        challenge: blob().$type<Uint8Array>().notNull(),
 
         /**
          * Resend ID for the sent onboarding email

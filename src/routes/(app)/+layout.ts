@@ -4,7 +4,7 @@ import { httpLink } from "@ap0nia/eden-svelte-query";
 import { QueryClient } from "@tanstack/svelte-query";
 
 import { browser } from "$app/environment";
-import { createClient } from "$lib/eden";
+import { eden } from "$lib/eden";
 
 export const load: LayoutLoad = async (event) => {
     const queryClient = new QueryClient({
@@ -16,7 +16,7 @@ export const load: LayoutLoad = async (event) => {
         },
     });
 
-    const client = createClient({
+    const client = eden.createClient({
         links: [
             // @ts-expect-error for some stupid ass reason typescript is shitting itself
             httpLink({
@@ -25,5 +25,5 @@ export const load: LayoutLoad = async (event) => {
         ],
     });
 
-    return { client, queryClient, dehydrated: event.data.dehydrated };
+    return { ...event.data, client, queryClient };
 };

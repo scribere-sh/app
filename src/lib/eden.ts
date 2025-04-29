@@ -9,11 +9,7 @@ import {
 /**
  * For convenience sake I've chopped off the .api bit otherwise it would be EVERYWHERE lmao.
  */
-const treaty = createEdenTreatySvelteQuery<Api>();
-
-export const eden = treaty.api;
-export const setContext = treaty.setContext;
-export const createClient = treaty.createClient;
+export const eden = createEdenTreatySvelteQuery<Api>();
 
 export type InferInput = InferTreatyQueryInput<Api>;
 export type InferOutput = InferTreatyQueryOutput<Api>;

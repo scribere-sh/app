@@ -85,7 +85,7 @@ export const totpSecretsTable = sqliteTable(
          * requirements as encryption is pretty much out of the
          * question here.
          */
-        secret: blob({ mode: "buffer" }).notNull(),
+        secret: blob().$type<Uint8Array>().notNull(),
 
         /**
          * Recovery Key `argon2` hash.

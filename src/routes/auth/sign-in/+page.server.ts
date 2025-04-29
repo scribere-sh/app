@@ -18,6 +18,8 @@ import { usersTable } from "$tb/user";
 import { verifyArgon2 } from "$srv/auth/argon2";
 import { setSecureToken, TOKEN_COOKIE_NAME } from "$srv/auth/cookie";
 import { signJWT } from "$srv/auth/jwt";
+import { generateSession } from "$srv/auth/session";
+
 import { cleanupCsrf, initCsrf, validateCsrf } from "$srv/csrf";
 
 import { route } from "$lib/routes";
@@ -26,7 +28,7 @@ import { route } from "$lib/routes";
 
 const schema = type({
     identifier: "string.email | /^[a-z0-9.-]{3,30}$/",
-    password: "string",
+    password: "12 < string < 3000",
     csrf: "string",
 });
 
@@ -61,7 +63,8 @@ export const actions: Actions = {
             return fail(400, { form, message: "CSRF Error" });
         }
 
-        const { 0: query, length } = await db.get
+        console.info("checking user id");
+        const { 0: query, length } = await db.query
             .select({
                 userId: usersTable.id,
                 handle: usersTable.handle,
@@ -91,11 +94,13 @@ export const actions: Actions = {
         }
 
         if (length === 0) {
+            // no user found
             console.warn("identifier does not correlate to any user");
             return setError(form, "identifier", "no user found", { status: 404 });
         }
 
         if (!(await verifyArgon2(query.passwordHash, form.data.password))) {
+            // password invalid
             console.warn("provided password is invalid");
             return setError(form, "password", "invalid password", { status: 403 });
         }
@@ -105,10 +110,14 @@ export const actions: Actions = {
         // - password is correct
         // we can now give the user a token
 
+        // # - Sign Token
         const now = new Date();
         const now_s = now.getTime() / 1000;
 
         const expiry_s = now_s + SIX_DAYS_IN_SECONDS;
+
+        console.info("generating session & token");
+        const session = await generateSession(query.userId);
 
         const signedJwt = await signJWT({
             sub: query.userId,
@@ -117,17 +126,23 @@ export const actions: Actions = {
 
             iss: "app.scribere.sh",
 
-            exp: expiry_s,
-            iat: now_s,
-            // clock skew account
-            nbf: now_s - 60,
+            sid: session,
+
+            exp: Math.floor(expiry_s),
+            iat: Math.floor(now_s),
+            // clock skew
+            nbf: Math.floor(now_s - 60),
         });
 
-        const expiryDate = new Date(expiry_s * 1000);
+        const expiryDate = new Date((expiry_s + SIX_DAYS_IN_SECONDS) * 1000);
 
         cleanupCsrf();
+        // we set the cookie to expire later than it actually expires to allow the
+        // auto-redirect functionality to work correctly.
         setSecureToken(TOKEN_COOKIE_NAME, signedJwt, expiryDate);
 
-        return redirect(303, route("/"));
+        console.info("success: redirecting");
+        // funciton throws the redirect and returns `never`
+        redirect(303, route("/"));
     },
 };

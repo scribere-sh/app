@@ -16,15 +16,15 @@ export const jwtPayloadType = type({
     /**
      * **`sub`**ject - user id
      */
-    sub: "/[0-7][0-9A-HJKMNP-TV-Z]{25}/",
+    sub: "string",
     /**
      * user's name to display
      */
-    dis: type.string,
+    dis: "string",
     /**
      * user's handle
      */
-    han: type.string,
+    han: "string",
 
     /**
      * issuer, i.e. us
@@ -32,19 +32,24 @@ export const jwtPayloadType = type({
     iss: "'app.scribere.sh'",
 
     /**
+     * session token hash this for the session ID
+     */
+    sid: "string",
+
+    /**
      * issued at time
      *
      * stored as seconds since UNIX epoch
      */
-    iat: type.number,
+    iat: "number",
     /**
      * expiry timestamp
      */
-    exp: type.number,
+    exp: "number",
     /**
      * not valid before
      */
-    nbf: type.number,
+    nbf: "number",
     /**
      * users' sign in method this only handles oauth since
      * the password method is fallback anyway.
@@ -122,6 +127,7 @@ export const verifyJWT = async (jwt: string): Promise<object | null> => {
     const header = jwtHeaderSchema(headerObject);
 
     if (header instanceof type.errors) {
+        console.log({ header });
         return null;
     }
 

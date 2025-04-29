@@ -7,8 +7,15 @@
 
     import { buttonVariants } from "$lib/components/ui/button";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+    import { cn } from "$lib/utils";
 
-    const props: DropdownMenuPrimitive.ContentProps = $props();
+    const {
+        expand = false,
+
+        ...rest
+    }: DropdownMenuPrimitive.ContentProps & {
+        expand?: boolean;
+    } = $props();
 </script>
 
 <!--
@@ -21,10 +28,14 @@
 <DropdownMenu.Root>
     <!-- Theme Button -->
     <DropdownMenu.Trigger
-        class={buttonVariants({
-            variant: "ghost",
-            size: "icon",
-        })}
+        class={cn(
+            expand
+                ? "size-full grid place-items-center hover:bg-foreground/10"
+                : buttonVariants({
+                    variant: "ghost",
+                    size: "icon",
+                }),
+        )}
     >
         <Sun
             class="size-[1.2rem] scale-100 rotate-0 transition-transform dark:scale-0 dark:-rotate-90"
@@ -35,14 +46,20 @@
         <span class="sr-only">Toggle Theme</span>
     </DropdownMenu.Trigger>
     <!-- Theme Options -->
-    <DropdownMenu.Content {...props}>
-        <DropdownMenu.Item onclick={() => setMode("light")}>
+    <DropdownMenu.Content {...rest}>
+        <DropdownMenu.Item
+            onclick={() => setMode("light")}
+            class="hover:bg-foreground/10"
+        >
             <Sun size="0.8rem" class="mr-4" />&nbsp;Light
         </DropdownMenu.Item>
-        <DropdownMenu.Item onclick={() => setMode("dark")}>
+        <DropdownMenu.Item
+            onclick={() => setMode("dark")}
+            class="hover:bg-foreground/10"
+        >
             <Moon size="0.8rem" class="mr-4" />&nbsp;Dark
         </DropdownMenu.Item>
-        <DropdownMenu.Item onclick={resetMode}>
+        <DropdownMenu.Item onclick={resetMode} class="hover:bg-foreground/10">
             <Settings size="0.8rem" class="mr-4" />&nbsp;System
         </DropdownMenu.Item>
     </DropdownMenu.Content>

@@ -8,7 +8,7 @@ const DB_LOCALS_KEY = "__db";
  * that the event.platform object contains our DB
  */
 export const db = {
-    get get(): DrizzleD1Database {
+    get query(): DrizzleD1Database {
         const { platform, locals } = getRequestEvent();
 
         if (!(DB_LOCALS_KEY in locals)) {
@@ -17,6 +17,8 @@ export const db = {
             // @ts-expect-error i know it's not defined that's why I'm defining it
             // this is the closes i'm getting to private object members
             locals[DB_LOCALS_KEY] = drizzle(platform.env.DB);
+        } else {
+            console.debug("using DB from request locals");
         }
 
         // @ts-expect-error see above

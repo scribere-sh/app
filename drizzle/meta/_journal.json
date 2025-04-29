@@ -8,6 +8,20 @@
             "when": 1745806846517,
             "tag": "0000_fine_kulan_gath",
             "breakpoints": true
+        },
+        {
+            "idx": 1,
+            "version": "6",
+            "when": 1745891656525,
+            "tag": "0001_same_switch",
+            "breakpoints": true
+        },
+        {
+            "idx": 2,
+            "version": "6",
+            "when": 1745923076511,
+            "tag": "0002_quiet_magneto",
+            "breakpoints": true
         }
     ]
 }

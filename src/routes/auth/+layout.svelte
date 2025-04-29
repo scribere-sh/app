@@ -1,8 +1,8 @@
 <script lang="ts">
     import type { LayoutProps } from "./$types";
 
+    import { ThemeToggle } from "$blk/theme-toggle";
     import { Scribere } from "$ui/logos";
-    import { ThemeToggle } from "$ui/theme-toggle";
 
     const { children }: LayoutProps = $props();
 </script>

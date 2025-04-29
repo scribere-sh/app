@@ -1,5 +1,3 @@
-import { ulid } from "../../ulid";
-
 import {
     sqliteTable,
     // integer,
@@ -22,8 +20,7 @@ export const usersTable = sqliteTable(
          */
         id: text({ mode: "text" })
             .notNull()
-            .primaryKey()
-            .$defaultFn(() => ulid().toCanonical()),
+            .primaryKey(),
 
         /**
          * Handle for the user, allows for quick mentioning, must
@@ -37,6 +34,10 @@ export const usersTable = sqliteTable(
         displayName: text({ mode: "text" }).notNull(),
     },
     (table) => [
+        /**
+         * enforces unique IDs
+         */
+        uniqueIndex("usersIdUniqueIndex").on(table.id),
         /**
          * make handles unique
          */

@@ -101,8 +101,9 @@
         <Form.Control>
             {#snippet children({ props })}
                 <div class="flex items-center justify-between">
-                    <Form.Label error={$errors.password !== undefined}
-                    >Password</Form.Label>
+                    <Form.Label error={$errors.password !== undefined}>
+                        Password
+                    </Form.Label>
                     <Form.FieldErrors />
                 </div>
 
