@@ -1,5 +1,3 @@
-import type { DehydratedState } from "@tanstack/svelte-query";
-
 import type {
     CfProperties,
     D1Database,
@@ -23,8 +21,6 @@ declare global {
         }
 
         interface Locals {
-            dehydrated: DehydratedState;
-
             /**
              * Keep in mind that within the auth system this will be undefined
              *

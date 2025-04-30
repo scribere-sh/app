@@ -1,9 +1,9 @@
-import { t } from "elysia";
+import { type } from "arktype";
 
-export const User = t.Object({
-    displayName: t.String(),
-    handle: t.String(),
-    id: t.String(),
+export const User = type({
+    displayName: "string",
+    handle: "string",
+    id: "string",
 });
 
-export type User = typeof User.static;
+export type User = typeof User.infer;

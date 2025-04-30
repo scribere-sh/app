@@ -1,51 +1,36 @@
 import type { Handle } from "@sveltejs/kit";
 
-import ElysiaKit from "$srv/api/elysia-kit";
-import { Elysia } from "elysia";
+import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
 
-import { cors } from "@elysiajs/cors";
-import { serverTiming } from "@elysiajs/server-timing";
+import { HonoKit } from "./hono-kit";
+import Routes from "./routes";
 
-import RootRoutes from "./routes/root";
+const ApiHono = new Hono()
+    .use(HonoKit)
+    .onError((err, c) => {
+        if (err instanceof HTTPException) {
+            c.status(err.status);
+            console.warn("HTTPException thrown, returning error");
+            return c.json({ message: err.message });
+        } else {
+            // Any other error means server error
+            c.status(500);
+            console.error("server error occured within a hono handler", err);
+            return c.json({ message: "Internal Server Error" });
+        }
+    })
+    .route("/api", Routes);
 
-const apiPrefix = "/api";
-
-const apiHandler = new Elysia({
-    /**
-     * Prefix so elysia's router works correctly
-     */
-    prefix: apiPrefix,
-    /**
-     * Disable ahead of time complication because it break cloudflare pages.
-     *
-     * This caused me untold pain for ages.
-     *
-     * Every Elysia instance must use this option.
-     *
-     * @see {@link https://github.com/elysiajs/elysia/issues/58}
-     * @see {@link https://elysiajs.com/blog/elysia-06#dynamic-mode}
-     */
-    aot: false,
-})
-    .use(serverTiming())
-    .use(
-        cors({
-            methods: ["GET", "POST", "PUT", "DELETE"],
-            origin: true,
-        }),
-    )
-    .use(ElysiaKit)
-    .use(RootRoutes);
-
-export type Api = typeof apiHandler;
+export type Api = typeof ApiHono;
 
 export const apiServerHandler: Handle = async ({ event, resolve }) => {
-    if (event.url.pathname.startsWith(apiPrefix)) {
-        console.info("request is being passed to elysia handler for api");
-        const response = await apiHandler.handle(event.request);
+    if (event.url.pathname.startsWith("/api")) {
+        console.info("request is being passed to hono handler for api");
+        const response = await ApiHono.fetch(event.request);
 
         if (!response.ok) {
-            console.warn(`elysia api handler returned code ${response.status}`);
+            console.warn(`hono api handler returned code ${response.status}`);
         }
 
         return response;

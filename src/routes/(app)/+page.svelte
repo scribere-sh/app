@@ -6,16 +6,25 @@
 
     import { mode, setTheme, theme, toggleMode } from "mode-watcher";
 
-    import { eden } from "$lib/eden";
+    import { api } from "$lib/hc";
+    import { createQuery } from "@tanstack/svelte-query";
 
-    const ping = eden.api.ping.get.createQuery(undefined);
+    const ping = createQuery({
+        queryKey: ["users", "me"],
+        queryFn: async () => {
+            const response = await api.users.me.$get();
+            const out = await response.json();
+            if (response.ok) return out;
+            else throw out;
+        },
+    });
 </script>
 
 <h1 class="text-foreground text-4xl font-extrabold capitalize">
     {#if $ping.isSuccess}
         Welcome to SvelteKit - {$ping.data.displayName}
     {:else if $ping.isError}
-        Failed to Ping
+        {$ping.error.message}
     {:else}
         <LoadingSpinner class="size-10" />
     {/if}
@@ -55,9 +64,9 @@
                 />
             </div>
             <AlertDialog.Footer>
-                <AlertDialog.Cancel variant="outline"><span
-                        class="font-extrabold"
-                    >R.I.P</span> Rick May</AlertDialog.Cancel>
+                <AlertDialog.Cancel variant="outline">
+                    <span class="font-extrabold">R.I.P</span> Rick May
+                </AlertDialog.Cancel>
             </AlertDialog.Footer>
         </AlertDialog.Content>
     </AlertDialog.Root>
@@ -93,5 +102,5 @@
 </p>
 
 {#if $ping.isSuccess}
-    <pre class="font-mono">{JSON.stringify($ping.data, null, 2)}</pre>
+    <pre class="font-mono">{JSON.stringify($ping.data, null, 4)}</pre>
 {/if}

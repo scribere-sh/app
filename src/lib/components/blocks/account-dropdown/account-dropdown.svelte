@@ -9,16 +9,25 @@
 <script lang="ts">
     import * as Avatar from "$ui/avatar";
     import * as DropdownMenu from "$ui/dropdown-menu";
+    import LoadingSpinner from "$ui/loading-spinner";
+
+    import { api } from "$lib/hc";
+    import { createQuery } from "@tanstack/svelte-query";
 
     const {
         user,
     }: AccountDropdownProps = $props();
 
-    const userInitials = $derived(
-        user.displayName.split(" ").slice(0, 3).map(s =>
-            s[0].toUpperCase()
-        ).join(""),
-    );
+    const userQuery = createQuery({
+        queryKey: ["users", "me"],
+        initialData: user,
+        queryFn: async () => {
+            const response = await api.users.me.$get();
+            const out = await response.json();
+            if (response.ok) return out;
+            else throw out;
+        },
+    });
 </script>
 
 <div class="aspect-square w-full">
@@ -28,7 +37,16 @@
         >
             <Avatar.Root>
                 <Avatar.Fallback>
-                    {userInitials}
+                    {#if $userQuery.data}
+                        {
+                            $userQuery.data.displayName
+                            .split(" ").slice(0, 3).map(
+                                s => s[0].toUpperCase(),
+                            ).join("")
+                        }
+                    {:else}
+                        <LoadingSpinner />
+                    {/if}
                 </Avatar.Fallback>
             </Avatar.Root>
         </DropdownMenu.Trigger>
