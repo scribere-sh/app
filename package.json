@@ -82,7 +82,6 @@
         "arktype": "^2.1.20",
         "drizzle-orm": "^0.43.1",
         "elysia": "^1.2.15",
-        "id128": "^1.6.6",
         "mode-watcher": "^1.0.2",
         "paneforge": "^0.0.6",
         "react": "^19.1.0",

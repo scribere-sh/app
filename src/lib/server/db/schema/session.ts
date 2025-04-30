@@ -6,11 +6,11 @@ export const sessionDetailsTable = sqliteTable(
         /**
          * Session ID, this is the sha256 hash of the `sid` key of the session token
          */
-        sessionId: blob().$type<Uint8Array>().notNull(),
+        sessionId: blob({ mode: "buffer" }).$type<Uint8Array>().notNull(),
         /**
          * User ID, who this token relates to, should be checked
          */
-        userIdHash: blob().$type<Uint8Array>().notNull(),
+        userIdHash: blob({ mode: "buffer" }).$type<Uint8Array>().notNull(),
 
         /**
          * when the session was created

@@ -21,7 +21,7 @@
     }: AppSidebarProps = $props();
 </script>
 
-<header class="fixed top left w-sidebar h-screen flex flex-col items-center justify-center border-r-2">
+<header class="fixed top left w-sidebar h-screen flex flex-col items-center justify-center border-r-2 text-foreground">
     <a href={route("/")} class="hover:bg-foreground/10">
         <AppSidebarItem>
             <Scribere class="w-1/2" />
@@ -36,7 +36,7 @@
     </span>
 
     <AppSidebarItem>
-        <ThemeToggle expand side="right" align="center" sideOffset={6} />
+        <ThemeToggle expand side="right" align="center" sideOffset={10} />
     </AppSidebarItem>
 
     <AccountDropdown {user} />

@@ -23,6 +23,6 @@
 
 <AppSidebar {user} />
 
-<main class="pl-sidebar flex min-h-screen w-screen flex-col items-center justify-center gap-8">
+<main class="pl-sidebar flex min-h-screen w-screen flex-col items-center justify-center gap-8 text-foreground">
     {@render children()}
 </main>

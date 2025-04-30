@@ -79,13 +79,14 @@ export const totpSecretsTable = sqliteTable(
             }),
 
         /**
-         * Plain text encoded totp secret.
+         * totp secret
          *
          * I can't think of a better way to do this that meets our
          * requirements as encryption is pretty much out of the
-         * question here.
+         * question here since we need to fetch it quickly and
+         * easily to check the codes.
          */
-        secret: blob().$type<Uint8Array>().notNull(),
+        secret: blob({ mode: "buffer" }).$type<Uint8Array>().notNull(),
 
         /**
          * Recovery Key `argon2` hash.

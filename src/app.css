@@ -67,7 +67,7 @@
 
 @layer base {
     * {
-        @apply text-foreground transition-colors duration-200 ease-out;
+        @apply transition-colors duration-200 ease-out;
     }
 
     a {

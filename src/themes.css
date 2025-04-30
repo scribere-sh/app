@@ -36,8 +36,8 @@
         --background: #fbf1c7;
         --foreground: #3c3836;
 
-        --primary: var(--foreground);
-        --primary-foreground: var(--background);
+        --primary: #282828;
+        --primary-foreground: #f9f5d7;
 
         --muted: #f9f5d7;
         --input: #f2e5bc;
@@ -50,8 +50,8 @@
         --background: #282828;
         --foreground: #ebdbb2;
 
-        --primary: var(--foreground);
-        --primary-foreground: var(--background);
+        --primary: #fbf1c7;
+        --primary-foreground: #1d2021;
 
         --muted: #1d2021;
         --input: #3c3836;

@@ -15,7 +15,7 @@ export const db = {
             console.debug("accessing platform API DB");
             if (!platform) throw new Error("unable to access platform APIs");
             // @ts-expect-error i know it's not defined that's why I'm defining it
-            // this is the closes i'm getting to private object members
+            // this is the closest i'm getting to private object members
             locals[DB_LOCALS_KEY] = drizzle(platform.env.DB);
         } else {
             console.debug("using DB from request locals");

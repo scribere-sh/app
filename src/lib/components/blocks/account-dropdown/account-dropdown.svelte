@@ -35,8 +35,8 @@
         <DropdownMenu.Content
             side="right"
             align="end"
-            alignOffset={4}
-            sideOffset={6}
+            alignOffset={6}
+            sideOffset={10}
             class="w-80"
         >
             Hello
