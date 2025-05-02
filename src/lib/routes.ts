@@ -19,12 +19,15 @@ export const PAGES = {
 /**
  * SERVERS
  */
-export const SERVERS = {};
+export const SERVERS = {
+    "GET /cdn/profile-picture": `/cdn/profile-picture`,
+};
 
 /**
  * ACTIONS
  */
 export const ACTIONS = {
+    "updateProfilePicture /settings": `/settings?/updateProfilePicture`,
     "default /auth/onboarding": `/auth/onboarding`,
     "default /auth/register": `/auth/register`,
     "default /auth/sign-in": `/auth/sign-in`,
@@ -147,8 +150,13 @@ export type KIT_ROUTES = {
         "/auth/register": never;
         "/auth/sign-in": never;
     };
-    SERVERS: Record<string, never>;
-    ACTIONS: { "default /auth/onboarding": never; "default /auth/register": never; "default /auth/sign-in": never };
+    SERVERS: { "GET /cdn/profile-picture": never };
+    ACTIONS: {
+        "updateProfilePicture /settings": never;
+        "default /auth/onboarding": never;
+        "default /auth/register": never;
+        "default /auth/sign-in": never;
+    };
     LINKS: Record<string, never>;
     Params: Record<string, never>;
 };

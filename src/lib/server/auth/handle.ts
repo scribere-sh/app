@@ -167,7 +167,7 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
     // pretty much just renews the token every 24 hours, but allows for
     // long weekends.
     if (payload.exp - now_s < FIVE_DAYS_IN_SECONDS) {
-        console.info("token is expiring within 4 days, automatically renewing");
+        console.info("token is expiring within 5 days, automatically renewing");
         // we work in milliseconds, tokens work in seconds
         const newExpiryDate = now_s + SIX_DAYS_IN_SECONDS;
 

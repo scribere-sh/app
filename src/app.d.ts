@@ -5,6 +5,7 @@ import type {
     D1Database,
     ExecutionContext,
     Fetcher,
+    ImagesBinding,
     KVNamespace,
     R2Bucket,
 } from "@cloudflare/workers-types";
@@ -68,6 +69,10 @@ declare global {
                  * Doesn't work during vite dev, replace with normal fetch
                  */
                 ARGON2: Fetcher;
+                /**
+                 * Transform some images
+                 */
+                IMAGES: ImagesBinding;
             };
         }
     }

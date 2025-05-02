@@ -40,7 +40,10 @@
             "service": "scribere-argon2-worker",
         },
     ],
-
+    // Working with Cloudflare Images
+    "images": {
+        "binding": "IMAGES",
+    },
     // Bucket for our files
     "r2_buckets": [
         {

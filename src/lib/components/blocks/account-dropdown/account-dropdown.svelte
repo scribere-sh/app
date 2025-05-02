@@ -16,8 +16,7 @@
     import LogOut from "@lucide/svelte/icons/log-out";
     import Settings from "@lucide/svelte/icons/settings";
 
-    import { api } from "$lib/hc";
-    import { createQuery } from "@tanstack/svelte-query";
+    import { api, createQuery } from "$lib/hc";
 
     import { route } from "$lib/routes";
     import { initials } from "$lib/utils";
@@ -27,14 +26,8 @@
     }: AccountDropdownProps = $props();
 
     const userQuery = createQuery({
-        queryKey: ["users", "me"],
         initialData: user,
-        queryFn: async () => {
-            const response = await api.users.me.$get();
-            const out = await response.json();
-            if (response.ok) return out;
-            else throw out;
-        },
+        endpoint: api.users.me,
     });
 
     const userInitials = $derived(
@@ -57,6 +50,7 @@
                         <LoadingSpinner />
                     {/if}
                 </Avatar.Fallback>
+                <Avatar.CurrentUser />
             </Avatar.Root>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content
@@ -80,6 +74,7 @@
                                 <LoadingSpinner />
                             {/if}
                         </Avatar.Fallback>
+                        <Avatar.CurrentUser />
                     </Avatar.Root>
                     <div class="flex flex-col w-full gap-1">
                         {#if $userQuery.data}

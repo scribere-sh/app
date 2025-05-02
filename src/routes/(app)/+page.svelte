@@ -42,8 +42,9 @@
     </Button>
 
     <AlertDialog.Root>
-        <AlertDialog.Trigger class={buttonVariants()}
-        >Alert</AlertDialog.Trigger>
+        <AlertDialog.Trigger class={buttonVariants()}>
+            Alert
+        </AlertDialog.Trigger>
 
         <AlertDialog.Content>
             <AlertDialog.Header>
