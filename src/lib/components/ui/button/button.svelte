@@ -20,7 +20,11 @@
 {#if href}
     <a
         bind:this={ref}
-        class={cn(buttonVariants({ variant, size, rounded }), className)}
+        class={cn(
+            buttonVariants({ variant, size, rounded }),
+            "no-underline",
+            className,
+        )}
         {href}
         {...rest}
     >

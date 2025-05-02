@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { dev } from "$app/environment";
+
     import AppSidebar from "$blk/app-sidebar";
 
     import { QueryClientProvider } from "@tanstack/svelte-query";
@@ -9,12 +11,14 @@
     const { client, user } = data;
 </script>
 
-<SvelteQueryDevtools {client} />
+{#if dev}
+    <SvelteQueryDevtools {client} />
+{/if}
 
 <QueryClientProvider {client}>
     <AppSidebar {user} />
 
-    <main class="pl-sidebar flex min-h-screen w-screen flex-col items-center justify-center gap-8 text-foreground">
+    <main class="pl-sidebar min-h-screen w-screen flex flex-col items-center justify-start gap-12 pt-content-top">
         {@render children()}
     </main>
 </QueryClientProvider>

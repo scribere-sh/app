@@ -66,6 +66,7 @@
         "wrangler": "^4.13.2"
     },
     "dependencies": {
+        "@hono/arktype-validator": "^2.0.1",
         "@libsql/client": "^0.15.4",
         "@oslojs/binary": "^1.0.0",
         "@oslojs/crypto": "^1.0.1",

@@ -6,25 +6,18 @@
 
     import { mode, setTheme, theme, toggleMode } from "mode-watcher";
 
-    import { api } from "$lib/hc";
-    import { createQuery } from "@tanstack/svelte-query";
+    import { api, createQuery } from "$lib/hc";
 
-    const ping = createQuery({
-        queryKey: ["users", "me"],
-        queryFn: async () => {
-            const response = await api.users.me.$get();
-            const out = await response.json();
-            if (response.ok) return out;
-            else throw out;
-        },
+    const userQuery = createQuery({
+        endpoint: api.users.me,
     });
 </script>
 
 <h1 class="text-foreground text-4xl font-extrabold capitalize">
-    {#if $ping.isSuccess}
-        Welcome to SvelteKit - {$ping.data.displayName}
-    {:else if $ping.isError}
-        {$ping.error.message}
+    {#if $userQuery.isSuccess}
+        Welcome to SvelteKit - {$userQuery.data.displayName}
+    {:else if $userQuery.isError}
+        {$userQuery.error.message}
     {:else}
         <LoadingSpinner class="size-10" />
     {/if}
@@ -101,6 +94,6 @@
     the documentation
 </p>
 
-{#if $ping.isSuccess}
-    <pre class="font-mono">{JSON.stringify($ping.data, null, 4)}</pre>
+{#if $userQuery.isSuccess}
+    <pre class="font-mono">{JSON.stringify($userQuery.data, null, 4)}</pre>
 {/if}

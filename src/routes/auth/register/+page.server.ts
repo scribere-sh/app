@@ -58,6 +58,10 @@ export const actions: Actions = {
         }
 
         // # - Query DB for email
+        //
+        // this returns an array, but arrays are objects with number keys, so we can do this
+        //
+        // welcome to javascript.
         const { 1: { length: emailAddressFoundCount }, 2: { length: emailOnboardingsFoundCount } } = await db.query
             .batch(
                 [

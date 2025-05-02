@@ -1,8 +1,11 @@
 :root {
     --sidebar-width: 24;
+    --settings-width: 200;
 
     --auth-header-height: 32;
     --auth-footer-height: 32;
+
+    --content-top-padding: 24;
 
     @variant default {
         --background: #eee;
@@ -25,7 +28,7 @@
         --primary: var(--foreground);
         --primary-foreground: var(--background);
 
-        --muted: #444;
+        --muted: #222;
         --input: #333;
 
         --logo-gradient-top: #edc9ff;

@@ -13,10 +13,12 @@ type InjectedVariables = {
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type InjectedBindings = {};
 
-export const HonoKit = createMiddleware<{
+export type Env = {
     Bindings: InjectedBindings;
     Variables: InjectedVariables;
-}>(async (c, next) => {
+};
+
+export const HonoKit = createMiddleware<Env>(async (c, next) => {
     const { locals } = getRequestEvent();
 
     c.set("user", locals.user);

@@ -1,4 +1,6 @@
 import type {
+    Cache,
+    CacheStorage,
     CfProperties,
     D1Database,
     ExecutionContext,
@@ -39,6 +41,8 @@ declare global {
         }
 
         interface Platform {
+            caches: CacheStorage & { default: Cache };
+
             context: ExecutionContext;
 
             cf: CfProperties;

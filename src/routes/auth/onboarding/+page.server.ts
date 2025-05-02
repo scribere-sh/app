@@ -157,21 +157,15 @@ export const actions: Actions = {
             return fail(400, { form, message: "onboarding link has expired" });
         }
 
-        // destruct array which is an object that contains length getter.
-        // welcome to javascript
-        const users = await db.query
-            .select({
-                handle: usersTable.handle,
-            })
-            .from(usersTable)
-            .where(eq(
+        const handleCount = await db.query.$count(
+            usersTable,
+            eq(
                 usersTable.handle,
                 form.data.handle,
-            ));
+            ),
+        );
 
-        console.log(users);
-
-        if (users.length > 0) {
+        if (handleCount > 0) {
             return setError(form, "handle", "handle is already taken");
         }
 
@@ -211,7 +205,23 @@ export const actions: Actions = {
 
         // we can create account
 
-        const userId = generateUid();
+        let userId;
+        let userIdIsUnique = false;
+        let userIdGenerationAttempts = 0;
+
+        // our ID generation doesn't have collision avoidance
+        // I don't want to implement it
+        //
+        // according to infinite monkey theorem, this may run
+        // forever, in reality I will be amased if it runs more than once
+        do {
+            userIdGenerationAttempts++;
+            userId = generateUid();
+            userIdIsUnique = (await db.query.$count(usersTable, eq(usersTable.id, userId))) === 0;
+        } while (!userIdIsUnique);
+
+        console.info(`generated UserId in ${userIdGenerationAttempts} attempt(s)`);
+
         const passwordHash = await createArgon2(form.data.password);
 
         await db.query.batch([

@@ -49,3 +49,13 @@ export const debounce = <T>(cb: (v: T) => void, durationMs: number): (v: T) => v
         timer = setTimeout(() => cb(v), durationMs);
     };
 };
+
+/**
+ * Given a string, generate a new string between 1 and 3 letters long,
+ * this string will be uppercase and can be used as fallback text
+ * within an avatar.
+ *
+ * @param name - the string to be treated as a name
+ * @returns a string of up to 3 letters long that can be used as initials
+ */
+export const initials = (name: string) => name.split(" ").slice(0, 3).map(s => s[0].toUpperCase()).join("");

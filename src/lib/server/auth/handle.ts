@@ -5,12 +5,17 @@ import { type } from "arktype";
 
 import { type JWTPayload, jwtPayloadType, signJWT, verifyJWT } from "./jwt";
 
-import { TOKEN_COOKIE_NAME } from "./cookie";
+import { setSecureToken, TOKEN_COOKIE_NAME } from "./cookie";
 
 import { PROVIDER_NAMES, type ProviderName } from "$srv/oauth/providers";
 
-import { route } from "$lib/routes";
+import { db } from "$srv/db";
+import { usersTable } from "$srv/db/schema/user";
+import { eq } from "drizzle-orm";
+
 import { renewSession, verifySession } from "./session";
+
+import { route } from "$lib/routes";
 
 // oauth hook runs beforehand, if it reaches here, its not an oauth check
 const isAuthPath = (path: string) => path.startsWith("/auth");
@@ -21,7 +26,8 @@ const FIVE_DAYS_IN_SECONDS = 5 * 24 * 60 * 60;
 const SIX_DAYS_IN_SECONDS = 6 * 24 * 60 * 60;
 
 export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
-    const { cookies } = event;
+    const { cookies, platform } = event;
+    if (!platform) throw new Error("unable to access platform APIs");
     const tokenCookie = cookies.get(TOKEN_COOKIE_NAME);
 
     const now_s = Date.now() / 1000;
@@ -156,7 +162,7 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
     }
 
     // if the expiration date is within 5 days, we should refresh it
-    // better safe than sorry
+    // better safe than sorry.
     //
     // pretty much just renews the token every 24 hours, but allows for
     // long weekends.
@@ -165,9 +171,18 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
         // we work in milliseconds, tokens work in seconds
         const newExpiryDate = now_s + SIX_DAYS_IN_SECONDS;
 
+        const [queryResult] = await db.query
+            .select({
+                dis: usersTable.displayName,
+                han: usersTable.handle,
+            })
+            .from(usersTable)
+            .where(eq(usersTable.id, payload.sub));
+
         // token expiry is emminent
         const newPayload = {
             ...payload,
+            ...queryResult,
 
             // new expiry
             exp: newExpiryDate,
@@ -178,16 +193,16 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
 
         const newToken = await signJWT(newPayload);
 
-        await renewSession(sessionData.encoded);
+        // micro-optimisation
+        //
+        // run this in the background when a session is renewed
+        // since we don't need to use any data from it.
+        platform.context.waitUntil(
+            renewSession(sessionData.encoded),
+        );
 
         // set new token
-        event.cookies.set(TOKEN_COOKIE_NAME, newToken, {
-            path: "/",
-            httpOnly: true,
-            secure: import.meta.env.PROD,
-            expires: new Date(newExpiryDate),
-            sameSite: "lax",
-        });
+        setSecureToken(TOKEN_COOKIE_NAME, newToken, new Date(newExpiryDate));
     }
 
     event.locals.session = sessionData;

@@ -57,9 +57,9 @@ export const emailAddressesTable = sqliteTable(
 );
 
 /**
- * # Email Validations
+ * # Email Onboardins
  *
- * stores refs and challenges for validating an email address.
+ * stores refs and challenges for validating an email address and creating a new account
  */
 export const emailOnboardingsTable = sqliteTable(
     "emailOnboardings",
@@ -108,6 +108,55 @@ export const emailOnboardingsTable = sqliteTable(
          */
         uniqueIndex("emailValidationsUniqueIndex").on(emailLowerCase(table.email)),
     ],
+);
+
+/**
+ * # Email Validations
+ *
+ * not to be confused with email onboardings, this is for when
+ * a user wants to change their email address.
+ */
+export const emailValidationsTable = sqliteTable(
+    "emailValidations",
+    {
+        /**
+         * User ID who is changing their email address
+         */
+        userId: text({ mode: "text" })
+            .notNull(),
+
+        /**
+         * the email address
+         *
+         * to look this up, ensure you wrap the reference to this
+         * column with {@link emailLowerCase}.
+         *
+         * @see {@link https://orm.drizzle.team/docs/guides/unique-case-insensitive-email#sqlite}
+         * @see {@link usersTable.id}
+         */
+        email: text({ mode: "text" })
+            .notNull(),
+
+        /**
+         * This should be some form of verifiable fingerprint of a
+         * token that is sent to the users' email address.*:
+         *
+         * going full `argon2` here may be a bit overkill, a simple
+         * salted hash may do the trick.
+         */
+        challenge: blob({ mode: "buffer" }).$type<Uint8Array>().notNull(),
+
+        /**
+         * Resend ID for the sent change email email
+         */
+        emailRef: text({ mode: "text" }).notNull(),
+
+        /**
+         * The expiry date of this validation challenge, the expiry
+         * time should be given to the user as well and enforced.
+         */
+        expires: integer({ mode: "timestamp" }).notNull(),
+    },
 );
 
 /**
