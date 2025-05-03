@@ -3,17 +3,20 @@
 
     "[svelte]": {
         // interpret markdown-style h1's as titles to put in the minimap
-        "editor.minimap.markSectionHeaderRegex": "#\\s+(?<label>.*)$"
+        "editor.minimap.markSectionHeaderRegex": "#\\s+(?<label>.*)$",
+        "editor.defaultFormatter": "dprint.dprint"
     },
     "[typescript]": {
         "editor.quickSuggestions": {
             "strings": "on"
         },
         // interpret markdown-style h1's as titles to put in the minimap
-        "editor.minimap.markSectionHeaderRegex": "#\\s+(?<label>.*)$"
+        "editor.minimap.markSectionHeaderRegex": "#\\s+(?<label>.*)$",
+        "editor.defaultFormatter": "dprint.dprint"
     },
     "[html]": {
-        "editor.minimap.markSectionHeaderRegex": "#\\s+(?<label>.*)$"
+        "editor.minimap.markSectionHeaderRegex": "#\\s+(?<label>.*)$",
+        "editor.defaultFormatter": "dprint.dprint"
     },
 
     "svelte.enable-ts-plugin": true,

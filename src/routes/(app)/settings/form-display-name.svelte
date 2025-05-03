@@ -1,15 +1,18 @@
 <script lang="ts" module>
     import type { PageData } from "./$types";
 
-    export interface FormProfilePictureProps {
-        form: PageData["details"]["updateProfilePicutreForm"];
+    export interface FormDisplayNameProps {
+        form: PageData["details"]["updateDisplayNameForm"];
     }
 </script>
 
 <script lang="ts">
     import { getContext } from "svelte";
 
-    import { fileProxy, superForm } from "sveltekit-superforms";
+    import { superForm } from "sveltekit-superforms";
+
+    import { invalidateQuery } from "$lib/hc";
+    import { useQueryClient } from "@tanstack/svelte-query";
 
     import * as Form from "$ui/form";
     import { Input } from "$ui/input";
@@ -25,8 +28,9 @@
     let success = $state(false);
 
     const csrf = getContext<string>("csrf");
+    const client = useQueryClient();
 
-    const { form: _form }: FormProfilePictureProps = $props();
+    const { form: _form }: FormDisplayNameProps = $props();
 
     const form = superForm(_form, {
         onSubmit: () => {
@@ -35,6 +39,8 @@
         onResult: ({ result }) => {
             if (result.type !== "success") disabled = false;
             else success = true;
+
+            invalidateQuery(client, ["get", "api", "users", "me"]);
 
             if (result.type === "failure") {
                 console.error(result);
@@ -51,15 +57,12 @@
         },
     });
 
-    const files = fileProxy(form, "image");
-
-    const { enhance } = form;
+    const { form: data, enhance } = form;
 </script>
 
 <form
     method="POST"
-    action={route("updateProfilePicture /settings")}
-    enctype="multipart/form-data"
+    action={route("updateDisplayName /settings")}
     class="flex flex-row gap-2 items-end justify-between w-full"
     use:enhance
 >
@@ -67,22 +70,23 @@
 
     <Form.Field
         {form}
-        name="image"
+        name="displayName"
         class="flex flex-col justify-between w-full"
     >
         <Form.Control>
             {#snippet children({ props })}
                 <div class="flex flex-row items-start justify-between h-4">
-                    <Form.Label>Update Profile Picture</Form.Label>
+                    <Form.Label>Update Display Name</Form.Label>
                     <Form.FieldErrors />
                 </div>
                 <Input
                     {...props}
-                    type="file"
-                    accept="image/*"
-                    required
                     {disabled}
-                    bind:files={$files}
+                    type="text"
+                    autocomplete="nickname"
+                    placeholder="Jane Doe"
+                    required
+                    bind:value={$data.displayName}
                 />
             {/snippet}
         </Form.Control>
@@ -94,7 +98,7 @@
         {:else if disabled}
             <LoadingSpinner />
         {:else}
-            Upload
+            Update
         {/if}
     </Form.Button>
 </form>

@@ -28,6 +28,8 @@ export const SERVERS = {
  */
 export const ACTIONS = {
     "updateProfilePicture /settings": `/settings?/updateProfilePicture`,
+    "updateDisplayName /settings": `/settings?/updateDisplayName`,
+    "updateHandle /settings": `/settings?/updateHandle`,
     "default /auth/onboarding": `/auth/onboarding`,
     "default /auth/register": `/auth/register`,
     "default /auth/sign-in": `/auth/sign-in`,
@@ -153,6 +155,8 @@ export type KIT_ROUTES = {
     SERVERS: { "GET /cdn/profile-picture": never };
     ACTIONS: {
         "updateProfilePicture /settings": never;
+        "updateDisplayName /settings": never;
+        "updateHandle /settings": never;
         "default /auth/onboarding": never;
         "default /auth/register": never;
         "default /auth/sign-in": never;

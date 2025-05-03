@@ -13,6 +13,8 @@
     import * as Card from "$ui/card";
     import { LoadingSpinner } from "$ui/loading-spinner";
 
+    import FormDisplayName from "./form-display-name.svelte";
+    import FormHandle from "./form-handle.svelte";
     import FormProfilePicture from "./form-profile-picture.svelte";
 
     import { cn, initials } from "$lib/utils";
@@ -61,11 +63,10 @@
         </div>
     </Card.Content>
 
-    <Card.Content class="w-2/3">
+    <Card.Content class="w-2/3 flex flex-col gap-6 justify-center">
         <FormProfilePicture form={details.updateProfilePicutreForm} />
-
-        <div>Display Name</div>
-        <div>Handle</div>
+        <FormDisplayName form={details.updateDisplayNameForm} />
+        <FormHandle form={details.updateHandleForm} />
     </Card.Content>
 </Card.Root>
 

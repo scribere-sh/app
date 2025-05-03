@@ -21,12 +21,40 @@ const updateProfileImageDefaults: typeof updateProfileImageSchema.infer = {
 
 const PROFILE_IMAGE_MAX_SIZE = 10_000_000;
 
-export const load: PageServerLoad = async () => {
+const updateDisplayNameSchema = type({
+    csrf: "string",
+    displayName: "string",
+});
+
+const updateDisplayNameDefaults: typeof updateDisplayNameSchema.infer = {
+    csrf: "",
+    displayName: "",
+};
+
+const updateHandleSchema = type({
+    csrf: "string",
+    handle: "string",
+});
+
+const updateHandleDefaults: typeof updateHandleSchema.infer = {
+    csrf: "",
+    handle: "",
+};
+
+export const load: PageServerLoad = async ({ locals }) => {
     return {
         csrf: initCsrf(),
         details: {
             updateProfilePicutreForm: await superValidate(
                 arktype(updateProfileImageSchema, { defaults: updateProfileImageDefaults }),
+            ),
+            updateDisplayNameForm: await superValidate(
+                arktype(updateDisplayNameSchema, {
+                    defaults: { ...updateDisplayNameDefaults, displayName: locals.user.displayName },
+                }),
+            ),
+            updateHandleForm: await superValidate(
+                arktype(updateHandleSchema, { defaults: { ...updateHandleDefaults, handle: locals.user.handle } }),
             ),
         },
     };
@@ -128,5 +156,25 @@ export const actions: Actions = {
         await uploadProfilePicture(locals.user.id, imageBuffer);
 
         console.log("profile picture updated");
+    },
+
+    updateDisplayName: async ({ request, locals }) => {
+        const form = await superValidate(
+            request,
+            arktype(updateDisplayNameSchema, {
+                defaults: { ...updateDisplayNameDefaults, displayName: locals.user.displayName },
+            }),
+        );
+
+        return { form };
+    },
+
+    updateHandle: async ({ request, locals }) => {
+        const form = await superValidate(
+            request,
+            arktype(updateHandleSchema, { defaults: { ...updateHandleDefaults, handle: locals.user.handle } }),
+        );
+
+        return { form };
     },
 };

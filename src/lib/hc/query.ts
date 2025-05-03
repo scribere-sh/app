@@ -128,3 +128,9 @@ export const createDeleteMutation = <In, Out>({ endpoint, options }: {
         },
     });
 };
+
+export const invalidateQuery = (client: QueryClient, queryKey: string[]) => {
+    return client.invalidateQueries({
+        queryKey,
+    });
+};
