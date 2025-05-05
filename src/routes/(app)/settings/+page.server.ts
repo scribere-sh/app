@@ -3,10 +3,20 @@ import type { Actions, PageServerLoad } from "./$types";
 
 import { initCsrf, validateCsrf } from "$srv/csrf";
 
+import { db } from "$srv/db";
+import { usersTable } from "$tb/user";
+import { eq } from "drizzle-orm";
+
 import { uploadProfilePicture } from "$srv/r2/profile-picture";
+
 import { type } from "arktype";
+
+import { setSecureToken, TOKEN_COOKIE_NAME } from "$srv/auth/cookie";
+import { updateJWT } from "$srv/auth/jwt";
 import { fail, setError, superValidate } from "sveltekit-superforms";
 import { arktype } from "sveltekit-superforms/adapters";
+
+const SIX_DAYS_IN_MILLISECONDS = 6 * 24 * 60 * 60 * 1000;
 
 const updateProfileImageSchema = type({
     csrf: "string",
@@ -166,6 +176,27 @@ export const actions: Actions = {
             }),
         );
 
+        if (!validateCsrf(form.data.csrf)) {
+            console.warn("CSRF Error");
+            return fail(400, { form, message: "CSRF Error" });
+        }
+
+        await db.query
+            .update(usersTable)
+            .set({
+                displayName: form.data.displayName,
+            })
+            .where(eq(
+                usersTable.id,
+                locals.user.id,
+            ));
+
+        setSecureToken(
+            TOKEN_COOKIE_NAME,
+            await updateJWT(locals.token, { dis: form.data.displayName }),
+            new Date(Date.now() + SIX_DAYS_IN_MILLISECONDS),
+        );
+
         return { form };
     },
 
@@ -173,6 +204,27 @@ export const actions: Actions = {
         const form = await superValidate(
             request,
             arktype(updateHandleSchema, { defaults: { ...updateHandleDefaults, handle: locals.user.handle } }),
+        );
+
+        if (!validateCsrf(form.data.csrf)) {
+            console.warn("CSRF Error");
+            return fail(400, { form, message: "CSRF Error" });
+        }
+
+        await db.query
+            .update(usersTable)
+            .set({
+                handle: form.data.handle,
+            })
+            .where(eq(
+                usersTable.id,
+                locals.user.id,
+            ));
+
+        setSecureToken(
+            TOKEN_COOKIE_NAME,
+            await updateJWT(locals.token, { han: form.data.handle }),
+            new Date(Date.now() + SIX_DAYS_IN_MILLISECONDS),
         );
 
         return { form };

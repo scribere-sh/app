@@ -6,6 +6,5 @@ import { Hono } from "hono";
 export default new Hono<Env>()
     // # GET /me
     .get("/me", async (c) => {
-        await new Promise(res => setTimeout(res, 2000));
         return c.json(c.get("user"));
     });

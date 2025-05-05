@@ -1,11 +1,3 @@
-<script lang="ts" module>
-    import type { User } from "$lib/schema/user";
-
-    export interface AppSidebarProps {
-        user: User;
-    }
-</script>
-
 <script lang="ts">
     import { AccountDropdown } from "$blk/account-dropdown";
     import { ThemeToggle } from "$blk/theme-toggle";
@@ -15,10 +7,6 @@
     import { route } from "$lib/routes";
 
     import AppSidebarItem from "./app-sidebar-item.svelte";
-
-    const {
-        user,
-    }: AppSidebarProps = $props();
 </script>
 
 <header class="fixed top left w-sidebar h-screen flex flex-col items-center justify-center border-r-2 text-foreground">
@@ -39,5 +27,5 @@
         <ThemeToggle expand side="right" align="center" sideOffset={10} />
     </AppSidebarItem>
 
-    <AccountDropdown {user} />
+    <AccountDropdown />
 </header>

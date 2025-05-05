@@ -138,3 +138,28 @@ export const verifyJWT = async (jwt: string): Promise<object | null> => {
 
     return uint8ArrayStrictEqual(givenSignature, signature) ? payloadObject : null;
 };
+
+/**
+ * # updateJWT
+ *
+ * Given a JWT, decode it and update the payload with the partial payload, then
+ * sign it and return it to be set as the token. This allows for consistency when
+ * the user updates their Display Name, or Handle.
+ *
+ * @param jwt - the current JWT
+ * @param updatedPayload  - the new properties
+ * @returns a newly signed JWT with the updated payload
+ */
+export const updateJWT = async (jwt: string, updatedPayload: Partial<JWTPayload>) => {
+    const { 1: payloadObject } = parseJWT(jwt);
+
+    const payload = jwtPayloadType(payloadObject);
+
+    if (payload instanceof type.errors) {
+        throw payload;
+    }
+
+    Object.assign(payload, updatedPayload);
+
+    return await signJWT(payload);
+};

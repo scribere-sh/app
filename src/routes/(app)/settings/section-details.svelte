@@ -17,13 +17,16 @@
     import FormHandle from "./form-handle.svelte";
     import FormProfilePicture from "./form-profile-picture.svelte";
 
+    import { useUser } from "$lib/ctx";
     import { cn, initials } from "$lib/utils";
     import { Skeleton } from "$ui/skeleton";
     import { getContext } from "svelte";
 
     const userQuery = createQuery({
+        initialData: useUser(),
         endpoint: api.users.me,
     });
+
     const detailsQuery = createQuery({
         endpoint: api.account.details,
     });

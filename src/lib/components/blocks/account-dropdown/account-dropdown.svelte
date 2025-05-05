@@ -1,11 +1,3 @@
-<script lang="ts" module>
-    import type { User } from "$lib/schema/user";
-
-    export interface AccountDropdownProps {
-        user: User;
-    }
-</script>
-
 <script lang="ts">
     import * as Avatar from "$ui/avatar";
     import { Button } from "$ui/button";
@@ -18,15 +10,12 @@
 
     import { api, createQuery } from "$lib/hc";
 
+    import { useUser } from "$lib/ctx";
     import { route } from "$lib/routes";
     import { initials } from "$lib/utils";
 
-    const {
-        user,
-    }: AccountDropdownProps = $props();
-
     const userQuery = createQuery({
-        initialData: user,
+        initialData: useUser(),
         endpoint: api.users.me,
     });
 

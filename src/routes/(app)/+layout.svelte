@@ -3,12 +3,16 @@
 
     import AppSidebar from "$blk/app-sidebar";
 
+    import { setLayoutContext } from "$lib/ctx.js";
+
     import { QueryClientProvider } from "@tanstack/svelte-query";
     import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
 
     let { children, data } = $props();
 
-    const { client, user } = data;
+    const { client } = data;
+
+    setLayoutContext(data);
 </script>
 
 {#if dev}
@@ -16,9 +20,9 @@
 {/if}
 
 <QueryClientProvider {client}>
-    <AppSidebar {user} />
+    <AppSidebar />
 
-    <main class="pl-sidebar min-h-screen w-screen flex flex-col items-center justify-start gap-12 pt-content-top">
+    <main class="pl-sidebar min-h-screen w-screen flex flex-col items-center justify-start gap-12 pt-content-top text-foreground">
         {@render children()}
     </main>
 </QueryClientProvider>

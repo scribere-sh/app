@@ -1,11 +1,6 @@
-import {
-    blob,
-    primaryKey,
-    sqliteTable,
-    // integer,
-    text,
-    uniqueIndex,
-} from "drizzle-orm/sqlite-core";
+import type { ProviderName } from "$srv/oauth/providers";
+
+import { blob, integer, primaryKey, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 import { usersTable } from "./user";
 
@@ -89,6 +84,14 @@ export const totpSecretsTable = sqliteTable(
         secret: blob({ mode: "buffer" }).$type<Uint8Array>().notNull(),
 
         /**
+         * whether or not OTP is in use for this user, if it's not the
+         * otp will not be applied to the user as we haven't confirmed
+         * that the secret is valid and that the user has a code generator
+         * set up.
+         */
+        inUse: integer({ mode: "boolean" }).notNull().$default(() => false),
+
+        /**
          * Recovery Key `argon2` hash.
          *
          * This is to be treated like a 2nd password because that's
@@ -123,8 +126,22 @@ export const oauthProvidersTable = sqliteTable(
                 onDelete: "cascade",
             }),
 
-        provider: text({ mode: "text" }).notNull(),
+        /**
+         * Provider Name
+         *
+         * this should be lower case and plain & simple
+         * for GitHub this will simply be the string "github"
+         */
+        provider: text({ mode: "text" }).notNull().$type<ProviderName>(),
 
+        /**
+         * Provider User ID
+         *
+         * this should be the hash of the UserID provided by the
+         * external provider.
+         *
+         * Todo: we still need to decide if OAuth should skip MFA.
+         */
         providerUserId: text({ mode: "text" }).notNull(),
     },
     (table) => [

@@ -213,6 +213,8 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
         handle: payload.han,
     };
 
+    event.locals.token = tokenCookie;
+
     console.info("token is valid, continuing");
     return resolve(event);
 };

@@ -39,6 +39,11 @@ declare global {
                 raw: Uint8Array;
                 encoded: string;
             };
+
+            /**
+             * The token itself to be used for updating down the line
+             */
+            token: string;
         }
 
         interface Platform {
