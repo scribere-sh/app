@@ -1,12 +1,15 @@
 import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
+
+import globals from "globals";
+import { fileURLToPath } from "node:url";
+
+import ts from "typescript-eslint";
+
+import pluginQuery from "@tanstack/eslint-plugin-query";
 import drizzle from "eslint-plugin-drizzle";
 import svelte from "eslint-plugin-svelte";
 import tsdoc from "eslint-plugin-tsdoc";
-import globals from "globals";
-import { fileURLToPath } from "node:url";
-import ts from "typescript-eslint";
-import svelteConfig from "./svelte.config.js";
 
 const gitignorePath = fileURLToPath(new URL("./.gitignore", import.meta.url));
 
@@ -15,6 +18,7 @@ export default ts.config(
     js.configs.recommended,
     ...ts.configs.recommended,
     ...svelte.configs.recommended,
+    ...pluginQuery.configs["flat/recommended"],
     {
         files: ["**/*.{ts,tsx}"],
         plugins: {
@@ -50,7 +54,6 @@ export default ts.config(
                 projectService: true,
                 extraFileExtensions: [".svelte"],
                 parser: ts.parser,
-                svelteConfig,
             },
         },
         rules: {

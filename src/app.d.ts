@@ -1,10 +1,11 @@
-import type { DehydratedState } from "@tanstack/svelte-query";
-
 import type {
+    Cache,
+    CacheStorage,
     CfProperties,
     D1Database,
     ExecutionContext,
     Fetcher,
+    ImagesBinding,
     KVNamespace,
     R2Bucket,
 } from "@cloudflare/workers-types";
@@ -23,8 +24,6 @@ declare global {
         }
 
         interface Locals {
-            dehydrated: DehydratedState;
-
             /**
              * Keep in mind that within the auth system this will be undefined
              *
@@ -40,9 +39,16 @@ declare global {
                 raw: Uint8Array;
                 encoded: string;
             };
+
+            /**
+             * The token itself to be used for updating down the line
+             */
+            token: string;
         }
 
         interface Platform {
+            caches: CacheStorage & { default: Cache };
+
             context: ExecutionContext;
 
             cf: CfProperties;
@@ -68,6 +74,10 @@ declare global {
                  * Doesn't work during vite dev, replace with normal fetch
                  */
                 ARGON2: Fetcher;
+                /**
+                 * Transform some images
+                 */
+                IMAGES: ImagesBinding;
             };
         }
     }

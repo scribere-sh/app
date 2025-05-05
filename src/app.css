@@ -34,9 +34,12 @@
     /* spacing */
 
     --spacing-sidebar: calc(var(--spacing) * var(--sidebar-width));
+    --spacing-settings: calc(var(--spacing) * var(--settings-width));
 
     --spacing-auth-header: calc(var(--spacing) * var(--auth-header-height));
     --spacing-auth-footer: calc(var(--spacing) * var(--auth-footer-height));
+
+    --spacing-content-top: calc(var(--spacing) * var(--content-top-padding));
 
     /* animations */
 

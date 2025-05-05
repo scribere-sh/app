@@ -15,9 +15,8 @@ const CSRF_TOKEN_NAME = "csrf";
 export const initCsrf = (): string => {
     const { cookies } = getRequestEvent();
 
-    // disabled for the time being
-    // const currentCookie = cookies.get(CSRF_TOKEN_NAME);
-    // if (currentCookie) return currentCookie;
+    const currentCookie = cookies.get(CSRF_TOKEN_NAME);
+    if (currentCookie) return currentCookie;
 
     const csrfToken = generateTokenString(32);
 

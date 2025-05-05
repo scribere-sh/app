@@ -12,7 +12,7 @@
 - [Libraries](#libraries)
   - [**Svelte + SvelteKit**](#svelte--sveltekit)
   - [**TailwindCSS v4**](#tailwindcss-v4)
-  - [**Elysia + Eden + Tanstack Svelte Query**](#elysia--eden--tanstack-svelte-query)
+  - [**Hono + Tanstack Svelte Query**](#hono--tanstack-svelte-query)
   - [**Drizzle ORM**](#drizzle-orm)
 - [Development](#development)
 - [Building](#building)
@@ -45,11 +45,11 @@ For the creation of re-useable components that are able to compile to very effic
 
 In order to rapidly develop and prototype this solution, we need a way to quickly update styles and components. TailwindCSS is perfect for this with its utility-class based system
 
-#### **Elysia + Eden + Tanstack Svelte Query**
+#### **Hono + Tanstack Svelte Query**
 
-While the [SvelteKit](#svelte--sveltekit) meta-framework is great for structuring a UI-based applications, it's very verbose and featureless when it comes to the creation of APIs, this is why the `/api` endpoint gets handled by an [Elysia](http://elysiajs.com/) Application.
+While the [SvelteKit](#svelte--sveltekit) meta-framework is great for structuring a UI-based applications, it's very verbose and featureless when it comes to the creation of APIs, this is why the `/api` endpoint gets handled by a [Hono](http://hono.def/) Application.
 
-In combination with it's [Eden](https://elysiajs.com/eden/overview.html) system, this creates an RPC-like system that makes our life significantly easier as we get end-to-end typing without needing to inflate the size of the end-product (which is a downside of [tRPC](https://trpc.io)).
+In combination with it's [`hc`](https://hono.dev/docs/guides/rpc) system, this creates an RPC-like system that makes our life significantly easier as we get end-to-end typing without needing to inflate the size of the end-product (which is a downside of [tRPC](https://trpc.io)).
 
 [Tanstack Svelte Query](https://tanstack.com/query/latest/docs/framework/svelte/overview) is a library for providing deduplication, error handling, data invalidation, caching, refetching, and many more things. It allows our application to feel more reactive than could be realistically achieved without such a system.
 

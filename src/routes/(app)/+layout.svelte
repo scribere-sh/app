@@ -1,28 +1,28 @@
 <script lang="ts">
+    import { dev } from "$app/environment";
+
     import AppSidebar from "$blk/app-sidebar";
 
-    import { hydrate } from "@tanstack/svelte-query";
-    import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
+    import { setLayoutContext } from "$lib/ctx.js";
 
-    import { eden } from "$lib/eden";
+    import { QueryClientProvider } from "@tanstack/svelte-query";
+    import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
 
     let { children, data } = $props();
 
-    const { client, queryClient, user, dehydrated } = data;
+    const { client } = data;
 
-    eden.setContext({
-        client,
-        // @ts-expect-error I don't even know man
-        queryClient,
-    });
-
-    hydrate(queryClient, dehydrated);
+    setLayoutContext(data);
 </script>
 
-<SvelteQueryDevtools client={queryClient} />
+{#if dev}
+    <SvelteQueryDevtools {client} />
+{/if}
 
-<AppSidebar {user} />
+<QueryClientProvider {client}>
+    <AppSidebar />
 
-<main class="pl-sidebar flex min-h-screen w-screen flex-col items-center justify-center gap-8 text-foreground">
-    {@render children()}
-</main>
+    <main class="pl-sidebar min-h-screen w-screen flex flex-col items-center justify-start gap-12 pt-content-top text-foreground">
+        {@render children()}
+    </main>
+</QueryClientProvider>

@@ -9,6 +9,9 @@
 
 <AvatarPrimitive.Image
     bind:ref
-    class={cn("aspect-square size-full", className)}
+    class={cn(
+        "aspect-square size-full animate-in fade-in slide-in-from-left-0",
+        className,
+    )}
     {...rest}
 />

@@ -10,6 +10,7 @@
  */
 export const PAGES = {
     "/": `/`,
+    "/settings": `/settings`,
     "/auth/onboarding": `/auth/onboarding`,
     "/auth/register": `/auth/register`,
     "/auth/sign-in": `/auth/sign-in`,
@@ -18,12 +19,17 @@ export const PAGES = {
 /**
  * SERVERS
  */
-export const SERVERS = {};
+export const SERVERS = {
+    "GET /cdn/profile-picture": `/cdn/profile-picture`,
+};
 
 /**
  * ACTIONS
  */
 export const ACTIONS = {
+    "updateProfilePicture /settings": `/settings?/updateProfilePicture`,
+    "updateDisplayName /settings": `/settings?/updateDisplayName`,
+    "updateHandle /settings": `/settings?/updateHandle`,
     "default /auth/onboarding": `/auth/onboarding`,
     "default /auth/register": `/auth/register`,
     "default /auth/sign-in": `/auth/sign-in`,
@@ -139,9 +145,22 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
  * ```
  */
 export type KIT_ROUTES = {
-    PAGES: { "/": never; "/auth/onboarding": never; "/auth/register": never; "/auth/sign-in": never };
-    SERVERS: Record<string, never>;
-    ACTIONS: { "default /auth/onboarding": never; "default /auth/register": never; "default /auth/sign-in": never };
+    PAGES: {
+        "/": never;
+        "/settings": never;
+        "/auth/onboarding": never;
+        "/auth/register": never;
+        "/auth/sign-in": never;
+    };
+    SERVERS: { "GET /cdn/profile-picture": never };
+    ACTIONS: {
+        "updateProfilePicture /settings": never;
+        "updateDisplayName /settings": never;
+        "updateHandle /settings": never;
+        "default /auth/onboarding": never;
+        "default /auth/register": never;
+        "default /auth/sign-in": never;
+    };
     LINKS: Record<string, never>;
     Params: Record<string, never>;
 };

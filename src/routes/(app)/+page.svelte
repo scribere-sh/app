@@ -6,16 +6,18 @@
 
     import { mode, setTheme, theme, toggleMode } from "mode-watcher";
 
-    import { eden } from "$lib/eden";
+    import { api, createQuery } from "$lib/hc";
 
-    const ping = eden.api.ping.get.createQuery(undefined);
+    const userQuery = createQuery({
+        endpoint: api.users.me,
+    });
 </script>
 
 <h1 class="text-foreground text-4xl font-extrabold capitalize">
-    {#if $ping.isSuccess}
-        Welcome to SvelteKit - {$ping.data.displayName}
-    {:else if $ping.isError}
-        Failed to Ping
+    {#if $userQuery.isSuccess}
+        Welcome to SvelteKit - {$userQuery.data.displayName}
+    {:else if $userQuery.isError}
+        {$userQuery.error.message}
     {:else}
         <LoadingSpinner class="size-10" />
     {/if}
@@ -40,8 +42,9 @@
     </Button>
 
     <AlertDialog.Root>
-        <AlertDialog.Trigger class={buttonVariants()}
-        >Alert</AlertDialog.Trigger>
+        <AlertDialog.Trigger class={buttonVariants()}>
+            Alert
+        </AlertDialog.Trigger>
 
         <AlertDialog.Content>
             <AlertDialog.Header>
@@ -55,9 +58,9 @@
                 />
             </div>
             <AlertDialog.Footer>
-                <AlertDialog.Cancel variant="outline"><span
-                        class="font-extrabold"
-                    >R.I.P</span> Rick May</AlertDialog.Cancel>
+                <AlertDialog.Cancel variant="outline">
+                    <span class="font-extrabold">R.I.P</span> Rick May
+                </AlertDialog.Cancel>
             </AlertDialog.Footer>
         </AlertDialog.Content>
     </AlertDialog.Root>
@@ -92,6 +95,6 @@
     the documentation
 </p>
 
-{#if $ping.isSuccess}
-    <pre class="font-mono">{JSON.stringify($ping.data, null, 2)}</pre>
+{#if $userQuery.isSuccess}
+    <pre class="font-mono">{JSON.stringify($userQuery.data, null, 4)}</pre>
 {/if}
