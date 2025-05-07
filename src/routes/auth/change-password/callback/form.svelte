@@ -18,6 +18,8 @@
     import { Input } from "$ui/input";
     import LoadingSpinner from "$ui/loading-spinner";
 
+    import { FormDebug } from "$blk/form-debug";
+
     import { route } from "$lib/routes";
 
     let firstFieldRef: HTMLElement | null = $state(null);
@@ -56,7 +58,15 @@
     });
 
     const { form: data, enhance, errors } = form;
+
+    $effect(() => {
+        $data.csrf = csrf;
+        $data.id = id;
+        $data.challenge = challenge;
+    });
 </script>
+
+<FormDebug {data} label="Change Password" />
 
 <form
     action={route("default /auth/change-password/callback")}
@@ -117,7 +127,7 @@
         {#if disabled}
             <LoadingSpinner class="stroke-background" />
         {:else}
-            Create Account
+            Change Password
         {/if}
     </Form.Button>
 </form>

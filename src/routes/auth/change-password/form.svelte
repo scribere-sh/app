@@ -4,6 +4,7 @@
     export interface UpdatePasswordFormProps {
         form: PageData["form"];
         disabled?: boolean;
+        success?: boolean;
         csrf: string;
     }
 </script>
@@ -26,8 +27,12 @@
         if (firstFieldRef) firstFieldRef.focus();
     });
 
-    let { form: _form, disabled = $bindable(false), csrf }:
-        UpdatePasswordFormProps = $props();
+    let {
+        form: _form,
+        disabled = $bindable(false),
+        success = $bindable(false),
+        csrf,
+    }: UpdatePasswordFormProps = $props();
 
     const form = superForm(_form, {
         onSubmit: () => {
@@ -37,7 +42,16 @@
             console.log(result);
             if (result.type !== "redirect") disabled = false;
 
-            if (result.type === "error") {
+            if (result.type === "success") {
+                success = true;
+
+                toast.success(
+                    `Check your inbox for the password reset email`,
+                    {
+                        position: "top-center",
+                    },
+                );
+            } else if (result.type === "error") {
                 console.error(result);
                 toast.error(`Failed to login: ${result.error.message}`);
             } else if (result.type === "failure") {
@@ -62,10 +76,10 @@
     });
 </script>
 
-<FormDebug {data} label="Update Password" />
+<FormDebug {data} label="Change Password" />
 
 <form
-    action={route("default /auth/update-password")}
+    action={route("default /auth/change-password")}
     method="POST"
     class="flex flex-col gap-4"
     use:enhance
@@ -84,7 +98,7 @@
 
                 <Input
                     {...props}
-                    {disabled}
+                    disabled={disabled || success}
                     error={$errors.email !== undefined}
                     type="email"
                     autocomplete="email"
@@ -97,11 +111,13 @@
         </Form.Control>
     </Form.Field>
 
-    <Form.Button {disabled} class="w-full">
-        {#if disabled}
+    <Form.Button disabled={disabled || success} class="w-full">
+        {#if success}
+            Check your Inbox!
+        {:else if disabled}
             <LoadingSpinner class="stroke-background" />
         {:else}
-            Sign In
+            Change Password
         {/if}
     </Form.Button>
 </form>

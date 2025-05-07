@@ -59,7 +59,7 @@ export const load: PageServerLoad = async ({ url }) => {
         const { 1: challengeLookup } = await db.query.batch([
             db.query
                 .delete(changePasswordChallengesTable)
-                .where(lt(changePasswordChallengesTable, new Date())),
+                .where(lt(changePasswordChallengesTable.expires, new Date())),
             db.query
                 .select({
                     verifier: changePasswordChallengesTable.challengeVerifier,
@@ -127,7 +127,7 @@ export const actions: Actions = {
         const { 1: challengeLookup } = await db.query.batch([
             db.query
                 .delete(changePasswordChallengesTable)
-                .where(lt(changePasswordChallengesTable, new Date())),
+                .where(lt(changePasswordChallengesTable.expires, new Date())),
             db.query
                 .select({
                     userId: changePasswordChallengesTable.userId,
