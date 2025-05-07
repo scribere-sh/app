@@ -171,3 +171,45 @@ export const oauthProvidersTable = sqliteTable(
         primaryKey({ name: "composite", columns: [table.userId, table.provider] }),
     ],
 );
+
+export const changePasswordChallengesTable = sqliteTable(
+    "changePasswordChallenges",
+    {
+        /**
+         * Change ID Request ID, this is a hash of the one sent to the user.
+         */
+        id: blob({ mode: "buffer" })
+            .$type<Uint8Array>()
+            .notNull(),
+
+        /**
+         * User ID that this challenge references
+         */
+        userId: text({ mode: "text" })
+            .notNull()
+            .references(() => usersTable.id),
+
+        /**
+         * Challenge verifier, this is the hash of the challenge sent to the user
+         */
+        challengeVerifier: blob({ mode: "buffer" })
+            .$type<Uint8Array>()
+            .notNull(),
+
+        /**
+         * Once the email is sent, the ref will be placed in here for debugging
+         */
+        emailRef: text({ mode: "text" })
+            .notNull(),
+
+        /**
+         * Expiry date of the challenge, if the challenge is found but is expired,
+         * it should be considered invalid.
+         */
+        expires: integer({ mode: "timestamp" })
+            .notNull(),
+    },
+    (table) => [
+        uniqueIndex("idChangePasswordChallengesTableUniqueIndex").on(table.id),
+    ],
+);

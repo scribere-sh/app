@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    export const TOAST_DURATION_MS = 5000;
+    export const TOAST_DURATION_MS = 12_000;
 </script>
 
 <script lang="ts">

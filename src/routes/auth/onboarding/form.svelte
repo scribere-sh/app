@@ -35,7 +35,7 @@
         display: null,
         handle: null,
         password: null,
-        confirm_password: null,
+        confirmPassword: null,
     });
 
     let {
@@ -172,24 +172,24 @@
         <Form.FieldErrors />
     </Form.Field>
 
-    <Form.Field {form} name="confirm_password">
+    <Form.Field {form} name="confirmPassword">
         <Form.Control>
             {#snippet children({ props })}
-                <Form.Label error={$errors.confirm_password !== undefined}>
+                <Form.Label error={$errors.confirmPassword !== undefined}>
                     Confirm Password
                 </Form.Label>
 
                 <Input
                     {...props}
                     {disabled}
-                    error={$errors.confirm_password !== undefined}
+                    error={$errors.confirmPassword !== undefined}
                     type="password"
                     autocomplete="new-password"
                     placeholder="************"
                     required
-                    onfocus={() => focussed = "confirm_password"}
-                    bind:value={$data.confirm_password}
-                    bind:ref={fieldRefs.confirm_password}
+                    onfocus={() => focussed = "confirmPassword"}
+                    bind:value={$data.confirmPassword}
+                    bind:ref={fieldRefs.confirmPassword}
                 />
             {/snippet}
         </Form.Control>

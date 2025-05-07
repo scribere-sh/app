@@ -11,29 +11,26 @@
 
     import * as Avatar from "$ui/avatar";
     import * as Card from "$ui/card";
-    import { LoadingSpinner } from "$ui/loading-spinner";
 
     import FormDisplayName from "./form-display-name.svelte";
     import FormHandle from "./form-handle.svelte";
     import FormProfilePicture from "./form-profile-picture.svelte";
 
     import { useUser } from "$lib/ctx";
-    import { cn, initials } from "$lib/utils";
+    import { cn } from "$lib/utils";
     import { Skeleton } from "$ui/skeleton";
     import { getContext } from "svelte";
 
+    const user = useUser();
+
     const userQuery = createQuery({
-        initialData: useUser(),
+        initialData: user,
         endpoint: api.users.me,
     });
 
     const detailsQuery = createQuery({
         endpoint: api.account.details,
     });
-
-    const userInitials = $userQuery.data
-        ? initials($userQuery.data.displayName)
-        : null;
 
     const cardClasses = getContext<string>("cardClasses");
 
@@ -42,16 +39,7 @@
 
 <Card.Root id="details" class={cn(cardClasses, "flex flex-row items-center")}>
     <Card.Content class="w-1/3 flex flex-col justify-between">
-        <Avatar.Root class="w-full h-max aspect-square">
-            <Avatar.Fallback>
-                {#if userInitials}
-                    {userInitials}
-                {:else}
-                    <LoadingSpinner />
-                {/if}
-            </Avatar.Fallback>
-            <Avatar.CurrentUser />
-        </Avatar.Root>
+        <Avatar.CurrentUser class="w-full h-max aspect-square" />
 
         <div class="flex flex-col gap-2 mt-4">
             {#if $userQuery.data}

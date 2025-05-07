@@ -1,3 +1,3 @@
-import AccountDropdown, { type AccountDropdownProps } from "./account-dropdown.svelte";
+import AccountDropdown from "./account-dropdown.svelte";
 
-export { AccountDropdown, type AccountDropdownProps };
+export { AccountDropdown };

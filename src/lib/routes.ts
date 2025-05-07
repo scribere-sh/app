@@ -11,6 +11,9 @@
 export const PAGES = {
     "/": `/`,
     "/settings": `/settings`,
+    "/auth/change-password": `/auth/change-password`,
+    "/auth/change-password/callback": `/auth/change-password/callback`,
+    "/auth/log-out": `/auth/log-out`,
     "/auth/onboarding": `/auth/onboarding`,
     "/auth/register": `/auth/register`,
     "/auth/sign-in": `/auth/sign-in`,
@@ -19,9 +22,7 @@ export const PAGES = {
 /**
  * SERVERS
  */
-export const SERVERS = {
-    "GET /cdn/profile-picture": `/cdn/profile-picture`,
-};
+export const SERVERS = {};
 
 /**
  * ACTIONS
@@ -30,6 +31,8 @@ export const ACTIONS = {
     "updateProfilePicture /settings": `/settings?/updateProfilePicture`,
     "updateDisplayName /settings": `/settings?/updateDisplayName`,
     "updateHandle /settings": `/settings?/updateHandle`,
+    "default /auth/change-password": `/auth/change-password`,
+    "default /auth/change-password/callback": `/auth/change-password/callback`,
     "default /auth/onboarding": `/auth/onboarding`,
     "default /auth/register": `/auth/register`,
     "default /auth/sign-in": `/auth/sign-in`,
@@ -148,15 +151,20 @@ export type KIT_ROUTES = {
     PAGES: {
         "/": never;
         "/settings": never;
+        "/auth/change-password": never;
+        "/auth/change-password/callback": never;
+        "/auth/log-out": never;
         "/auth/onboarding": never;
         "/auth/register": never;
         "/auth/sign-in": never;
     };
-    SERVERS: { "GET /cdn/profile-picture": never };
+    SERVERS: Record<string, never>;
     ACTIONS: {
         "updateProfilePicture /settings": never;
         "updateDisplayName /settings": never;
         "updateHandle /settings": never;
+        "default /auth/change-password": never;
+        "default /auth/change-password/callback": never;
         "default /auth/onboarding": never;
         "default /auth/register": never;
         "default /auth/sign-in": never;

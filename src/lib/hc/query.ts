@@ -6,8 +6,9 @@ export interface QueryError {
     message: string;
 }
 
-const queryKey = (url: URL) => [
+const queryKey = (url: URL, other: Record<string, unknown> = {}) => [
     ...url.pathname.split("/").filter(s => s.length > 0),
+    ...Object.values(other).map(v => JSON.stringify(v)).filter(s => s.length > 0),
 ];
 
 export const prefetchQuery = <In, Out>({ client, endpoint, input, options }: {
@@ -25,7 +26,7 @@ export const prefetchQuery = <In, Out>({ client, endpoint, input, options }: {
 }) => {
     return client.prefetchQuery({
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
-        queryKey: ["get", ...queryKey(endpoint.$url())],
+        queryKey: ["get", ...queryKey(endpoint.$url(), input ? input : {})],
         queryFn: async () => {
             // @ts-expect-error I don't understand this at all
             const response = await endpoint.$get(input, options);
@@ -46,12 +47,13 @@ export const createQuery = <In, Out>({ endpoint, initialData, input, options }: 
         };
     }>;
     initialData?: Out;
-    input?: In extends unknown ? undefined : In;
+    input?: object extends In ? undefined : In;
     options?: ClientRequestOptions;
 }) => {
     return createTanstackQuery({
+        // @ts-expect-error - shut up and let me cook
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
-        queryKey: ["get", ...queryKey(endpoint.$url())],
+        queryKey: ["get", ...queryKey(endpoint.$url(input))],
         initialData,
         queryFn: async () => {
             // @ts-expect-error I don't understand this at all
@@ -59,6 +61,50 @@ export const createQuery = <In, Out>({ endpoint, initialData, input, options }: 
             const data = await response.json();
             if (response.ok) return data;
             else throw data as QueryError;
+        },
+    });
+};
+
+export const createBlobQuery = <In, Out>({ endpoint, input, options }: {
+    endpoint: ClientRequest<{
+        $get: {
+            input: In;
+            output: Out;
+            outputFormat: "body";
+            status: ContentfulStatusCode;
+        };
+    }>;
+    input?: object extends In ? undefined : In;
+    options?: ClientRequestOptions;
+}) => {
+    return createTanstackQuery({
+        // @ts-expect-error - shut up and let me cook
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
+        queryKey: ["get", "bin", ...queryKey(endpoint.$url(input))],
+        refetchOnMount: false,
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: true,
+        staleTime: 60 * 60 * 1000,
+        queryFn: async (ctx) => {
+            const cachedObjects = ctx.client.getQueryCache().findAll({
+                queryKey: ctx.queryKey,
+            });
+
+            cachedObjects.forEach(obj => {
+                if (obj.state.data) {
+                    // prevent a "memory leak"-esque situation
+                    console.debug(`Freeing Cached Object - ${(obj.state.data as string).split("/")[3]}`);
+                    URL.revokeObjectURL(obj.state.data as string);
+                }
+            });
+
+            // @ts-expect-error I don't understand this at all
+            const response = await endpoint.$get(input, options);
+            if (!response.ok) throw await response.json();
+
+            const responseBlob = await response.blob();
+            return URL.createObjectURL(responseBlob);
         },
     });
 };

@@ -1,12 +1,15 @@
 <script lang="ts">
     import "../app.css";
 
-    import { Toaster } from "$ui/sonner";
+    import type { LayoutProps } from "./$types";
 
     import { ModeWatcher, setTheme } from "mode-watcher";
     import { onMount } from "svelte";
+    import { toast } from "svelte-sonner";
 
-    let { children } = $props();
+    import { Toaster } from "$ui/sonner";
+
+    let { children, data }: LayoutProps = $props();
 
     let disableTransitions = $state(true);
 
@@ -16,6 +19,26 @@
 
         window.setTheme = setTheme;
         window.resetTheme = () => setTheme("default");
+
+        if (data.message) {
+            if (data.message.type === "info") {
+                toast.info(data.message.content, {
+                    position: "top-center",
+                });
+            } else if (data.message.type === "warning") {
+                toast.warning(data.message.content, {
+                    position: "top-center",
+                });
+            } else if (data.message.type === "error") {
+                toast.error(data.message.content, {
+                    position: "top-center",
+                });
+            } else {
+                toast(data.message.content, {
+                    position: "top-center",
+                });
+            }
+        }
     });
 </script>
 

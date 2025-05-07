@@ -63,7 +63,7 @@ const schema = type({
     /**
      * Confirm Password
      */
-    confirm_password: "string",
+    confirmPassword: "12 < string < 3000",
 });
 
 const defaults: typeof schema.infer = {
@@ -76,7 +76,7 @@ const defaults: typeof schema.infer = {
     handle: "",
 
     password: "",
-    confirm_password: "",
+    confirmPassword: "",
 };
 
 const validateEmailChallenge = async (email: string, challenge: string) => {
@@ -154,6 +154,7 @@ export const actions: Actions = {
         }
 
         if (!(await validateEmailChallenge(form.data.email, form.data.challenge))) {
+            console.warn("onboarding link expired");
             return fail(400, { form, message: "onboarding link has expired" });
         }
 
@@ -170,11 +171,11 @@ export const actions: Actions = {
         }
 
         // check that passwords match
-        if (form.data.password !== form.data.confirm_password) {
+        if (form.data.password !== form.data.confirmPassword) {
             console.warn("supplied password pair does not match");
 
             setError(form, "password", "passwords don't match");
-            setError(form, "confirm_password", "passwords don't match");
+            setError(form, "confirmPassword", "passwords don't match");
 
             return fail(400, { form });
         }
