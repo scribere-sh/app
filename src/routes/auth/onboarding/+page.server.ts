@@ -24,6 +24,7 @@ import { generateUid } from "$lib/uid";
 import { cleanupCsrf, initCsrf, validateCsrf } from "$srv/csrf";
 
 import { route } from "$lib/routes";
+import { profanityMatcher } from "$srv/profanity";
 
 const schema = type({
     /**
@@ -170,6 +171,14 @@ export const actions: Actions = {
             return setError(form, "handle", "handle is already taken");
         }
 
+        if (profanityMatcher.hasMatch(form.data.display)) {
+            return setError(form, "display", "watch your profanity");
+        }
+
+        if (profanityMatcher.hasMatch(form.data.handle)) {
+            return setError(form, "handle", "watch your profanity");
+        }
+
         // check that passwords match
         if (form.data.password !== form.data.confirmPassword) {
             console.warn("supplied password pair does not match");
@@ -193,6 +202,8 @@ export const actions: Actions = {
 
         // handle is valid
         // handle is not taken
+
+        // handle and display name probably don't have the n word in them.
 
         // password strength is valid
         // password confirmation is matched

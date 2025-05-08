@@ -52,7 +52,7 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
             });
         }
 
-        console.info("event has no token, redirected to sign in");
+        console.warn("event has no token, redirected to sign in");
         return new Response(null, {
             status: 303,
             headers: {
