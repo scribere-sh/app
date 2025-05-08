@@ -1,11 +1,3 @@
-<script lang="ts" module>
-    import type { PageData } from "./$types";
-
-    export interface SectionDetailsProps {
-        details: PageData["details"];
-    }
-</script>
-
 <script lang="ts">
     import { api, createQuery } from "$lib/hc";
 
@@ -33,8 +25,6 @@
     });
 
     const cardClasses = getContext<string>("cardClasses");
-
-    const { details }: SectionDetailsProps = $props();
 </script>
 
 <Card.Root id="details" class={cn(cardClasses, "flex flex-row items-center")}>
@@ -55,9 +45,9 @@
     </Card.Content>
 
     <Card.Content class="w-2/3 flex flex-col gap-6 justify-center">
-        <FormProfilePicture form={details.updateProfilePicutreForm} />
-        <FormDisplayName form={details.updateDisplayNameForm} />
-        <FormHandle form={details.updateHandleForm} />
+        <FormProfilePicture />
+        <FormDisplayName current={user.displayName} />
+        <FormHandle current={user.handle} />
     </Card.Content>
 </Card.Root>
 

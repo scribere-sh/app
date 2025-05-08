@@ -1,8 +1,15 @@
-import { createMutation, createQuery as createTanstackQuery, QueryClient } from "@tanstack/svelte-query";
+import {
+    createMutation,
+    type CreateMutationOptions,
+    createQuery as createTanstackQuery,
+    QueryClient,
+} from "@tanstack/svelte-query";
 import type { ClientRequest, ClientRequestOptions } from "hono/client";
-import type { ContentfulStatusCode } from "hono/utils/http-status";
+import type { ResponseFormat } from "hono/types";
+import type { StatusCode } from "hono/utils/http-status";
 
 export interface QueryError {
+    name: string;
     message: string;
 }
 
@@ -11,14 +18,14 @@ const queryKey = (url: URL, other: Record<string, unknown> = {}) => [
     ...Object.values(other).map(v => JSON.stringify(v)).filter(s => s.length > 0),
 ];
 
-export const prefetchQuery = <In, Out>({ client, endpoint, input, options }: {
+export const prefetchQuery = <In, Out, Code extends StatusCode>({ client, endpoint, input, options }: {
     client: QueryClient;
     endpoint: ClientRequest<{
         $get: {
             input: In;
             output: Out;
             outputFormat: "json";
-            status: ContentfulStatusCode;
+            status: Code;
         };
     }>;
     input?: In extends unknown ? undefined : In;
@@ -37,13 +44,13 @@ export const prefetchQuery = <In, Out>({ client, endpoint, input, options }: {
     });
 };
 
-export const createQuery = <In, Out>({ endpoint, initialData, input, options }: {
+export const createQuery = <In, Out, Code extends StatusCode>({ endpoint, initialData, input, options }: {
     endpoint: ClientRequest<{
         $get: {
             input: In;
             output: Out;
             outputFormat: "json";
-            status: ContentfulStatusCode;
+            status: Code;
         };
     }>;
     initialData?: Out;
@@ -65,13 +72,13 @@ export const createQuery = <In, Out>({ endpoint, initialData, input, options }: 
     });
 };
 
-export const createBlobQuery = <In, Out>({ endpoint, input, options }: {
+export const createBlobQuery = <In, Out, Code extends StatusCode>({ endpoint, input, options }: {
     endpoint: ClientRequest<{
         $get: {
             input: In;
             output: Out;
             outputFormat: "body";
-            status: ContentfulStatusCode;
+            status: Code;
         };
     }>;
     input?: object extends In ? undefined : In;
@@ -109,74 +116,92 @@ export const createBlobQuery = <In, Out>({ endpoint, input, options }: {
     });
 };
 
-export const createPutMutation = <In, Out>({ endpoint, options }: {
-    endpoint: ClientRequest<{
-        $put: {
-            input: In;
-            output: Out;
-            outputFormat: "json";
-            status: ContentfulStatusCode;
-        };
-    }>;
-    options?: ClientRequestOptions;
-}) => {
+export const createPutMutation = <In, Out, Code extends StatusCode, Fmt extends ResponseFormat>(
+    { endpoint, options, ...config }: {
+        endpoint: ClientRequest<{
+            $put: {
+                input: In;
+                output: Out;
+                outputFormat: Fmt;
+                status: Code;
+            };
+        }>;
+        options?: ClientRequestOptions;
+    } & Omit<CreateMutationOptions<Out, QueryError, In>, "mutationFn" | "mutationKey">,
+) => {
     return createMutation({
+        ...config,
         mutationKey: ["put", ...queryKey(endpoint.$url())],
         mutationFn: async (variables: In) => {
             const response = await endpoint.$put(variables, options);
             const data = await response.json();
-            if (response.ok) return data;
-            else throw data as QueryError;
+            if (!response.ok) throw data as QueryError;
+            return data as Out;
         },
     });
 };
 
-export const createPostMutation = <In, Out>({ endpoint, options }: {
-    endpoint: ClientRequest<{
-        $post: {
-            input: In;
-            output: Out;
-            outputFormat: "json";
-            status: ContentfulStatusCode;
-        };
-    }>;
-    options?: ClientRequestOptions;
-}) => {
-    return createMutation({
+export const createPostMutation = <In, Out, Code extends StatusCode, Fmt extends ResponseFormat>(
+    { endpoint, options, ...config }: {
+        endpoint: ClientRequest<{
+            $post: {
+                input: In;
+                output: Out;
+                outputFormat: Fmt;
+                status: Code;
+            };
+        }>;
+        options?: ClientRequestOptions;
+        config?: Omit<CreateMutationOptions, "mutationFn" | "mutationKey">;
+    } & Omit<CreateMutationOptions<Out, QueryError, In>, "mutationFn" | "mutationKey">,
+) => {
+    return createMutation<Out, QueryError, In>({
+        ...config,
         mutationKey: ["post", ...queryKey(endpoint.$url())],
         mutationFn: async (variables: In) => {
             const response = await endpoint.$post(variables, options);
             const data = await response.json();
-            if (response.ok) return data;
-            else throw data as QueryError;
+            if (!response.ok) throw data as QueryError;
+            return data as Out;
         },
     });
 };
 
-export const createDeleteMutation = <In, Out>({ endpoint, options }: {
-    endpoint: ClientRequest<{
-        $delete: {
-            input: In;
-            output: Out;
-            outputFormat: "json";
-            status: ContentfulStatusCode;
-        };
-    }>;
-    options?: ClientRequestOptions;
-}) => {
-    return createMutation({
+export const createDeleteMutation = <In, Out, Code extends StatusCode, Fmt extends ResponseFormat>(
+    { endpoint, options, ...config }: {
+        endpoint: ClientRequest<{
+            $delete: {
+                input: In;
+                output: Out;
+                outputFormat: Fmt;
+                status: Code;
+            };
+        }>;
+        options?: ClientRequestOptions;
+    } & Omit<CreateMutationOptions<Out, QueryError, In>, "mutationFn" | "mutationKey">,
+) => {
+    return createMutation<Out, QueryError, In>({
+        ...config,
         mutationKey: ["delete", ...queryKey(endpoint.$url())],
         mutationFn: async (variables: In) => {
             const response = await endpoint.$delete(variables, options);
             const data = await response.json();
-            if (response.ok) return data;
-            else throw data as QueryError;
+            if (!response.ok) throw data as QueryError;
+            return data as Out;
         },
     });
 };
 
-export const invalidateQuery = (client: QueryClient, queryKey: string[]) => {
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export const invalidateQuery = (client: QueryClient, endpoint: ClientRequest<{}>) => {
     return client.invalidateQueries({
-        queryKey,
+        queryKey: ["get", ...queryKey(endpoint.$url())],
+    });
+};
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export const invalidateBlobQuery = (client: QueryClient, endpoint: ClientRequest<{}>) => {
+    return client.invalidateQueries({
+        queryKey: ["get", "bin", ...queryKey(endpoint.$url())],
     });
 };

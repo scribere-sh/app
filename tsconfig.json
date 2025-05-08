@@ -31,6 +31,10 @@
         "incremental": false,
         "lib": ["WebWorker"],
 
+        "types": [
+            "@cloudflare/workers-types"
+        ],
+
         "strict": true,
         "noImplicitAny": true,
 

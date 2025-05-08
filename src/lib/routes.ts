@@ -28,9 +28,6 @@ export const SERVERS = {};
  * ACTIONS
  */
 export const ACTIONS = {
-    "updateProfilePicture /settings": `/settings?/updateProfilePicture`,
-    "updateDisplayName /settings": `/settings?/updateDisplayName`,
-    "updateHandle /settings": `/settings?/updateHandle`,
     "default /auth/change-password": `/auth/change-password`,
     "default /auth/change-password/callback": `/auth/change-password/callback`,
     "default /auth/onboarding": `/auth/onboarding`,
@@ -160,9 +157,6 @@ export type KIT_ROUTES = {
     };
     SERVERS: Record<string, never>;
     ACTIONS: {
-        "updateProfilePicture /settings": never;
-        "updateDisplayName /settings": never;
-        "updateHandle /settings": never;
         "default /auth/change-password": never;
         "default /auth/change-password/callback": never;
         "default /auth/onboarding": never;

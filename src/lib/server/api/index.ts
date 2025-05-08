@@ -1,3 +1,4 @@
+import type { QueryError } from "$lib/hc";
 import type { Handle } from "@sveltejs/kit";
 
 import { Hono } from "hono";
@@ -10,12 +11,12 @@ const ApiHono = new Hono()
         if (err instanceof HTTPException) {
             c.status(err.status);
             console.warn("HTTPException thrown, returning error");
-            return c.json({ message: err.message });
+            return c.json({ name: err.name, message: err.message } satisfies QueryError);
         } else {
             // Any other error means server error
             c.status(500);
             console.error("server error occured within a hono handler", err);
-            return c.json({ message: "Internal Server Error" });
+            return c.json({ name: "Internal Server Error", message: "Unknown error has occured" } satisfies QueryError);
         }
     })
     .route("/api", Routes);
