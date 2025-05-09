@@ -19,9 +19,13 @@
     const censorEmail = (email: string): string => {
         const atSymbolPos = email.indexOf("@");
 
-        return `${"*".repeat(atSymbolPos)}${
-            email.substring(atSymbolPos)
-        }`;
+        return email[0]
+            .concat(
+                "*".repeat(atSymbolPos - 1),
+            )
+            .concat(
+                email.substring(atSymbolPos),
+            );
     };
 </script>
 

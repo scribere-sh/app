@@ -59,6 +59,9 @@
             disabled={$mut.isPending}
             type="file"
             accept="image/*"
+            onchange={() => {
+                if ($mut.isSuccess || $mut.isError) $mut.reset();
+            }}
             bind:files
         />
     </div>

@@ -24,8 +24,8 @@
 </script>
 
 <Card.Root id="details" class={cn(cardClasses, "flex flex-row items-center")}>
-    <Card.Content class="w-1/3 flex flex-col justify-between">
-        <Avatar.CurrentUser class="w-full h-max aspect-square" />
+    <Card.Content class="w-1/3 flex flex-col justify-between ml-4">
+        <Avatar.CurrentUser class="w-full h-max aspect-square my-4" />
 
         <div class="flex flex-col gap-2">
             {#if $userQuery.data}
