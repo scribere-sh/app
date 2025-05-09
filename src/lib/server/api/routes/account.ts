@@ -1,4 +1,7 @@
 import type { Env } from "../hono-kit";
+
+import { env } from "$env/dynamic/private";
+
 // used in tsdoc
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { ImagesBinding, ImagesError, ReadableStream } from "@cloudflare/workers-types";
@@ -17,7 +20,7 @@ import { profanityMatcher } from "$srv/profanity";
 import { db } from "$srv/db";
 import { emailAddressesTable, emailValidationsTable } from "$tb/email";
 import { usersTable } from "$tb/user";
-import { eq } from "drizzle-orm";
+import { eq, lt } from "drizzle-orm";
 
 import { TOKEN_COOKIE_NAME } from "$srv/auth/cookie";
 import { updateJWT } from "$srv/auth/jwt";
@@ -103,7 +106,7 @@ export default new Hono<Env>()
                 {
                     expires: new Date(Date.now() + SIX_DAYS_IN_MILLISECONDS),
                     path: "/",
-                    secure: import.meta.env.PROD,
+                    secure: env.WE_IN_THIS_WORKER === "true",
                     httpOnly: true,
                     sameSite: "lax",
                 },
@@ -145,7 +148,7 @@ export default new Hono<Env>()
                 {
                     expires: new Date(Date.now() + SIX_DAYS_IN_MILLISECONDS),
                     path: "/",
-                    secure: import.meta.env.PROD,
+                    secure: env.WE_IN_THIS_WORKER === "true",
                     httpOnly: true,
                     sameSite: "lax",
                 },
@@ -231,5 +234,43 @@ export default new Hono<Env>()
             await uploadProfilePicture(c.get("user").id, buf);
 
             return c.json({ message: "complete" });
+        },
+    )
+    // # PUT /update-email-address
+    .put(
+        "/update-email-address",
+        arktypeValidator(
+            "json",
+            type({
+                email: "string.email",
+            }),
+        ),
+        async (c) => {
+            const {
+                1: challenges,
+            } = await db.query.batch([
+                db.query
+                    .delete(emailValidationsTable)
+                    .where(lt(emailValidationsTable.expires, new Date())),
+                db.query
+                    .select({
+                        emailAddress: emailValidationsTable.email,
+                    })
+                    .from(emailValidationsTable).where(eq(
+                        emailAddressesTable.userId,
+                        c.get("user").id,
+                    )),
+            ]);
+
+            if (challenges.length > 0) {
+                console.warn("user already has email in validation");
+                throw new HTTPException(400, {
+                    message: "You may not attempt to verify multiple emails",
+                });
+            }
+
+            throw new HTTPException(422, { message: "unimplemented" });
+
+            return c.json({ message: "unimplemented" });
         },
     );

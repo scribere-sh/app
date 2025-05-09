@@ -60,6 +60,8 @@
             type="file"
             accept="image/*"
             onchange={() => {
+                // if they update again
+                // it resets the button
                 if ($mut.isSuccess || $mut.isError) $mut.reset();
             }}
             bind:files

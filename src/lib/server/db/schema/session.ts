@@ -19,9 +19,10 @@ export const sessionDetailsTable = sqliteTable(
             .notNull(),
         /**
          * client ip address of the request that created the session
+         *
+         * note: because wrangler dev is stupid on windows, this can be null.
          */
-        ip: text({ mode: "text" })
-            .notNull(),
+        ip: text({ mode: "text" }),
         /**
          * user agent of the request that created the session, can be with
          * with `device-detector-js` to derive the device and brower.

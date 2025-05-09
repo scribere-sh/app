@@ -15,6 +15,13 @@
         "directory": ".svelte-kit/cloudflare",
     },
 
+    // need localhost to work in dev
+    //
+    // cookies are dumb
+    "dev": {
+        "ip": "localhost",
+    },
+
     // i need to see stuff happen
     "observability": {
         "enabled": true,
@@ -31,6 +38,9 @@
         // Sender email and name
         "SENDER_EMAIL": "noreply@scribere.sh",
         "SENDER_NAME": "Scribere",
+
+        // for use in the public area
+        "PUBLIC_ORIGIN": "https://app.scribere.sh",
     },
 
     // Binding to our ARGON2 Worker
@@ -78,4 +88,19 @@
             "migrations_dir": "./drizzle",
         },
     ],
+
+    // unsafe bindings
+    "unsafe": {
+        "bindings": [
+            {
+                "name": "RATELIMIT",
+                "type": "ratelimit",
+                "namespace_id": "999",
+                "simple": {
+                    "period": 60,
+                    "limit": 1000,
+                },
+            },
+        ],
+    },
 }

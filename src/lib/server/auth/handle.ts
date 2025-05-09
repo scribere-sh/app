@@ -39,20 +39,22 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
         // the oauth handle runs before this one, meaning
         // we don't need to check it here
         if (isAuthPath(event.url.pathname)) {
-            console.warn("event has no token but it is being allowed through to an auth page");
+            console.log("event has no token but it is being allowed through to an auth page");
+
             return resolve(event);
         }
 
         // API methods should NOT redirect to the sign-in
         // screen and should simply return a 401
         if (isAPIPath(event.url.pathname)) {
-            console.warn("event has no token and is attempting an API request, returning 401");
+            console.log("event has no token and is attempting an API request, returning 401");
+
             return new Response(null, {
                 status: 401,
             });
         }
 
-        console.warn("event has no token, redirected to sign in");
+        console.log("event has no token, redirected to sign in");
         return new Response(null, {
             status: 303,
             headers: {
@@ -86,15 +88,17 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
         //
         // the oauth handle runs before this one, meaning
         // we don't need to check it here
-        console.warn("token is invalid but it is being allowed through to an auth page");
         if (isAuthPath(event.url.pathname)) {
+            console.log("token is invalid but it is being allowed through to an auth page");
+
             return resolve(event);
         }
 
         // API methods should NOT redirect to the sign-in
         // screen and should simply return a 401
-        console.warn("token is invalid or expired and is attempting an API request, returning 401");
         if (isAPIPath(event.url.pathname)) {
+            console.log("token is invalid or expired and is attempting an API request, returning 401");
+
             return new Response(null, {
                 status: 401,
             });
@@ -107,7 +111,8 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
             && typeof payload.met === "string"
             && PROVIDER_NAMES.includes(payload.met as ProviderName)
         ) {
-            console.info("expired token contains \"met\" item which is a valid method, redirecting to oauth");
+            console.log("expired token contains \"met\" item which is a valid method, redirecting to oauth");
+
             return new Response(null, {
                 status: 303,
                 headers: {
@@ -116,7 +121,7 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
             });
         }
 
-        console.warn("token is invalid, redirecting to sign in");
+        console.log("token is invalid, redirecting to sign in");
         // if it is not there or invalid, we can just redirect to
         // the sign in page.
         return new Response(null, {
@@ -125,6 +130,20 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
                 location: route("/auth/sign-in"),
             },
         });
+    }
+
+    // This will rate limit users with a token
+    const { success } = await platform.env.RATELIMIT.limit({ key: payload.sid });
+
+    if (!success) {
+        return new Response(
+            JSON.stringify({
+                message: "429 - Too many requests",
+            }),
+            {
+                status: 429,
+            },
+        );
     }
 
     // load the session keys from the KV namespace

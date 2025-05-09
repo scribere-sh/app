@@ -17,6 +17,7 @@ export const PAGES = {
     "/auth/onboarding": `/auth/onboarding`,
     "/auth/register": `/auth/register`,
     "/auth/sign-in": `/auth/sign-in`,
+    "/auth/verify-email": `/auth/verify-email`,
 };
 
 /**
@@ -154,6 +155,7 @@ export type KIT_ROUTES = {
         "/auth/onboarding": never;
         "/auth/register": never;
         "/auth/sign-in": never;
+        "/auth/verify-email": never;
     };
     SERVERS: Record<string, never>;
     ACTIONS: {
