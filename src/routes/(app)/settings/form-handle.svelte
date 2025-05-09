@@ -1,107 +1,72 @@
 <script lang="ts" module>
-    import type { PageData } from "./$types";
-
     export interface FormHandleProps {
-        form: PageData["details"]["updateHandleForm"];
+        current: string;
     }
 </script>
 
 <script lang="ts">
-    import { getContext } from "svelte";
-
-    import { superForm } from "sveltekit-superforms";
-
-    import { invalidateQuery } from "$lib/hc";
-    import { useQueryClient } from "@tanstack/svelte-query";
-
-    import * as Form from "$ui/form";
+    import { Button } from "$ui/button";
     import { Input } from "$ui/input";
+    import { Label } from "$ui/label";
     import LoadingSpinner from "$ui/loading-spinner";
 
-    import Check from "@lucide/svelte/icons/check";
-
+    import { useQueryClient } from "@tanstack/svelte-query";
     import { toast } from "svelte-sonner";
 
-    import { route } from "$lib/routes";
+    import { api, createPutMutation, invalidateQuery } from "$lib/hc";
+    import { debounce } from "$lib/utils";
 
-    let disabled = $state(false);
-    let success = $state(false);
+    import Check from "@lucide/svelte/icons/check";
+    import X from "@lucide/svelte/icons/x";
 
-    const csrf = getContext<string>("csrf");
+    const { current }: FormHandleProps = $props();
     const client = useQueryClient();
+    const uid = $props.id();
 
-    const { form: _form }: FormHandleProps = $props();
+    let value = $state("");
+    const isValueValid = $derived(value.length > 3);
 
-    const form = superForm(_form, {
-        onSubmit: () => {
-            disabled = true;
+    const mut = createPutMutation({
+        endpoint: api.account["update-handle"],
+        onSuccess: () => {
+            invalidateQuery(client, api.users.me);
         },
-        onResult: ({ result }) => {
-            if (result.type !== "success") disabled = false;
-            else success = true;
-
-            invalidateQuery(client, ["get", "api", "users", "me"]);
-
-            if (result.type === "failure") {
-                console.error(result);
-                if (
-                    "data" in result
-                    && typeof result.data !== "undefined"
-                    && "message" in result.data
-                ) {
-                    toast.error(
-                        `Failed to login: ${result.data!.message}`,
-                    );
-                }
-            }
+        onError: (e) => {
+            toast.error("Failed to update Handle", {
+                description: e.message,
+            });
         },
     });
 
-    const { form: data, enhance } = form;
+    const update = debounce(() => {
+        $mut.mutate({ json: { handle: value } });
+    }, 500);
 </script>
 
-<form
-    method="POST"
-    action={route("updateHandle /settings")}
-    class="flex flex-row gap-2 items-end justify-between w-full"
-    use:enhance
->
-    <input type="hidden" name="csrf" value={csrf}>
-
-    <Form.Field
-        {form}
-        name="handle"
-        class="flex flex-col justify-between w-full"
+<div class="flex flex-row items-end gap-2">
+    <div class="flex flex-col gap-2 w-full">
+        <Label for="{uid}-handle">Update Handle</Label>
+        <Input
+            id="{uid}-handle"
+            type="text"
+            autocomplete="username"
+            placeholder={current}
+            bind:value
+        />
+    </div>
+    <Button
+        class="w-24"
+        disabled={$mut.isPending || !isValueValid}
+        onclick={update}
     >
-        <Form.Control>
-            {#snippet children({ props })}
-                <div class="flex flex-row items-start justify-between h-4">
-                    <Form.Label>Update Handle</Form.Label>
-                    <Form.FieldErrors />
-                </div>
-                <div class="w-full flex flex-row items-center pl-2 gap-2">
-                    <span>@</span>
-                    <Input
-                        {...props}
-                        {disabled}
-                        type="text"
-                        autocomplete="username"
-                        placeholder="jane.doe23"
-                        required
-                        bind:value={$data.handle}
-                    />
-                </div>
-            {/snippet}
-        </Form.Control>
-    </Form.Field>
-
-    <Form.Button {disabled} class="w-32">
-        {#if success}
-            <Check class="stroke-green-500" />
-        {:else if disabled}
+        {#if $mut.isPending}
             <LoadingSpinner />
+        {:else if $mut.isSuccess}
+            <Check class="stroke-green-500" />
+        {:else if $mut.isError}
+            <X class="stroke-red-500" />
         {:else}
             Update
         {/if}
-    </Form.Button>
-</form>
+    </Button>
+</div>

@@ -11,7 +11,7 @@ import { sha256 } from "@oslojs/crypto/sha2";
 import { eq, lt } from "drizzle-orm";
 
 import { generateTokenString } from "$srv/auth/token";
-import { initCsrf, validateCsrf } from "$srv/csrf";
+import { cleanupCsrf, initCsrf, validateCsrf } from "$srv/csrf";
 import { sendOnboardingEmail } from "$srv/email";
 
 import { db } from "$srv/db";
@@ -52,7 +52,7 @@ export const actions: Actions = {
             return fail(400, { form, csrf });
         }
 
-        if (!validateCsrf(form.data.csrf)) {
+        if (!validateCsrf(csrf)) {
             console.warn("csrf token is invalid");
             return fail(400, { form, csrf, message: "CSRF Error" });
         }
@@ -142,6 +142,8 @@ export const actions: Actions = {
                 challenge: challegeVerifier,
                 expires: new Date(Date.now() + THIRTY_MINUTES_IN_MILLISECONDS),
             });
+
+        cleanupCsrf();
 
         // # - Success
         return { email: form.data.email };

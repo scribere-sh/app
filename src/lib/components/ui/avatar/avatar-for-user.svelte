@@ -11,16 +11,24 @@
     import AvatarImage from "./avatar-image.svelte";
     import Avatar from "./avatar.svelte";
 
-    const query = createBlobQuery({
-        endpoint: api.assets["profile-picture"],
-    });
-
     let {
         ref = $bindable(null),
         class: className = "",
+        userId,
 
         ...rest
-    }: AvatarPrimitive.RootProps = $props();
+    }: AvatarPrimitive.RootProps & {
+        userId: string;
+    } = $props();
+
+    const query = createBlobQuery({
+        endpoint: api.assets["profile-picture"][":user-id"],
+        input: {
+            param: {
+                "user-id": userId,
+            },
+        },
+    });
 </script>
 
 <Avatar

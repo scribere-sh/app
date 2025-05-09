@@ -46,7 +46,11 @@
         Register
     </Button>
 
-    <Button href={route("/")} variant="link" class="text-foreground w-full">
+    <Button
+        href={route("/auth/change-password")}
+        variant="link"
+        class="text-foreground w-full"
+    >
         Forgot Password?
     </Button>
 </div>

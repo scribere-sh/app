@@ -17,13 +17,12 @@ export const cn = (...inputs: ClassValue[]) => {
  * @param cb - fetcher for the reactive args
  * @returns an object that tanstack query likes and will react to
  */
-export const reactiveQueryArgs = <T>(cb: () => T) => {
-    return readable(cb(), (set) => {
+export const reactiveQueryArgs = <T>(cb: () => T) =>
+    readable(cb(), (set) => {
         $effect.pre(() => {
             set(cb());
         });
     });
-};
 
 /**
  * Schedule the {@link cb | callback} to run after the set {@link durationMs | duration},

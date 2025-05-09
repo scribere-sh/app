@@ -2,7 +2,6 @@
     import * as Avatar from "$ui/avatar";
     import { Button } from "$ui/button";
     import * as DropdownMenu from "$ui/dropdown-menu";
-    import LoadingSpinner from "$ui/loading-spinner";
     import { Skeleton } from "$ui/skeleton";
 
     import LogOut from "@lucide/svelte/icons/log-out";
@@ -12,18 +11,11 @@
 
     import { useUser } from "$lib/ctx";
     import { route } from "$lib/routes";
-    import { initials } from "$lib/utils";
 
     const userQuery = createQuery({
         initialData: useUser(),
         endpoint: api.users.me,
     });
-
-    const userInitials = $derived(
-        $userQuery.data
-            ? initials($userQuery.data.displayName)
-            : null,
-    );
 </script>
 
 <div class="aspect-square w-full">
@@ -31,16 +23,7 @@
         <DropdownMenu.Trigger
             class="size-full grid place-items-center hover:bg-foreground/10"
         >
-            <Avatar.Root>
-                <Avatar.Fallback>
-                    {#if userInitials}
-                        {userInitials}
-                    {:else}
-                        <LoadingSpinner />
-                    {/if}
-                </Avatar.Fallback>
-                <Avatar.CurrentUser />
-            </Avatar.Root>
+            <Avatar.CurrentUser />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content
             side="right"
@@ -55,16 +38,7 @@
                     variant="ghost"
                     class="w-full h-min p-4 gap-0 flex flex-row no-underline"
                 >
-                    <Avatar.Root class="mr-4">
-                        <Avatar.Fallback>
-                            {#if userInitials}
-                                {userInitials}
-                            {:else}
-                                <LoadingSpinner />
-                            {/if}
-                        </Avatar.Fallback>
-                        <Avatar.CurrentUser />
-                    </Avatar.Root>
+                    <Avatar.CurrentUser class="mr-4" />
                     <div class="flex flex-col w-full gap-1">
                         {#if $userQuery.data}
                             <span class="font-bold">{
@@ -103,7 +77,7 @@
                 <Button
                     variant="destructive-ghost"
                     size="dropdown"
-                    href={route("/")}
+                    href={route("/auth/log-out")}
                 >
                     <LogOut />Sign Out
                 </Button>

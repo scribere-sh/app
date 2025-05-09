@@ -52,7 +52,7 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
             });
         }
 
-        console.info("event has no token, redirected to sign in");
+        console.warn("event has no token, redirected to sign in");
         return new Response(null, {
             status: 303,
             headers: {
@@ -202,7 +202,7 @@ export const tokenReaderHandle: Handle = async ({ event, resolve }) => {
         );
 
         // set new token
-        setSecureToken(TOKEN_COOKIE_NAME, newToken, new Date(newExpiryDate));
+        setSecureToken(TOKEN_COOKIE_NAME, newToken, new Date(newExpiryDate * 1000));
     }
 
     event.locals.session = sessionData;
