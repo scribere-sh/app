@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { api, createQuery } from "$lib/hc";
-
     import * as Avatar from "$ui/avatar";
     import * as Card from "$ui/card";
+
+    import { api, createQuery } from "$lib/hc";
 
     import FormDisplayName from "./form-display-name.svelte";
     import FormHandle from "./form-handle.svelte";
@@ -20,10 +20,6 @@
         endpoint: api.users.me,
     });
 
-    const detailsQuery = createQuery({
-        endpoint: api.account.details,
-    });
-
     const cardClasses = getContext<string>("cardClasses");
 </script>
 
@@ -31,7 +27,7 @@
     <Card.Content class="w-1/3 flex flex-col justify-between">
         <Avatar.CurrentUser class="w-full h-max aspect-square" />
 
-        <div class="flex flex-col gap-2 mt-4">
+        <div class="flex flex-col gap-2">
             {#if $userQuery.data}
                 <span class="text-2xl">{$userQuery.data.displayName}</span>
                 <span class="text-foreground/70">@{
@@ -48,21 +44,5 @@
         <FormProfilePicture />
         <FormDisplayName current={user.displayName} />
         <FormHandle current={user.handle} />
-    </Card.Content>
-</Card.Root>
-
-<Card.Root id="emails" class={cn(cardClasses)}>
-    <Card.Header>
-        <Card.Title>Email Address</Card.Title>
-    </Card.Header>
-    <Card.Content class="h-96 grid place-items-center">
-        {#if $detailsQuery.data}
-            <pre class="w-[80%]">
-{JSON.stringify(
-                    $detailsQuery.data,
-                    null,
-                    4,
-                )}</pre>
-        {/if}
     </Card.Content>
 </Card.Root>

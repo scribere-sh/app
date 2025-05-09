@@ -2,6 +2,8 @@ import {
     createMutation,
     type CreateMutationOptions,
     createQuery as createTanstackQuery,
+    type CreateQueryOptions,
+    type FetchQueryOptions,
     QueryClient,
 } from "@tanstack/svelte-query";
 import type { ClientRequest, ClientRequestOptions } from "hono/client";
@@ -18,7 +20,7 @@ const queryKey = (url: URL, other: Record<string, unknown> = {}) => [
     ...Object.values(other).map(v => JSON.stringify(v)).filter(s => s.length > 0),
 ];
 
-export const prefetchQuery = <In, Out, Code extends StatusCode>({ client, endpoint, input, options }: {
+export const prefetchQuery = <In, Out, Code extends StatusCode>({ client, endpoint, input, options, ...config }: {
     client: QueryClient;
     endpoint: ClientRequest<{
         $get: {
@@ -30,8 +32,9 @@ export const prefetchQuery = <In, Out, Code extends StatusCode>({ client, endpoi
     }>;
     input?: In extends unknown ? undefined : In;
     options?: ClientRequestOptions;
-}) => {
+} & Omit<FetchQueryOptions<Out, QueryError, In>, "queryKey" | "queryFn">) => {
     return client.prefetchQuery({
+        ...config,
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ["get", ...queryKey(endpoint.$url(), input ? input : {})],
         queryFn: async () => {
@@ -44,7 +47,7 @@ export const prefetchQuery = <In, Out, Code extends StatusCode>({ client, endpoi
     });
 };
 
-export const createQuery = <In, Out, Code extends StatusCode>({ endpoint, initialData, input, options }: {
+export const createQuery = <In, Out, Code extends StatusCode>({ endpoint, initialData, input, options, ...config }: {
     endpoint: ClientRequest<{
         $get: {
             input: In;
@@ -56,8 +59,9 @@ export const createQuery = <In, Out, Code extends StatusCode>({ endpoint, initia
     initialData?: Out;
     input?: object extends In ? undefined : In;
     options?: ClientRequestOptions;
-}) => {
-    return createTanstackQuery({
+} & Omit<CreateQueryOptions<Out, QueryError>, "queryFn" | "queryKey">) => {
+    return createTanstackQuery<Out, QueryError>({
+        ...config,
         // @ts-expect-error - shut up and let me cook
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ["get", ...queryKey(endpoint.$url(input))],
@@ -66,13 +70,13 @@ export const createQuery = <In, Out, Code extends StatusCode>({ endpoint, initia
             // @ts-expect-error I don't understand this at all
             const response = await endpoint.$get(input, options);
             const data = await response.json();
-            if (response.ok) return data;
+            if (response.ok) return data as Out;
             else throw data as QueryError;
         },
     });
 };
 
-export const createBlobQuery = <In, Out, Code extends StatusCode>({ endpoint, input, options }: {
+export const createBlobQuery = <In, Out, Code extends StatusCode>({ endpoint, input, options, ...config }: {
     endpoint: ClientRequest<{
         $get: {
             input: In;
@@ -83,8 +87,9 @@ export const createBlobQuery = <In, Out, Code extends StatusCode>({ endpoint, in
     }>;
     input?: object extends In ? undefined : In;
     options?: ClientRequestOptions;
-}) => {
-    return createTanstackQuery({
+} & Omit<CreateQueryOptions<string, QueryError>, "queryFn" | "queryKey">) => {
+    return createTanstackQuery<string, QueryError>({
+        ...config,
         // @ts-expect-error - shut up and let me cook
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ["get", "bin", ...queryKey(endpoint.$url(input))],
