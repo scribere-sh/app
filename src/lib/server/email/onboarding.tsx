@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import { resend } from "./resend.ts";
 import OnboardingTemplate from "./toxic-waste/onboarding.tsx";
 

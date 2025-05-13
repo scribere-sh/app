@@ -10,13 +10,14 @@
  */
 export const PAGES = {
     "/": `/`,
-    "/settings": `/settings`,
+    "/account/settings": `/account/settings`,
     "/auth/change-password": `/auth/change-password`,
     "/auth/change-password/callback": `/auth/change-password/callback`,
     "/auth/log-out": `/auth/log-out`,
     "/auth/onboarding": `/auth/onboarding`,
     "/auth/register": `/auth/register`,
     "/auth/sign-in": `/auth/sign-in`,
+    "/auth/verify-email": `/auth/verify-email`,
 };
 
 /**
@@ -147,13 +148,14 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 export type KIT_ROUTES = {
     PAGES: {
         "/": never;
-        "/settings": never;
+        "/account/settings": never;
         "/auth/change-password": never;
         "/auth/change-password/callback": never;
         "/auth/log-out": never;
         "/auth/onboarding": never;
         "/auth/register": never;
         "/auth/sign-in": never;
+        "/auth/verify-email": never;
     };
     SERVERS: Record<string, never>;
     ACTIONS: {

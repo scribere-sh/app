@@ -15,7 +15,7 @@ import { cleanupCsrf, initCsrf, validateCsrf } from "$srv/csrf";
 import { sendOnboardingEmail } from "$srv/email";
 
 import { db } from "$srv/db";
-import { emailAddressesTable, emailLowerCase, emailOnboardingsTable } from "$tb/email";
+import { emailAddressesTable, emailLowerCase, emailOnboardingsTable, emailValidationsTable } from "$tb/email";
 
 import { route } from "$lib/routes";
 
@@ -62,7 +62,11 @@ export const actions: Actions = {
         // this returns an array, but arrays are objects with number keys, so we can do this
         //
         // welcome to javascript.
-        const { 1: { length: emailAddressFoundCount }, 2: { length: emailOnboardingsFoundCount } } = await db.query
+        const {
+            1: { length: emailAddressFoundCount },
+            2: { length: emailOnboardingsFoundCount },
+            3: { length: emailVerificationsFoundCount },
+        } = await db.query
             .batch(
                 [
                     // delete expired challenges
@@ -85,11 +89,19 @@ export const actions: Actions = {
                         .from(emailOnboardingsTable)
                         .where(eq(emailLowerCase(emailOnboardingsTable.email), form.data.email.toLowerCase()))
                         .limit(1),
+                    // select current updating emails
+                    db.query
+                        .select({
+                            email: emailValidationsTable.email,
+                        })
+                        .from(emailValidationsTable)
+                        .where(eq(emailLowerCase(emailOnboardingsTable.email), form.data.email.toLowerCase()))
+                        .limit(1),
                 ],
             );
 
         // user with this email already in system
-        if (emailAddressFoundCount > 0) {
+        if (emailAddressFoundCount > 0 || emailVerificationsFoundCount > 0) {
             console.warn("email is in use");
             setError(form, "email", "email in use");
             return fail(403, { form, csrf });

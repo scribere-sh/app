@@ -1,4 +1,7 @@
 import type { Env } from "../hono-kit";
+
+import { env } from "$env/dynamic/private";
+
 // used in tsdoc
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { ImagesBinding, ImagesError, ReadableStream } from "@cloudflare/workers-types";
@@ -15,13 +18,17 @@ import { DisplayName, Handle } from "$lib/schema/user";
 import { profanityMatcher } from "$srv/profanity";
 
 import { db } from "$srv/db";
-import { emailAddressesTable, emailValidationsTable } from "$tb/email";
+import { emailAddressesTable, emailLowerCase, emailValidationsTable } from "$tb/email";
 import { usersTable } from "$tb/user";
-import { eq } from "drizzle-orm";
+import { eq, lt } from "drizzle-orm";
 
+import { route } from "$lib/routes";
 import { TOKEN_COOKIE_NAME } from "$srv/auth/cookie";
 import { updateJWT } from "$srv/auth/jwt";
+import { generateTokenString } from "$srv/auth/token";
+import { sendVerifyEmailEmail } from "$srv/email";
 import { uploadProfilePicture } from "$srv/r2/profile-picture";
+import { sha256 } from "@oslojs/crypto/sha2";
 
 interface ImageInfoWithoutSVG {
     format: string;
@@ -32,6 +39,7 @@ interface ImageInfoWithoutSVG {
 
 const PROFILE_IMAGE_MAX_SIZE = 10 * 1024 * 1024;
 const SIX_DAYS_IN_MILLISECONDS = 6 * 24 * 60 * 60 * 1000;
+const THIRTY_MINUTES_IN_MILLISECONDS = 30 * 60 * 1000;
 
 export default new Hono<Env>()
     // # GET /details
@@ -103,7 +111,7 @@ export default new Hono<Env>()
                 {
                     expires: new Date(Date.now() + SIX_DAYS_IN_MILLISECONDS),
                     path: "/",
-                    secure: import.meta.env.PROD,
+                    secure: env.WE_IN_THIS_WORKER === "true",
                     httpOnly: true,
                     sameSite: "lax",
                 },
@@ -145,7 +153,7 @@ export default new Hono<Env>()
                 {
                     expires: new Date(Date.now() + SIX_DAYS_IN_MILLISECONDS),
                     path: "/",
-                    secure: import.meta.env.PROD,
+                    secure: env.WE_IN_THIS_WORKER === "true",
                     httpOnly: true,
                     sameSite: "lax",
                 },
@@ -231,5 +239,86 @@ export default new Hono<Env>()
             await uploadProfilePicture(c.get("user").id, buf);
 
             return c.json({ message: "complete" });
+        },
+    )
+    // # PUT /update-email-address
+    .put(
+        "/update-email-address",
+        arktypeValidator(
+            "json",
+            type({
+                email: "string.email",
+            }),
+        ),
+        async (c) => {
+            const { email } = c.req.valid("json");
+
+            const {
+                1: challenges,
+            } = await db.query.batch([
+                db.query
+                    .delete(emailValidationsTable)
+                    .where(lt(emailValidationsTable.expires, new Date())),
+                db.query
+                    .select({
+                        email: emailValidationsTable.email,
+                    })
+                    .from(emailValidationsTable)
+                    .where(eq(
+                        emailAddressesTable.userId,
+                        c.get("user").id,
+                    )),
+                db.query
+                    .select({
+                        email: emailValidationsTable.email,
+                    })
+                    .from(emailValidationsTable)
+                    .where(eq(
+                        emailLowerCase(emailValidationsTable.email),
+                        email.toLowerCase(),
+                    )),
+            ]);
+
+            if (challenges.length > 0) {
+                console.warn("user already has email in validation");
+                throw new HTTPException(400, {
+                    message: "You may not attempt to verify multiple emails",
+                });
+            }
+
+            const challengeToken = generateTokenString(32);
+            const challegeVerifier = sha256(new TextEncoder().encode(
+                `${email}:${challengeToken}`,
+            ));
+
+            const challengeUrl = new URL(c.req.url);
+            challengeUrl.pathname = route("/auth/verify-email");
+            challengeUrl.searchParams.set("email", encodeURIComponent(email));
+            challengeUrl.searchParams.set("token", encodeURIComponent(challengeToken));
+
+            const emailSendResult = await sendVerifyEmailEmail(
+                email,
+                c.get("user").displayName,
+                challengeUrl.toString(),
+            );
+
+            if (emailSendResult.error || !emailSendResult.data) {
+                console.error(emailSendResult);
+                throw new HTTPException(500, { message: "Failed to send validation email" });
+            }
+
+            await db.query
+                .insert(emailValidationsTable)
+                .values({
+                    userId: c.get("user").id,
+                    email,
+                    emailRef: emailSendResult.data.id,
+                    challenge: challegeVerifier,
+                    expires: new Date(Date.now() + THIRTY_MINUTES_IN_MILLISECONDS),
+                });
+
+            return c.json({
+                message: "success, please check your inbox",
+            });
         },
     );

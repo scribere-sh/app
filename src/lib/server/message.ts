@@ -1,4 +1,5 @@
 import { getRequestEvent } from "$app/server";
+import { env } from "$env/dynamic/private";
 
 import { decodeBase64urlIgnorePadding, encodeBase64urlNoPadding } from "@oslojs/encoding";
 import { type } from "arktype";
@@ -6,7 +7,7 @@ import { type } from "arktype";
 const MESSAGE_COOKIE_NAME = "__message";
 
 const messageType = type({
-    type: "'info' | 'warning' | 'error'",
+    type: "'info' | 'warning' | 'error' | 'success'",
     content: "string < 50",
 });
 
@@ -29,7 +30,7 @@ export const setMessage = (msg: Message) => {
             path: "/",
             httpOnly: true,
             sameSite: "lax",
-            secure: import.meta.env.PROD,
+            secure: env.WE_IN_THIS_WORKER === "true",
         },
     );
 };

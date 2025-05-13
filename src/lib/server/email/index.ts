@@ -1,4 +1,5 @@
 import { sendOnboardingEmail } from "./onboarding.tsx";
 import { sendUpdatePasswordEmail } from "./updatePassword.tsx";
+import { sendEmailValidationEmail } from "./validateEmail.tsx";
 
-export { sendOnboardingEmail, sendUpdatePasswordEmail };
+export { sendEmailValidationEmail as sendVerifyEmailEmail, sendOnboardingEmail, sendUpdatePasswordEmail };

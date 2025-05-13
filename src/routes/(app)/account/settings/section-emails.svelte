@@ -10,6 +10,8 @@
     import Check from "@lucide/svelte/icons/check";
     import X from "@lucide/svelte/icons/x";
 
+    import FormEmail from "./form-email.svelte";
+
     const detailsQuery = createQuery({
         endpoint: api.account.details,
     });
@@ -52,7 +54,14 @@
             {/if}
         </div>
         <div class="flex justify-center items-center mx-4 py-4">
-            todo - update email
+            <FormEmail
+                current={$detailsQuery.data?.emailAddressInValidation
+                ? censorEmail(
+                    $detailsQuery.data
+                        ?.emailAddressInValidation,
+                )
+                : undefined}
+            />
         </div>
     </Card.Content>
 </Card.Root>
