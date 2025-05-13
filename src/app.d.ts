@@ -8,7 +8,6 @@ import type {
     ImagesBinding,
     KVNamespace,
     R2Bucket,
-    RateLimit,
 } from "@cloudflare/workers-types";
 
 import type { User } from "$lib/schema/user";
@@ -55,10 +54,6 @@ declare global {
             cf: CfProperties;
 
             env: {
-                /**
-                 * Rate Limiter
-                 */
-                RATELIMIT: RateLimit;
                 /**
                  * KV Namespace for loading signing keys
                  */

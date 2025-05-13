@@ -66,7 +66,7 @@
                     <Button
                         variant="ghost"
                         size="dropdown"
-                        href={route("/account/settings")}
+                        href={route("/settings")}
                     >
                         <Settings />Settings
                     </Button>

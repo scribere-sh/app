@@ -18,9 +18,6 @@ export const load: LayoutLoad = async (event) => {
     await prefetchQuery({
         client,
         endpoint: api.users.me,
-        options: {
-            fetch: event.fetch,
-        },
     });
 
     return { ...event.data, client };

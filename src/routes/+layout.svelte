@@ -33,10 +33,6 @@
                 toast.error(data.message.content, {
                     position: "top-center",
                 });
-            } else if (data.message.type === "success") {
-                toast.success(data.message.content, {
-                    position: "top-center",
-                });
             } else {
                 toast(data.message.content, {
                     position: "top-center",

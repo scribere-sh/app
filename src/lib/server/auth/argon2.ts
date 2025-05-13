@@ -42,7 +42,7 @@ export const createArgon2 = async (to_hash: string): Promise<string> => {
 
     let response;
 
-    if (dev || !!env.ARGON2_WORKER_DOMAIN) {
+    if (dev) {
         // in development we use fetch to a remote worker, because any mention
         // of the use of a hasher causes cloudflare to spontaneously combust.
         const { ARGON2_WORKER_DOMAIN } = env;
@@ -126,7 +126,7 @@ export const verifyArgon2 = async (hash: string, subject: string): Promise<boole
 
     let response;
 
-    if (dev || !!env.ARGON2_WORKER_DOMAIN) {
+    if (dev) {
         // in development we use fetch to a remote worker, because I said so.
         const { ARGON2_WORKER_DOMAIN } = env;
 

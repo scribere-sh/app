@@ -10,29 +10,10 @@ import type { ClientRequest, ClientRequestOptions } from "hono/client";
 import type { ResponseFormat } from "hono/types";
 import type { StatusCode } from "hono/utils/http-status";
 
-import { readable } from "svelte/store";
-
 export interface QueryError {
     name: string;
     message: string;
 }
-
-/**
- * Shamelessly stolen from
- *
- * https://github.com/ap0nia/eden-query/issues/85
- *
- * written by my mate Bruno
- *
- * @param cb - fetcher for the reactive args
- * @returns an object that tanstack query likes and will react to
- */
-export const reactiveQueryArgs = <T>(cb: () => T) =>
-    readable(cb(), (set) => {
-        $effect.pre(() => {
-            set(cb());
-        });
-    });
 
 const queryKey = (url: URL, other: Record<string, unknown> = {}) => [
     ...url.pathname.split("/").filter(s => s.length > 0),
@@ -79,20 +60,20 @@ export const createQuery = <In, Out, Code extends StatusCode>({ endpoint, initia
     input?: object extends In ? undefined : In;
     options?: ClientRequestOptions;
 } & Omit<CreateQueryOptions<Out, QueryError>, "queryFn" | "queryKey">) => {
-    return createTanstackQuery<Out, QueryError>(reactiveQueryArgs(() => ({
+    return createTanstackQuery<Out, QueryError>({
         ...config,
         // @ts-expect-error - shut up and let me cook
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ["get", ...queryKey(endpoint.$url(input))],
         initialData,
         queryFn: async () => {
-            // @ts-expect-error - shut up and let me cook
+            // @ts-expect-error I don't understand this at all
             const response = await endpoint.$get(input, options);
             const data = await response.json();
             if (response.ok) return data as Out;
             else throw data as QueryError;
         },
-    })));
+    });
 };
 
 export const createBlobQuery = <In, Out, Code extends StatusCode>({ endpoint, input, options, ...config }: {
@@ -107,18 +88,16 @@ export const createBlobQuery = <In, Out, Code extends StatusCode>({ endpoint, in
     input?: object extends In ? undefined : In;
     options?: ClientRequestOptions;
 } & Omit<CreateQueryOptions<string, QueryError>, "queryFn" | "queryKey">) => {
-    return createTanstackQuery<string, QueryError>(reactiveQueryArgs(() => ({
+    return createTanstackQuery<string, QueryError>({
         ...config,
         // @ts-expect-error - shut up and let me cook
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ["get", "bin", ...queryKey(endpoint.$url(input))],
-
         refetchOnMount: false,
         refetchInterval: false,
         refetchOnWindowFocus: false,
         refetchOnReconnect: true,
         staleTime: 60 * 60 * 1000,
-
         queryFn: async (ctx) => {
             const cachedObjects = ctx.client.getQueryCache().findAll({
                 queryKey: ctx.queryKey,
@@ -132,14 +111,14 @@ export const createBlobQuery = <In, Out, Code extends StatusCode>({ endpoint, in
                 }
             });
 
-            // @ts-expect-error - shut up and let me cook
+            // @ts-expect-error I don't understand this at all
             const response = await endpoint.$get(input, options);
             if (!response.ok) throw await response.json();
 
             const responseBlob = await response.blob();
             return URL.createObjectURL(responseBlob);
         },
-    })));
+    });
 };
 
 export const createPutMutation = <In, Out, Code extends StatusCode, Fmt extends ResponseFormat>(

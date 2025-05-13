@@ -1,5 +1,4 @@
 import { getRequestEvent } from "$app/server";
-import { env } from "$env/dynamic/private";
 import { generateTokenString } from "./auth/token";
 
 const CSRF_TOKEN_NAME = "csrf";
@@ -25,7 +24,7 @@ export const initCsrf = (): string => {
         path: "/",
         httpOnly: true,
         sameSite: "strict",
-        secure: env.WE_IN_THIS_WORKER === "true",
+        secure: import.meta.env.PROD,
     });
 
     return csrfToken;

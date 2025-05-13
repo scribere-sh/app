@@ -20,7 +20,7 @@ import { getRequestEvent } from "$app/server";
  * @returns the value of `current` within the {@link KVNamespace}
  */
 export const getCurrentSigningKID = async () => {
-    if (dev || !!env.LOCAL_SIGNING_KEY_KID) {
+    if (dev) {
         return env.LOCAL_SIGNING_KEY_KID;
     }
 
@@ -45,9 +45,9 @@ export const getCurrentSigningKID = async () => {
  * @returns the key arraybuffer from the {@link KVNamespace}
  */
 export const getSigningKey = async (kid: string) => {
-    if (dev || !!env.LOCAL_SIGNING_KEY_KID) {
+    if (dev) {
         // allows us to simulate bad tokens
-        if (kid === env.LOCAL_SIGNING_KEY_KID && !!env.LOCAL_SIGNING_KEY) {
+        if (kid === env.LOCAL_SIGNING_KEY_KID) {
             return sha256(new TextEncoder().encode(env.LOCAL_SIGNING_KEY));
         }
 

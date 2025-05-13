@@ -12,7 +12,7 @@
     import Avatar from "./avatar.svelte";
 
     const query = createBlobQuery({
-        endpoint: api.assets["profile-picture"].me,
+        endpoint: api.assets["profile-picture"],
     });
 
     let {

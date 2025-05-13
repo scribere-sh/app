@@ -1,5 +1,4 @@
 import { getRequestEvent } from "$app/server";
-import { env } from "$env/dynamic/private";
 
 export const TOKEN_COOKIE_NAME = "token";
 
@@ -20,7 +19,7 @@ export const setSecureToken = (name: string, value: string, expires: Date) => {
 
     cookies.set(name, value, {
         path: "/",
-        secure: env.WE_IN_THIS_WORKER === "true",
+        secure: import.meta.env.PROD,
         expires,
         httpOnly: true,
         sameSite: "lax",

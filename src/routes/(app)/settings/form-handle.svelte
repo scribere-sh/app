@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    export interface FormDisplayNameProps {
+    export interface FormHandleProps {
         current: string;
     }
 </script>
@@ -19,44 +19,37 @@
     import Check from "@lucide/svelte/icons/check";
     import X from "@lucide/svelte/icons/x";
 
-    const { current }: FormDisplayNameProps = $props();
+    const { current }: FormHandleProps = $props();
     const client = useQueryClient();
     const uid = $props.id();
 
     let value = $state("");
-    const isValueValid = $derived(value.length > 0);
+    const isValueValid = $derived(value.length > 3);
 
     const mut = createPutMutation({
-        endpoint: api.account["update-display-name"],
+        endpoint: api.account["update-handle"],
         onSuccess: () => {
             invalidateQuery(client, api.users.me);
         },
         onError: (e) => {
-            toast.error("Failed to update Display Name", {
+            toast.error("Failed to update Handle", {
                 description: e.message,
             });
         },
     });
 
     const update = debounce(() => {
-        $mut.mutate({ json: { displayName: value } });
+        $mut.mutate({ json: { handle: value } });
     }, 500);
 </script>
 
-<form
-    class="flex flex-row items-end gap-2"
-    onsubmit={(e) => {
-        e.preventDefault();
-        update(e);
-    }}
->
+<div class="flex flex-row items-end gap-2">
     <div class="flex flex-col gap-2 w-full">
-        <Label for="{uid}-display-name">Update Display Name</Label>
+        <Label for="{uid}-handle">Update Handle</Label>
         <Input
-            id="{uid}-display-name"
-            disabled={$mut.isPending}
+            id="{uid}-handle"
             type="text"
-            autocomplete="nickname"
+            autocomplete="username"
             placeholder={current}
             bind:value
         />
@@ -64,7 +57,6 @@
     <Button
         class="w-24"
         disabled={$mut.isPending || !isValueValid}
-        type="submit"
         onclick={update}
     >
         {#if $mut.isPending}
@@ -77,4 +69,4 @@
             Update
         {/if}
     </Button>
-</form>
+</div>
