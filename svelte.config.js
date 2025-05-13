@@ -10,6 +10,7 @@ const config = {
         adapter: adapter({
             platformProxy: {
                 configPath: "./wrangler.jsonc",
+                persist: true,
             },
         }),
         alias: {

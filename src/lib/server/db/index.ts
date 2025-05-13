@@ -1,4 +1,6 @@
+import { dev } from "$app/environment";
 import { getRequestEvent } from "$app/server";
+
 import { drizzle, type DrizzleD1Database } from "drizzle-orm/d1";
 
 const DB_LOCALS_KEY = "__db";
@@ -16,7 +18,9 @@ export const db = {
             if (!platform) throw new Error("unable to access platform APIs");
             // @ts-expect-error i know it's not defined that's why I'm defining it
             // this is the closest i'm getting to private object members
-            locals[DB_LOCALS_KEY] = drizzle(platform.env.DB);
+            locals[DB_LOCALS_KEY] = drizzle(platform.env.DB, {
+                logger: dev,
+            });
         } else {
             console.debug("using DB from request locals");
         }

@@ -40,7 +40,7 @@ CREATE TABLE `emailAddresses` (
 --> statement-breakpoint
 CREATE INDEX `userIdIndex` ON `emailAddresses` (`userId`);
 --> statement-breakpoint
-CREATE UNIQUE INDEX `emailUniqueIndex` ON `emailAddresses` (lower("email"));
+CREATE UNIQUE INDEX `emailUniqueIndex` ON `emailAddresses` (lower(`email`));
 --> statement-breakpoint
 CREATE TABLE `emailOnboardings` (
     `email` text NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE `emailOnboardings` (
 --> statement-breakpoint
 CREATE INDEX `emailValidationExpirationIndex` ON `emailOnboardings` (`expires`);
 --> statement-breakpoint
-CREATE UNIQUE INDEX `emailValidationsUniqueIndex` ON `emailOnboardings` (lower("email"));
+CREATE UNIQUE INDEX `emailValidationsUniqueIndex` ON `emailOnboardings` (lower(`email`));
 --> statement-breakpoint
 CREATE TABLE `users` (
     `id` text PRIMARY KEY NOT NULL,

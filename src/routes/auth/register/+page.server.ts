@@ -95,7 +95,7 @@ export const actions: Actions = {
                             email: emailValidationsTable.email,
                         })
                         .from(emailValidationsTable)
-                        .where(eq(emailLowerCase(emailOnboardingsTable.email), form.data.email.toLowerCase()))
+                        .where(eq(emailLowerCase(emailValidationsTable.email), form.data.email.toLowerCase()))
                         .limit(1),
                 ],
             );
