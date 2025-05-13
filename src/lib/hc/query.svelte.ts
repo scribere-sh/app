@@ -118,6 +118,7 @@ export const createBlobQuery = <In, Out, Code extends StatusCode>({ endpoint, in
         refetchOnWindowFocus: false,
         refetchOnReconnect: true,
         staleTime: 60 * 60 * 1000,
+        retry: 1,
 
         queryFn: async (ctx) => {
             const cachedObjects = ctx.client.getQueryCache().findAll({
@@ -139,7 +140,7 @@ export const createBlobQuery = <In, Out, Code extends StatusCode>({ endpoint, in
             const responseBlob = await response.blob();
             return URL.createObjectURL(responseBlob);
         },
-    })));
+    } satisfies CreateQueryOptions<string, QueryError>)));
 };
 
 export const createPutMutation = <In, Out, Code extends StatusCode, Fmt extends ResponseFormat>(
