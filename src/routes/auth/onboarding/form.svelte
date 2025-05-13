@@ -187,7 +187,7 @@
                     autocomplete="new-password"
                     placeholder="************"
                     required
-                    onfocus={() => focussed = "confirmPassword"}
+                    onfocus={() => focussed = "password"}
                     bind:value={$data.confirmPassword}
                     bind:ref={fieldRefs.confirmPassword}
                 />
