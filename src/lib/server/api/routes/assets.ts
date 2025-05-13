@@ -5,7 +5,7 @@ import type { Env } from "../hono-kit";
 import { getUserProfilePicture } from "$srv/r2/profile-picture";
 
 export default new Hono<Env>()
-    .get("/profile-picture", async (c) => {
+    .get("/profile-picture/me", async (c) => {
         const profilePicture = await getUserProfilePicture(c.get("user").id);
 
         if (!profilePicture) throw new HTTPException(404, { message: "no profile picture for user" });

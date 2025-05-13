@@ -10,7 +10,7 @@
  */
 export const PAGES = {
     "/": `/`,
-    "/settings": `/settings`,
+    "/account/settings": `/account/settings`,
     "/auth/change-password": `/auth/change-password`,
     "/auth/change-password/callback": `/auth/change-password/callback`,
     "/auth/log-out": `/auth/log-out`,
@@ -148,7 +148,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 export type KIT_ROUTES = {
     PAGES: {
         "/": never;
-        "/settings": never;
+        "/account/settings": never;
         "/auth/change-password": never;
         "/auth/change-password/callback": never;
         "/auth/log-out": never;

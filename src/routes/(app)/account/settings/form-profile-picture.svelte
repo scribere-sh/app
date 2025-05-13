@@ -32,7 +32,11 @@
     const mut = createPutMutation({
         endpoint: api.account["update-profile-picture"],
         onSuccess: () => {
-            invalidateBlobQuery(client, api.assets["profile-picture"]);
+            invalidateBlobQuery(
+                client,
+                api.assets["profile-picture"].me,
+            );
+
             toast.success("Updated profile picture", {
                 dismissable: true,
             });

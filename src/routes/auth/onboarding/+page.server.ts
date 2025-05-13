@@ -90,7 +90,6 @@ const validateEmailChallenge = async (email: string, challenge: string) => {
         db.query
             .select({
                 challenge: emailOnboardingsTable.challenge,
-                expires: emailOnboardingsTable.expires,
             })
             .from(emailOnboardingsTable)
             .where(

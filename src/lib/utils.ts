@@ -1,28 +1,11 @@
+/* eslint-disable no-control-regex */
+
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-
-import { readable } from "svelte/store";
 
 export const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs));
 };
-
-/**
- * Shamelessly stolen from
- *
- * https://github.com/ap0nia/eden-query/issues/85
- *
- * written by my mate Bruno
- *
- * @param cb - fetcher for the reactive args
- * @returns an object that tanstack query likes and will react to
- */
-export const reactiveQueryArgs = <T>(cb: () => T) =>
-    readable(cb(), (set) => {
-        $effect.pre(() => {
-            set(cb());
-        });
-    });
 
 /**
  * Schedule the {@link cb | callback} to run after the set {@link durationMs | duration},
@@ -58,3 +41,6 @@ export const debounce = <T>(cb: (v: T) => void, durationMs: number): (v: T) => v
  * @returns a string of up to 3 letters long that can be used as initials
  */
 export const initials = (name: string) => name.split(" ").slice(0, 3).map(s => s[0].toUpperCase()).join("");
+
+export const EMAIL_REGEX =
+    /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/g;

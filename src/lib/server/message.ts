@@ -7,7 +7,7 @@ import { type } from "arktype";
 const MESSAGE_COOKIE_NAME = "__message";
 
 const messageType = type({
-    type: "'info' | 'warning' | 'error'",
+    type: "'info' | 'warning' | 'error' | 'success'",
     content: "string < 50",
 });
 
