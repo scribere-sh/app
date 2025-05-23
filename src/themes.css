@@ -8,7 +8,9 @@
     --content-top-padding: 24;
 
     @variant default {
-        --background: #eee;
+        --app-background: linear-gradient(#edc9ff, #f2b79f);
+
+        --background: #3f505f;
         --foreground: #111;
 
         --primary: var(--foreground);

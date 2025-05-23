@@ -5,6 +5,8 @@
 
     import { setLayoutContext } from "$lib/ctx.js";
 
+    import { Swirl } from "$ui/backgrounds";
+
     import { QueryClientProvider } from "@tanstack/svelte-query";
     import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
 
@@ -22,7 +24,15 @@
 <QueryClientProvider {client}>
     <AppSidebar />
 
-    <main class="pl-sidebar min-h-screen w-screen flex flex-col items-center justify-start gap-12 pt-content-top text-foreground">
+    <main class="[background:var(--app-background)] min-h-screen w-screen pl-sidebar flex flex-col items-center justify-start gap-12 pt-content-top text-foreground">
+        <Swirl class="z-0" />
+
         {@render children()}
     </main>
 </QueryClientProvider>
+
+<style>
+    :global(main *:not(svg)) {
+        z-index: 2;
+    }
+</style>
