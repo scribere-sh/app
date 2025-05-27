@@ -4,6 +4,7 @@ import {
     createQuery as createTanstackQuery,
     type CreateQueryOptions,
     type FetchQueryOptions,
+    type InitialDataFunction,
     QueryClient,
 } from "@tanstack/svelte-query";
 import type { ClientRequest, ClientRequestOptions } from "hono/client";
@@ -12,7 +13,7 @@ import type { StatusCode } from "hono/utils/http-status";
 
 import { readable } from "svelte/store";
 
-export interface QueryError {
+export interface QueryError extends Error {
     name: string;
     message: string;
 }
@@ -49,19 +50,19 @@ export const prefetchQuery = <In, Out, Code extends StatusCode>({ client, endpoi
             status: Code;
         };
     }>;
-    input?: In extends unknown ? undefined : In;
+    input?: object extends In ? undefined : In;
     options?: ClientRequestOptions;
 } & Omit<FetchQueryOptions<Out, QueryError, In>, "queryKey" | "queryFn">) => {
     return client.prefetchQuery({
         ...config,
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
-        queryKey: ["get", ...queryKey(endpoint.$url(), input ? input : {})],
+        queryKey: ["get", ...queryKey(endpoint.$url(), input ?? {})],
         queryFn: async () => {
             // @ts-expect-error I don't understand this at all
             const response = await endpoint.$get(input, options);
             const data = await response.json();
             if (response.ok) return data;
-            else throw data as QueryError;
+            else throw (data as QueryError);
         },
     });
 };
@@ -75,7 +76,7 @@ export const createQuery = <In, Out, Code extends StatusCode>({ endpoint, initia
             status: Code;
         };
     }>;
-    initialData?: Out;
+    initialData?: Out | (Out & InitialDataFunction<Out>);
     input?: object extends In ? undefined : In;
     options?: ClientRequestOptions;
 } & Omit<CreateQueryOptions<Out, QueryError>, "queryFn" | "queryKey">) => {
@@ -83,14 +84,14 @@ export const createQuery = <In, Out, Code extends StatusCode>({ endpoint, initia
         ...config,
         // @ts-expect-error - shut up and let me cook
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
-        queryKey: ["get", ...queryKey(endpoint.$url(input))],
+        queryKey: ["get", ...queryKey(endpoint.$url(input), input ?? {})],
         initialData,
         queryFn: async () => {
             // @ts-expect-error - shut up and let me cook
             const response = await endpoint.$get(input, options);
             const data = await response.json();
             if (response.ok) return data as Out;
-            else throw data as QueryError;
+            else throw (data as QueryError);
         },
     })));
 };

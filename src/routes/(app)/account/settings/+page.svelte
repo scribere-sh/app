@@ -7,7 +7,7 @@
 
     setContext(
         "cardClasses",
-        cn("w-settings [scroll-margin-top:var(--spacing-content-top)]"),
+        cn("w-page [scroll-margin-top:var(--spacing-content-top)]"),
     );
 </script>
 

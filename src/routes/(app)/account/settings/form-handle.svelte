@@ -27,7 +27,7 @@
     const isValueValid = $derived(value.length > 3);
 
     const mut = createPutMutation({
-        endpoint: api.account["update-handle"],
+        endpoint: api.account.updateHandle,
         onSuccess: () => {
             invalidateQuery(client, api.users.me);
         },

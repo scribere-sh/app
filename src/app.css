@@ -30,16 +30,17 @@
 
     --color-muted: var(--muted);
     --color-input: var(--input);
+    /* --color-card: var(--card); */
 
     /* spacing */
 
     --spacing-sidebar: calc(var(--spacing) * var(--sidebar-width));
-    --spacing-settings: calc(var(--spacing) * var(--settings-width));
+    --spacing-page: calc(var(--spacing) * var(--page-width));
 
     --spacing-auth-header: calc(var(--spacing) * var(--auth-header-height));
     --spacing-auth-footer: calc(var(--spacing) * var(--auth-footer-height));
 
-    --spacing-content-top: calc(var(--spacing) * var(--content-top-padding));
+    --spacing-content-top: --spacing(var(--content-top-padding));
 
     /* animations */
 

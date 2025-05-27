@@ -17,18 +17,6 @@
     });
 
     const cardClasses = getContext<string>("cardClasses");
-
-    const censorEmail = (email: string): string => {
-        const atSymbolPos = email.indexOf("@");
-
-        return email[0]
-            .concat(
-                "*".repeat(atSymbolPos - 1),
-            )
-            .concat(
-                email.substring(atSymbolPos),
-            );
-    };
 </script>
 
 <Card.Root id="emails" class={cn(cardClasses)}>
@@ -44,9 +32,7 @@
             {:else if $detailsQuery.isSuccess}
                 <div class="flex flex-row items-center gap-2">
                     <Check class="stroke-green-500 size-4" />{
-                        censorEmail(
-                            $detailsQuery.data.emailAddress,
-                        )
+                        $detailsQuery.data.emailAddress
                     }
                 </div>
             {:else if $detailsQuery.isError}
@@ -56,11 +42,7 @@
         <div class="flex justify-center items-center mx-4 py-4">
             <FormEmail
                 current={$detailsQuery.data?.emailAddressInValidation
-                ? censorEmail(
-                    $detailsQuery.data
-                        ?.emailAddressInValidation,
-                )
-                : undefined}
+                ?? undefined}
             />
         </div>
     </Card.Content>

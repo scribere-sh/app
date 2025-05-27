@@ -33,7 +33,8 @@
     );
 
     const mut = createPutMutation({
-        endpoint: api.account["update-email-address"],
+        endpoint: api.account.updateEmailAddress,
+
         onSuccess: ({ message }) => {
             toast.success(message);
         },
