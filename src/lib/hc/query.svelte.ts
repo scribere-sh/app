@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     createMutation,
     type CreateMutationOptions,
@@ -79,8 +80,8 @@ export const createQuery = <In, Out, Code extends StatusCode>({ endpoint, initia
     initialData?: Out | (Out & InitialDataFunction<Out>);
     input?: object extends In ? undefined : In;
     options?: ClientRequestOptions;
-} & Omit<CreateQueryOptions<Out, QueryError>, "queryFn" | "queryKey">) => {
-    return createTanstackQuery<Out, QueryError>(reactiveQueryArgs(() => ({
+} & Omit<CreateQueryOptions<never extends Out ? any : Out, QueryError>, "queryFn" | "queryKey">) => {
+    return createTanstackQuery<never extends Out ? any : Out, QueryError>(reactiveQueryArgs(() => ({
         ...config,
         // @ts-expect-error - shut up and let me cook
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
@@ -90,7 +91,7 @@ export const createQuery = <In, Out, Code extends StatusCode>({ endpoint, initia
             // @ts-expect-error - shut up and let me cook
             const response = await endpoint.$get(input, options);
             const data = await response.json();
-            if (response.ok) return data as Out;
+            if (response.ok) return data as never extends Out ? any : Out;
             else throw (data as QueryError);
         },
     })));

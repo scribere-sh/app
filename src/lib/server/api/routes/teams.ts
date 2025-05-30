@@ -8,6 +8,7 @@ import { and, count, eq } from "drizzle-orm";
 
 import { PERMISSION_BASE } from "$lib/schema/permission";
 import { UidSchema } from "$lib/schema/uid";
+import { accessControl } from "$srv/access";
 import { userIsMemberOfTeam } from "$srv/access/team";
 import { usersTable } from "$srv/db/schema/user";
 import { arktypeValidator } from "@hono/arktype-validator";
@@ -109,20 +110,15 @@ export default new Hono<Env>()
                 team: UidSchema,
             }),
         ),
-        // guard function
-        async (c, next) => {
-            if (
-                !(await userIsMemberOfTeam(
-                    c.get("user").id,
-                    c.req.valid("query").team,
-                ))
-            ) {
-                throw new HTTPException(401, { message: "User does not have access to this team" });
-            }
-
-            return await next();
-        },
         async (c) => {
+            await accessControl(
+                () =>
+                    userIsMemberOfTeam(
+                        c.get("user").id,
+                        c.req.valid("query").team,
+                    ),
+            );
+
             const { team: teamId } = c.req.valid("query");
 
             const [teamQuery, membersQuery] = await db.query.batch([
@@ -174,7 +170,7 @@ export default new Hono<Env>()
                         // todo: add this properly
                         activity: {
                             time: 3,
-                            page: "test-page",
+                            pageDisplay: "Test Page",
                         },
                     };
                 }),

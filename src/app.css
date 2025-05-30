@@ -71,7 +71,7 @@
 
 @layer base {
     * {
-        @apply transition-colors duration-200 ease-out;
+        @apply transition-colors duration-200 ease-out overflow-hidden;
     }
 
     a {
@@ -79,6 +79,6 @@
     }
 
     html {
-        @apply bg-background overflow-hidden;
+        @apply bg-background overflow-y-auto;
     }
 }

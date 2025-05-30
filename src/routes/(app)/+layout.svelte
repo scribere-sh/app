@@ -22,7 +22,7 @@
 <QueryClientProvider {client}>
     <AppSidebar />
 
-    <main class="pl-sidebar min-h-screen w-screen flex flex-col items-center justify-start gap-12 pt-content-top text-foreground">
+    <main class="pl-sidebar min-h-screen w-screen flex flex-col items-center justify-start gap-12 pt-content-top pb-content-top text-foreground">
         {@render children()}
     </main>
 </QueryClientProvider>
