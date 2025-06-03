@@ -24,10 +24,12 @@
 <QueryClientProvider {client}>
     <AppSidebar />
 
-    <main class="[background:var(--app-background)] min-h-screen w-screen pl-sidebar flex flex-col items-center justify-start gap-12 pt-content-top text-foreground">
-        <Swirl class="z-0" />
+    <main class="[background:var(--app-background)] min-h-screen w-screen pl-sidebar justify-start gap-12 pt-content-top text-foreground">
+        <Swirl class="absolute inset-0 z-0 mt-30" />
 
-        {@render children()}
+        <div class="relative z-10 mx-60">
+            {@render children()}
+        </div>
     </main>
 </QueryClientProvider>
 
