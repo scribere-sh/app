@@ -44,12 +44,12 @@
         <div class="mt-8 w-full">
             <Tabs.Content value="home">
                 <Card.Root class="w-full">
-                    <Card.Header>
-                        <Card.Title>Description</Card.Title>
-                    </Card.Header>
-                    <Card.Content>
+                    <!-- <Card.Header> -->
+                        <!-- <Card.Title>Description</Card.Title> -->
+                    <!-- </Card.Header> -->
+                    <Card.Content class="flex flex-col items-end">
                         {#if $teamQuery.isSuccess}
-                            <Description description={$teamQuery.data.description} />
+                            <Description description={$teamQuery.data.description} teamId={data.teamId} />
                         {:else}
                             <Skeleton class="w-2/3 h-6" />
                         {/if}
@@ -65,9 +65,9 @@
                             <Accordion.Root type="single" class="w-full">
                                 <Accordion.Item value="item-1">
                                     <Accordion.Trigger>Alert</Accordion.Trigger>
-                                    <Accordion.Content
-                                        >Yo mama</Accordion.Content
-                                    >
+                                    <Accordion.Content>
+                                        Yo mama
+                                    </Accordion.Content>
                                 </Accordion.Item>
                             </Accordion.Root>
                         </Card.Content>

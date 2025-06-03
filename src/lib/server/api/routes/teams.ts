@@ -6,10 +6,10 @@ import { db } from "$srv/db";
 import { teamsTable, teamUserRelationsTable } from "$tb/teams";
 import { and, count, eq } from "drizzle-orm";
 
-import { PERMISSION_BASE } from "$lib/schema/permission";
+import { PERMISSION_BASE, PERMISSION_UPDATE_TEAM } from "$lib/schema/permission";
 import { UidSchema } from "$lib/schema/uid";
 import { accessControl } from "$srv/access";
-import { userIsMemberOfTeam } from "$srv/access/team";
+import { userHasPermissionInTeam, userIsMemberOfTeam } from "$srv/access/team";
 import { usersTable } from "$srv/db/schema/user";
 import { arktypeValidator } from "@hono/arktype-validator";
 import { type } from "arktype";
@@ -177,5 +177,43 @@ export default new Hono<Env>()
             };
 
             return c.json(out);
+        },
+    )
+    .put(
+        "/updateDescription/:team",
+        arktypeValidator(
+            "json",
+            type({
+                content: "object",
+            }),
+        ),
+        arktypeValidator(
+            "param",
+            type({
+                team: "/[a-zA-Z0-9]/",
+            }),
+        ),
+        async (c) => {
+            await accessControl(
+                () =>
+                    userHasPermissionInTeam(
+                        c.get("user").id,
+                        c.req.param().team,
+                        PERMISSION_UPDATE_TEAM,
+                    ),
+            );
+
+            // user is confirmed to be in team and have necessary permission
+            await db.query
+                .update(teamsTable)
+                .set({
+                    description: c.req.valid("json").content,
+                })
+                .where(eq(
+                    teamsTable.id,
+                    c.req.param().team,
+                ));
+
+            return c.json(c.req.valid("json").content);
         },
     );
