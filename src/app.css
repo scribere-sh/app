@@ -14,7 +14,11 @@
 @custom-variant gruvbox-dark (&:where([data-theme=gruvbox].dark, [data-theme=gruvbox].dark *));
 
 @theme {
+    --font-sans: "Nexa", sans-serif;
+
     /* colours */
+    --color-app-background: var(--app-background);
+
     --color-background: var(--background);
     --color-foreground: var(--foreground);
 

@@ -5,6 +5,8 @@
 
     import { setLayoutContext } from "$lib/ctx.js";
 
+    import { Swirl } from "$ui/backgrounds";
+
     import { QueryClientProvider } from "@tanstack/svelte-query";
     import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
 
@@ -26,3 +28,9 @@
         {@render children()}
     </main>
 </QueryClientProvider>
+
+<style>
+    :global(main *:not(svg)) {
+        z-index: 2;
+    }
+</style>
