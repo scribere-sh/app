@@ -86,11 +86,12 @@
                                                 userId={member.id}
                                             />
                                             <div class="flex flex-col w-full">
-                                                <span>{member.displayName}</span
-                                                >
-                                                <span class="opacity-65"
-                                                    >@{member.handle}</span
-                                                >
+                                                <span>
+                                                    {member.displayName}
+                                                </span>
+                                                <span class="opacity-65">
+                                                    @{member.handle}
+                                                </span>
                                             </div>
                                             <div
                                                 class="flex flex-col items-center justify-center gap-1 h-full opacity-75 shrink-0"
