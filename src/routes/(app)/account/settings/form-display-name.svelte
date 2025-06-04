@@ -27,7 +27,7 @@
     const isValueValid = $derived(value.length > 0);
 
     const mut = createPutMutation({
-        endpoint: api.account["update-display-name"],
+        endpoint: api.account.updateDisplayName,
         onSuccess: () => {
             invalidateQuery(client, api.users.me);
         },

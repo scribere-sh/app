@@ -3,6 +3,7 @@
     import { ThemeToggle } from "$blk/theme-toggle";
 
     import { Scribere } from "$ui/logos";
+    import Users from "@lucide/svelte/icons/users";
 
     import { route } from "$lib/routes";
 
@@ -13,6 +14,12 @@
     <a href={route("/")} class="hover:bg-foreground/10">
         <AppSidebarItem>
             <Scribere class="w-1/2" />
+        </AppSidebarItem>
+    </a>
+
+    <a href={route("/teams")} class="hover:bg-foreground/10">
+        <AppSidebarItem>
+            <Users class="w-1/2" />
         </AppSidebarItem>
     </a>
 
