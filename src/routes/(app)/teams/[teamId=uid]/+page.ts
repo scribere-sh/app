@@ -10,8 +10,8 @@ export const load: PageLoad = async (event) => {
         endpoint: api.teams.getTeamDetails,
         input: {
             query: {
-                team: event.params.teamId
-            }
+                team: event.params.teamId,
+            },
         },
         options: {
             fetch: event.fetch,
@@ -21,6 +21,6 @@ export const load: PageLoad = async (event) => {
     return {
         // note: if server data gets loaded here, uncomment this or no data will be given to the component.
         // ...event.data,
-        teamId: event.params.teamId
+        teamId: event.params.teamId,
     };
 };
