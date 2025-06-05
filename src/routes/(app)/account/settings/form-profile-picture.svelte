@@ -30,11 +30,11 @@
     const hasImage = $derived(file !== null);
 
     const mut = createPutMutation({
-        endpoint: api.account["update-profile-picture"],
+        endpoint: api.account.updateProfilePicture,
         onSuccess: () => {
             invalidateBlobQuery(
                 client,
-                api.assets["profile-picture"].me,
+                api.assets.profilePicture.me,
             );
 
             toast.success("Updated profile picture", {

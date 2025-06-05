@@ -11,6 +11,10 @@
 export const PAGES = {
     "/": `/`,
     "/account/settings": `/account/settings`,
+    "/teams": `/teams`,
+    "/teams/[teamId=uid]": (params: { teamId: ExtractParamType<typeof import("../params/uid.ts").match> }) => {
+        return `/teams/${params["teamId"]}`;
+    },
     "/auth/change-password": `/auth/change-password`,
     "/auth/change-password/callback": `/auth/change-password/callback`,
     "/auth/log-out": `/auth/log-out`,
@@ -130,6 +134,11 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
     }
 }
 
+/* type helpers param & predicate */
+type ExtractFnPredicate<T> = T extends (param: any) => param is infer U ? U : never;
+type ExtractParamType<T extends (param: any) => any> = ExtractFnPredicate<T> extends never ? Parameters<T>[0]
+    : ExtractFnPredicate<T>;
+
 /**
  * Add this type as a generic of the vite plugin `kitRoutes<KIT_ROUTES>`.
  *
@@ -149,6 +158,8 @@ export type KIT_ROUTES = {
     PAGES: {
         "/": never;
         "/account/settings": never;
+        "/teams": never;
+        "/teams/[teamId=uid]": "teamId";
         "/auth/change-password": never;
         "/auth/change-password/callback": never;
         "/auth/log-out": never;
@@ -166,5 +177,5 @@ export type KIT_ROUTES = {
         "default /auth/sign-in": never;
     };
     LINKS: Record<string, never>;
-    Params: Record<string, never>;
+    Params: { "teamId": never };
 };

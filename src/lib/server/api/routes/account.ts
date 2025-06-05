@@ -23,6 +23,7 @@ import { usersTable } from "$tb/user";
 import { eq, lt } from "drizzle-orm";
 
 import { route } from "$lib/routes";
+import { censorEmail } from "$lib/utils";
 import { TOKEN_COOKIE_NAME } from "$srv/auth/cookie";
 import { updateJWT } from "$srv/auth/jwt";
 import { generateTokenString } from "$srv/auth/token";
@@ -42,7 +43,6 @@ const SIX_DAYS_IN_MILLISECONDS = 6 * 24 * 60 * 60 * 1000;
 const THIRTY_MINUTES_IN_MILLISECONDS = 30 * 60 * 1000;
 
 export default new Hono<Env>()
-    // # GET /details
     .get("/details", async (c) => {
         const userId = c.get("user").id;
 
@@ -55,19 +55,22 @@ export default new Hono<Env>()
             .where(eq(emailAddressesTable.userId, userId))
             .leftJoin(
                 emailValidationsTable,
-                eq(
-                    emailAddressesTable.userId,
-                    emailValidationsTable.userId,
-                ),
+                eq(emailAddressesTable.userId, emailValidationsTable.userId),
             );
 
         if (!response) throw new HTTPException(404, { message: "user not found" });
 
-        return c.json(response);
+        return c.json({
+            ...response,
+
+            emailAddress: censorEmail(response.emailAddress),
+            emailAddressInValidation: response.emailAddressInValidation
+                ? censorEmail(response.emailAddressInValidation)
+                : null,
+        });
     })
-    // # PUT /update-handle
     .put(
-        "/update-handle",
+        "/updateHandle",
         arktypeValidator(
             "json",
             type({
@@ -81,14 +84,10 @@ export default new Hono<Env>()
                 throw new HTTPException(400, { message: "watch your profanity." });
             }
 
-            const usageCount = await db.query
-                .$count(
-                    usersTable,
-                    eq(
-                        usersTable.handle,
-                        handle,
-                    ),
-                );
+            const usageCount = await db.query.$count(
+                usersTable,
+                eq(usersTable.handle, handle),
+            );
 
             if (usageCount > 0) {
                 throw new HTTPException(400, { message: "handle is taken" });
@@ -99,10 +98,7 @@ export default new Hono<Env>()
                 .set({
                     handle,
                 })
-                .where(eq(
-                    usersTable.id,
-                    c.get("user").id,
-                ));
+                .where(eq(usersTable.id, c.get("user").id));
 
             setCookie(
                 c,
@@ -120,9 +116,8 @@ export default new Hono<Env>()
             return c.json({ message: "complete" });
         },
     )
-    // # PUT /update-display-name
     .put(
-        "/update-display-name",
+        "/updateDisplayName",
         arktypeValidator(
             "json",
             type({
@@ -141,10 +136,7 @@ export default new Hono<Env>()
                 .set({
                     displayName,
                 })
-                .where(eq(
-                    usersTable.id,
-                    c.get("user").id,
-                ));
+                .where(eq(usersTable.id, c.get("user").id));
 
             setCookie(
                 c,
@@ -162,9 +154,8 @@ export default new Hono<Env>()
             return c.json({ message: "complete" });
         },
     )
-    // # PUT /update-profile-picture
     .put(
-        "/update-profile-picture",
+        "/updateProfilePicture",
         arktypeValidator(
             "form",
             type({
@@ -176,7 +167,9 @@ export default new Hono<Env>()
             const file = body["file"];
 
             if (typeof file === "string") {
-                throw new HTTPException(400, { message: "this is not an image, you have submitted a string" });
+                throw new HTTPException(400, {
+                    message: "this is not an image, you have submitted a string",
+                });
             }
 
             if (file.size > PROFILE_IMAGE_MAX_SIZE) {
@@ -184,13 +177,20 @@ export default new Hono<Env>()
             }
 
             try {
-                const imageInfo = await c.env.IMAGES.info(file.stream() as ReadableStream<Uint8Array>);
+                const imageInfo = await c.env.IMAGES.info(
+                    file.stream() as ReadableStream<Uint8Array>,
+                );
 
                 if (imageInfo.format !== "image/svg+xml") {
                     const imageInfoButNotSvg = imageInfo as ImageInfoWithoutSVG;
 
-                    if (imageInfoButNotSvg.width > 1000 || imageInfoButNotSvg.height > 1000) {
-                        throw new HTTPException(400, { message: "image may be up to 1000x1000px" });
+                    if (
+                        imageInfoButNotSvg.width > 1000
+                        || imageInfoButNotSvg.height > 1000
+                    ) {
+                        throw new HTTPException(400, {
+                            message: "image may be up to 1000x1000px",
+                        });
                     }
                 }
             } catch (e) {
@@ -241,9 +241,8 @@ export default new Hono<Env>()
             return c.json({ message: "complete" });
         },
     )
-    // # PUT /update-email-address
     .put(
-        "/update-email-address",
+        "/updateEmailAddress",
         arktypeValidator(
             "json",
             type({
@@ -253,9 +252,7 @@ export default new Hono<Env>()
         async (c) => {
             const { email } = c.req.valid("json");
 
-            const {
-                1: challenges,
-            } = await db.query.batch([
+            const { 1: challenges } = await db.query.batch([
                 db.query
                     .delete(emailValidationsTable)
                     .where(lt(emailValidationsTable.expires, new Date())),
@@ -264,19 +261,18 @@ export default new Hono<Env>()
                         email: emailValidationsTable.email,
                     })
                     .from(emailValidationsTable)
-                    .where(eq(
-                        emailAddressesTable.userId,
-                        c.get("user").id,
-                    )),
+                    .where(eq(emailAddressesTable.userId, c.get("user").id)),
                 db.query
                     .select({
                         email: emailValidationsTable.email,
                     })
                     .from(emailValidationsTable)
-                    .where(eq(
-                        emailLowerCase(emailValidationsTable.email),
-                        email.toLowerCase(),
-                    )),
+                    .where(
+                        eq(
+                            emailLowerCase(emailValidationsTable.email),
+                            email.toLowerCase(),
+                        ),
+                    ),
             ]);
 
             if (challenges.length > 0) {
@@ -287,14 +283,17 @@ export default new Hono<Env>()
             }
 
             const challengeToken = generateTokenString(32);
-            const challegeVerifier = sha256(new TextEncoder().encode(
-                `${email}:${challengeToken}`,
-            ));
+            const challegeVerifier = sha256(
+                new TextEncoder().encode(`${email}:${challengeToken}`),
+            );
 
             const challengeUrl = new URL(c.req.url);
             challengeUrl.pathname = route("/auth/verify-email");
             challengeUrl.searchParams.set("email", encodeURIComponent(email));
-            challengeUrl.searchParams.set("token", encodeURIComponent(challengeToken));
+            challengeUrl.searchParams.set(
+                "token",
+                encodeURIComponent(challengeToken),
+            );
 
             const emailSendResult = await sendVerifyEmailEmail(
                 email,
@@ -304,18 +303,18 @@ export default new Hono<Env>()
 
             if (emailSendResult.error || !emailSendResult.data) {
                 console.error(emailSendResult);
-                throw new HTTPException(500, { message: "Failed to send validation email" });
+                throw new HTTPException(500, {
+                    message: "Failed to send validation email",
+                });
             }
 
-            await db.query
-                .insert(emailValidationsTable)
-                .values({
-                    userId: c.get("user").id,
-                    email,
-                    emailRef: emailSendResult.data.id,
-                    challenge: challegeVerifier,
-                    expires: new Date(Date.now() + THIRTY_MINUTES_IN_MILLISECONDS),
-                });
+            await db.query.insert(emailValidationsTable).values({
+                userId: c.get("user").id,
+                email,
+                emailRef: emailSendResult.data.id,
+                challenge: challegeVerifier,
+                expires: new Date(Date.now() + THIRTY_MINUTES_IN_MILLISECONDS),
+            });
 
             return c.json({
                 message: "success, please check your inbox",

@@ -22,7 +22,7 @@
     } = $props();
 
     const query = createBlobQuery({
-        endpoint: api.assets["profile-picture"][":user-id"],
+        endpoint: api.assets.profilePicture[":user-id"],
         input: {
             param: {
                 "user-id": userId,
