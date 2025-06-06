@@ -13,9 +13,9 @@
     });
 </script>
 
-<h1 class="text-left text-background text-6xl font-extrabold capitalize">
+<h1 class="text-left text-background text-7xl font-extrabold capitalize">
     {#if $userQuery.isSuccess}
-        <span class="font-normal text-3xl">Welcome</span><br>{
+        <span class="font-normal text-4xl">Welcome</span><br>{
             $userQuery.data.displayName
         }
     {:else if $userQuery.isError}
@@ -25,6 +25,10 @@
     {/if}
 </h1>
 
-<h2 class="mt-10 font-semibold text-2xl text-background">Recent Documents</h2>
+<h2 class="my-10 font-semibold text-3xl text-background">Recent Documents</h2>
 
-<Document />
+<Document
+    documentName="Document Name"
+    teamName="Team Name"
+    spaceName="Space Name"
+/>

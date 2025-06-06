@@ -5,7 +5,7 @@
 
     import { setLayoutContext } from "$lib/ctx.js";
 
-    // import { Swirl } from "$ui/backgrounds";
+    import { Swirl } from "$ui/backgrounds";
 
     import { QueryClientProvider } from "@tanstack/svelte-query";
     import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";

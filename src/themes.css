@@ -11,7 +11,7 @@
         --app-background: linear-gradient(#edc9ff, #f2b79f);
 
         --background: #3f505f;
-        --foreground: #111;
+        --foreground: #e7fffd;
 
         --primary: var(--foreground);
         --primary-foreground: var(--background);

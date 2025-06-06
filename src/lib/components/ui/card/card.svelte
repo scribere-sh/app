@@ -15,7 +15,7 @@
 <div
     bind:this={ref}
     class={cn(
-        "bg-background text-foreground rounded-lg border-2 shadow-sm",
+        "bg-foreground text-background rounded-lg border-4 shadow-sm",
         className,
     )}
     {...rest}
