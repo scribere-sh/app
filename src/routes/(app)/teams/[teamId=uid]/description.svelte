@@ -2,6 +2,7 @@
     export interface DescriptionProps {
         description: object;
         teamId: string;
+        canEdit: boolean;
     }
 </script>
 
@@ -24,12 +25,13 @@
     let {
         description,
         teamId,
+        canEdit = false
     }: DescriptionProps = $props();
 
     let descriptionSnapshot = $state(description);
 
     const updateDescriptionMutation = createPutMutation({
-        endpoint: api.teams.updateDescription[":team"],
+        endpoint: api.teams.updateDescription,
         onError: (err) => {
             console.error(err.message);
             toast.error("Error Occured During Update", {
@@ -53,7 +55,7 @@
     const commitEdit = () => {
         isEditing = false;
         $updateDescriptionMutation.mutate({
-            param: {
+            query: {
                 team: teamId,
             },
             json: {
@@ -62,42 +64,6 @@
         });
     };
 </script>
-
-{#if isEditing || $updateDescriptionMutation.isPending}
-    <Button
-        variant="ghost"
-        size="icon"
-        class="absolute -translate-x-[110%]"
-        onclick={commitEdit}
-    >
-        {#if $updateDescriptionMutation.isPending}
-            <LoadingSpinner />
-        {:else}
-            <Check class="text-green-500" />
-        {/if}
-    </Button>
-
-    <Button
-        variant="destructive-ghost"
-        size="icon"
-        class="absolute text-red-500 hover:text-foreground"
-        onclick={cancelEdit}
-    >
-        <X />
-    </Button>
-{:else}
-    <Button
-        variant="ghost"
-        size="icon"
-        class="absolute"
-        onclick={() => {
-            descriptionSnapshot = $state.snapshot(description);
-            isEditing = true;
-        }}
-    >
-        <Edit />
-    </Button>
-{/if}
 
 {#key isEditing}
     {#key descriptionSnapshot}
@@ -108,3 +74,41 @@
         />
     {/key}
 {/key}
+
+{#if canEdit}
+    {#if isEditing || $updateDescriptionMutation.isPending}
+        <Button
+            variant="ghost"
+            size="icon"
+            class="absolute -translate-x-[110%] z-50"
+            onclick={commitEdit}
+        >
+            {#if $updateDescriptionMutation.isPending}
+                <LoadingSpinner />
+            {:else}
+                <Check class="text-green-500" />
+            {/if}
+        </Button>
+
+        <Button
+            variant="destructive-ghost"
+            size="icon"
+            class="absolute text-red-500 hover:text-foreground z-50"
+            onclick={cancelEdit}
+        >
+            <X />
+        </Button>
+    {:else}
+        <Button
+            variant="ghost"
+            size="icon"
+            class="absolute z-50"
+            onclick={() => {
+                descriptionSnapshot = $state.snapshot(description);
+                isEditing = true;
+            }}
+        >
+            <Edit />
+        </Button>
+    {/if}
+{/if}

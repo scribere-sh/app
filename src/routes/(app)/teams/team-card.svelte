@@ -16,6 +16,7 @@
     import { initials } from "$lib/utils";
 
     import { route } from "$lib/routes";
+
     import BookOpenText from "@lucide/svelte/icons/book-open-text";
     import Users from "@lucide/svelte/icons/users";
 
@@ -65,7 +66,7 @@
                 )}
             {@render stat(
                     BookOpenText,
-                    `${spaceCountRand} Space${
+                    `${team.spaceCount} Space${
                         Math.abs(spaceCountRand) === 1 ? "" : "s"
                     }`,
                 )}

@@ -9,4 +9,5 @@ export interface Team {
 
 export interface CardTeam extends Omit<Team, "description"> {
     memberCount: number;
+    spaceCount: number;
 }

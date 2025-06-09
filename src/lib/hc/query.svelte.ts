@@ -80,8 +80,8 @@ export const createQuery = <In, Out, Code extends StatusCode>({ endpoint, initia
     initialData?: Out | (Out & InitialDataFunction<Out>);
     input?: object extends In ? undefined : In;
     options?: ClientRequestOptions;
-} & Omit<CreateQueryOptions<never extends Out ? any : Out, QueryError>, "queryFn" | "queryKey">) => {
-    return createTanstackQuery<never extends Out ? any : Out, QueryError>(reactiveQueryArgs(() => ({
+} & Omit<CreateQueryOptions<Out, QueryError>, "queryFn" | "queryKey">) => {
+    return createTanstackQuery<Out, QueryError>(reactiveQueryArgs(() => ({
         ...config,
         // @ts-expect-error - shut up and let me cook
         // eslint-disable-next-line @tanstack/query/exhaustive-deps

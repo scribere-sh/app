@@ -12,6 +12,8 @@
     import { api, createQuery } from "$lib/hc";
     
     import Description from "./description.svelte";
+    import SpaceList from "./space-list.svelte";
+    import CreateSpace from "./create-space.svelte";
 
     const { data }: PageProps = $props();
 
@@ -49,7 +51,7 @@
                     <!-- </Card.Header> -->
                     <Card.Content class="flex flex-col items-end">
                         {#if $teamQuery.isSuccess}
-                            <Description description={$teamQuery.data.description} teamId={data.teamId} />
+                            <Description description={$teamQuery.data.description} teamId={data.teamId} canEdit={data.userCanUpdate} />
                         {:else}
                             <Skeleton class="w-2/3 h-6" />
                         {/if}
@@ -124,6 +126,11 @@
                         </Card.Header>
                     </Card.Root>
                 </div>
+            </Tabs.Content>
+
+            <Tabs.Content value="spaces">
+                <CreateSpace teamId={data.teamId} />
+                <SpaceList teamId={data.teamId} />
             </Tabs.Content>
         </div>
     </Tabs.Root>

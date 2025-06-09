@@ -4,12 +4,14 @@ import type { Env } from "../hono-kit";
 
 import { db } from "$srv/db";
 import { teamsTable, teamUserRelationsTable } from "$tb/teams";
-import { and, count, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
-import { PERMISSION_BASE, PERMISSION_UPDATE_TEAM } from "$lib/schema/permission";
+import { PERMISSION_BASE, PERMISSION_UPDATE_TEAM, PERMISSION_WRITE_SPACE } from "$lib/schema/permission";
 import { UidSchema } from "$lib/schema/uid";
 import { accessControl } from "$srv/access";
 import { userHasPermissionInTeam, userIsMemberOfTeam } from "$srv/access/team";
+import { pagesTable } from "$srv/db/schema/page";
+import { spacesTable } from "$srv/db/schema/space";
 import { usersTable } from "$srv/db/schema/user";
 import { arktypeValidator } from "@hono/arktype-validator";
 import { type } from "arktype";
@@ -23,7 +25,28 @@ export default new Hono<Env>()
                 id: teamsTable.id,
                 handle: teamsTable.handle,
                 displayName: teamsTable.displayName,
-                // description: teamsTable.description,
+                memberCount: db.query
+                    .$count(
+                        teamUserRelationsTable,
+                        and(
+                            eq(
+                                teamUserRelationsTable.team,
+                                teamsTable.id,
+                            ),
+                            eq(
+                                teamUserRelationsTable.permission,
+                                PERMISSION_BASE,
+                            ),
+                        ),
+                    ),
+                spaceCount: db.query
+                    .$count(
+                        spacesTable,
+                        eq(
+                            spacesTable.team,
+                            teamsTable.id,
+                        ),
+                    ),
             })
             .from(teamUserRelationsTable)
             .where(
@@ -46,60 +69,9 @@ export default new Hono<Env>()
                 ),
             );
 
-        if (query.length === 0) return c.json([]);
-
-        // map each team to a lookup of how many instances there are of different users
-        // with the member permission within each team.
-        const memberCountQueryIter = query
-            .map(({ id }) =>
-                db
-                    .query
-                    .select({
-                        count: count(teamUserRelationsTable.user),
-                    })
-                    .from(teamUserRelationsTable)
-                    .where(
-                        and(
-                            eq(
-                                teamUserRelationsTable.team,
-                                id,
-                            ),
-                            eq(
-                                teamUserRelationsTable.permission,
-                                PERMISSION_BASE,
-                            ),
-                        ),
-                    )
-            );
-
-        // run all queries atomically in batch, batch queries are guaranteed
-        // to run in the same order they're given, as are the results of .map
-        //
-        // therefore the list in the original query is in the same order as this one
-        // making it really easy to zip together.
-        //
-        // except JS doesn't have an iterator zip function, so we make do.
-        const memberCountQuery: number[] = (
-            await db
-                .query
-                .batch(
-                    // @ts-expect-error - Manually Tested
-                    memberCountQueryIter,
-                )
-        )
-            .map(
-                queryResult => queryResult[0].count,
-            );
-
         // zip the iterators together and return
         return c.json(
-            query
-                .map((val, i) => {
-                    return {
-                        ...val,
-                        memberCount: memberCountQuery[i],
-                    };
-                }),
+            query,
         );
     })
     .get(
@@ -180,7 +152,7 @@ export default new Hono<Env>()
         },
     )
     .put(
-        "/updateDescription/:team",
+        "/updateDescription",
         arktypeValidator(
             "json",
             type({
@@ -188,7 +160,7 @@ export default new Hono<Env>()
             }),
         ),
         arktypeValidator(
-            "param",
+            "query",
             type({
                 team: "/[a-zA-Z0-9]/",
             }),
@@ -198,7 +170,7 @@ export default new Hono<Env>()
                 () =>
                     userHasPermissionInTeam(
                         c.get("user").id,
-                        c.req.param().team,
+                        c.req.valid("query").team,
                         PERMISSION_UPDATE_TEAM,
                     ),
             );
@@ -211,9 +183,70 @@ export default new Hono<Env>()
                 })
                 .where(eq(
                     teamsTable.id,
-                    c.req.param().team,
+                    c.req.valid("query").team,
                 ));
 
             return c.json(c.req.valid("json").content);
+        },
+    )
+    .get(
+        "/getSpaces",
+        arktypeValidator(
+            "query",
+            type({
+                team: "/[a-zA-Z0-9]/",
+            }),
+        ),
+        async (c) => {
+            const userId = c.get("user").id;
+            const teamId = c.req.valid("query").team;
+
+            await accessControl(
+                () => userIsMemberOfTeam(userId, teamId),
+            );
+
+            const spaceList = await db.query
+                .select({
+                    id: spacesTable.id,
+                    title: spacesTable.title,
+                    homepage: spacesTable.homepage,
+                    createdAt: spacesTable.createdAt,
+                    pageCount: db.query.$count(pagesTable, eq(pagesTable.space, spacesTable.id)),
+                })
+                .from(spacesTable)
+                .where(
+                    eq(spacesTable.team, teamId),
+                )
+                .orderBy(
+                    desc(spacesTable.createdAt),
+                );
+
+            return c.json(spaceList);
+        },
+    )
+    .post(
+        "/createSpace",
+        arktypeValidator(
+            "query",
+            type({
+                team: "/[a-zA-Z0-9]/",
+            }),
+        ),
+        arktypeValidator(
+            "json",
+            type({
+                title: "0 < string < 35",
+            }),
+        ),
+        async (c) => {
+            const userId = c.get("user").id;
+            const teamId = c.req.valid("query").team;
+
+            await accessControl(
+                () => userIsMemberOfTeam(userId, teamId),
+                () => userHasPermissionInTeam(userId, teamId, PERMISSION_WRITE_SPACE),
+            );
+
+            throw new HTTPException(500, { message: "unimplemented" });
         },
     );
