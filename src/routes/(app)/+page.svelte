@@ -27,8 +27,76 @@
 
 <h2 class="my-10 font-semibold text-3xl text-background">Recent Documents</h2>
 
-<Document
-    documentName="Document Name"
-    teamName="Team Name"
-    spaceName="Space Name"
-/>
+<div class="flex flex-wrap gap-18 justify-between">
+    <Document
+        documentName="Document Name"
+        teamName="Team Name"
+        spaceName="Space Name"
+    />
+
+    <Document
+        documentName="Document Name"
+        teamName="Team Name"
+        spaceName="Space Name"
+    />
+
+    <Document
+        documentName="Document Name"
+        teamName="Team Name"
+        spaceName="Space Name"
+    />
+
+    <Document
+        documentName="Document Name"
+        teamName="Team Name"
+        spaceName="Space Name"
+    />
+
+    <Document
+        documentName="Document Name"
+        teamName="Team Name"
+        spaceName="Space Name"
+    />
+
+    <Document
+        documentName="Document Name"
+        teamName="Team Name"
+        spaceName="Space Name"
+    />
+
+    <Document
+        documentName="Document Name"
+        teamName="Team Name"
+        spaceName="Space Name"
+    />
+
+    <Document
+        documentName="Document Name"
+        teamName="Team Name"
+        spaceName="Space Name"
+    />
+
+    <Document
+        documentName="Document Name"
+        teamName="Team Name"
+        spaceName="Space Name"
+    />
+
+    <Document
+        documentName="Document Name"
+        teamName="Team Name"
+        spaceName="Space Name"
+    />
+
+    <Document
+        documentName="Document Name"
+        teamName="Team Name"
+        spaceName="Space Name"
+    />
+
+    <Document
+        documentName="Document Name"
+        teamName="Team Name"
+        spaceName="Space Name"
+    />
+</div>
