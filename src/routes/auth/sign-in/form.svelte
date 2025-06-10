@@ -108,6 +108,7 @@
                 </div>
 
                 <Input
+                    class="text-foreground"
                     {...props}
                     {disabled}
                     error={$errors.password !== undefined}

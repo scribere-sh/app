@@ -5,11 +5,16 @@ import Header from "./card-header.svelte";
 import Title from "./card-title.svelte";
 import Root from "./card.svelte";
 
+import Document from "./card-document.svelte";
+import Space from "./card-space.svelte";
+
 export {
     Content,
     Content as CardContent,
     Description,
     Description as CardDescription,
+    Document,
+    Document as CardDocument,
     Footer,
     Footer as CardFooter,
     Header,
@@ -17,6 +22,8 @@ export {
     Root,
     //
     Root as Card,
+    Space,
+    Space as CardSpace,
     Title,
     Title as CardTitle,
 };

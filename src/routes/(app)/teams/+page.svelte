@@ -3,6 +3,8 @@
 
     import TeamCard from "./team-card.svelte";
 
+    import { Space } from "$ui/card";
+
     const teamsQuery = createQuery({
         endpoint: api.teams.getUserTeams,
     });
@@ -16,3 +18,11 @@
         <!-- Todo: this -->
     {/each}
 {/if}
+
+<Space
+    spaceName="Space Name"
+    spaceId=""
+    homePageId=""
+    pageCount={1}
+    lastUpdated={new Date("2025-06-10T00:22:37Z")}
+/>

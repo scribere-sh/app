@@ -5,7 +5,7 @@
 
     import { setLayoutContext } from "$lib/ctx.js";
 
-    // import { Swirl } from "$ui/backgrounds";
+    import { Swirl } from "$ui/backgrounds";
 
     import { QueryClientProvider } from "@tanstack/svelte-query";
     import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
@@ -24,8 +24,12 @@
 <QueryClientProvider {client}>
     <AppSidebar />
 
-    <main class="pl-sidebar min-h-screen w-screen flex flex-col items-center justify-start gap-12 pt-content-top pb-content-top text-foreground">
-        {@render children()}
+    <main class="bg-transparent h-screen z-10 overflow-y-auto min-h-screen w-screen pl-sidebar justify-start gap-12 pt-content-top text-foreground">
+        <Swirl class="fixed inset-0 z-0 mt-30 pointer-events-none" />
+
+        <div class="relative z-10 mx-60">
+            {@render children()}
+        </div>
     </main>
 </QueryClientProvider>
 
