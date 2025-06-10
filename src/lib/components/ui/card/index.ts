@@ -6,6 +6,7 @@ import Title from "./card-title.svelte";
 import Root from "./card.svelte";
 
 import Document from "./card-document.svelte";
+import Space from "./card-space.svelte";
 
 export {
     Content,
@@ -21,6 +22,8 @@ export {
     Root,
     //
     Root as Card,
+    Space,
+    Space as CardSpace,
     Title,
     Title as CardTitle,
 };

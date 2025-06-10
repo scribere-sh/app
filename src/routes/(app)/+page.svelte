@@ -27,7 +27,7 @@
 
 <h2 class="my-10 font-semibold text-3xl text-background">Recent Documents</h2>
 
-<div class="flex flex-wrap gap-18 justify-between">
+<div class="flex flex-wrap gap-18 justify-between mb-24">
     <Document
         documentName="Document Name"
         teamName="Team Name"
