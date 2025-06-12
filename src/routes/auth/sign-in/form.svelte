@@ -67,7 +67,7 @@
 <form
     action={route("default /auth/sign-in")}
     method="POST"
-    class="flex flex-col gap-4"
+    class="flex flex-col gap-4 overflow-visible"
     use:enhance
 >
     <input type="hidden" name="csrf" value={csrf} />
@@ -83,6 +83,7 @@
                 </div>
 
                 <Input
+                    class="text-foreground"
                     {...props}
                     {disabled}
                     error={$errors.identifier !== undefined}
@@ -97,7 +98,7 @@
         </Form.Control>
     </Form.Field>
 
-    <Form.Field {form} name="password">
+    <Form.Field {form} name="password" class="overflow-visible">
         <Form.Control>
             {#snippet children({ props })}
                 <div class="flex items-center justify-between">
