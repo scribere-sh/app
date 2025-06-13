@@ -40,12 +40,12 @@
                         </Card.Title>
                     </Card.Header>
                     <Card.Content>
-                        <span>
+                        <div class="w-full inline-flex flex-row gap-2">
                             <BookOpen /> {space.pageCount}
-                        </span>
-                        <span>
-                            <ClockPlus /> {new Date(space.createdAt).toLocaleDateString()}
-                        </span>
+                        </div>
+                        <div class="w-full inline-flex flex-row gap-2">
+                            <ClockPlus /> {new Date(space.createdAt).toLocaleString()}
+                        </div>
                     </Card.Content>
                 </Card.Root>
             </a>

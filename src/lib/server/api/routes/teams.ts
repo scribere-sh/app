@@ -6,8 +6,14 @@ import { db } from "$srv/db";
 import { teamsTable, teamUserRelationsTable } from "$tb/teams";
 import { and, desc, eq } from "drizzle-orm";
 
-import { PERMISSION_BASE, PERMISSION_UPDATE_TEAM, PERMISSION_WRITE_SPACE } from "$lib/schema/permission";
+import {
+    PERMISSION_BASE,
+    PERMISSION_SPACE_OWNER,
+    PERMISSION_UPDATE_TEAM,
+    PERMISSION_WRITE_SPACE,
+} from "$lib/schema/permission";
 import { UidSchema } from "$lib/schema/uid";
+import { generateUid } from "$lib/uid";
 import { accessControl } from "$srv/access";
 import { userHasPermissionInTeam, userIsMemberOfTeam } from "$srv/access/team";
 import { pagesTable } from "$srv/db/schema/page";
@@ -16,6 +22,8 @@ import { usersTable } from "$srv/db/schema/user";
 import { arktypeValidator } from "@hono/arktype-validator";
 import { type } from "arktype";
 import { HTTPException } from "hono/http-exception";
+
+const EMPTY_DOC = { type: "doc", content: {} };
 
 export default new Hono<Env>()
     .get("/getUserTeams", async (c) => {
@@ -235,7 +243,7 @@ export default new Hono<Env>()
         arktypeValidator(
             "json",
             type({
-                title: "0 < string < 35",
+                title: "2 < string < 35",
             }),
         ),
         async (c) => {
@@ -247,6 +255,79 @@ export default new Hono<Env>()
                 () => userHasPermissionInTeam(userId, teamId, PERMISSION_WRITE_SPACE),
             );
 
-            throw new HTTPException(500, { message: "unimplemented" });
+            const { title } = c.req.valid("json");
+
+            console.log("Creating space with", title, "for team", teamId);
+
+            const spaceId = generateUid();
+            const homepageId = generateUid();
+
+            await db.query
+                .batch([
+                    db.query
+                        .insert(spacesTable)
+                        .values({
+                            id: spaceId,
+                            team: teamId,
+                            title,
+                            createdAt: new Date(),
+                            homepage: homepageId,
+                        }),
+                    db.query
+                        .insert(pagesTable)
+                        .values({
+                            id: homepageId,
+                            space: spaceId,
+                            title: `${title} - Home`,
+                            content: EMPTY_DOC,
+                            lastUpdated: new Date(),
+                        }),
+                ]);
+
+            return c.json({
+                spaceId,
+                homepageId,
+            });
+        },
+    )
+    .post(
+        "/create",
+        arktypeValidator(
+            "json",
+            type({
+                name: "string",
+            }),
+        ),
+        async (c) => {
+            const teamId = generateUid();
+            const userId = c.get("user").id;
+
+            const { name } = c.req.valid("json");
+
+            await db.query.batch([
+                db.query
+                    .insert(teamsTable)
+                    .values({
+                        displayName: name,
+                        // i cba checking this, sooooo
+                        handle: teamId,
+                        id: teamId,
+                        description: { type: "doc", content: [] },
+                    }),
+                db.query
+                    .insert(teamUserRelationsTable)
+                    .values([
+                        {
+                            permission: PERMISSION_BASE,
+                            team: teamId,
+                            user: userId,
+                        },
+                        {
+                            permission: PERMISSION_SPACE_OWNER,
+                            team: teamId,
+                            user: userId,
+                        },
+                    ]),
+            ]);
         },
     );

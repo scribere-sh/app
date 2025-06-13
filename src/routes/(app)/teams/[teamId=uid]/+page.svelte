@@ -30,10 +30,10 @@
 <main class="w-page flex flex-col items-start justify-center gap-2">
     {#if $teamQuery.isSuccess}
         <h1 class="text-4xl w-full font-bold">{$teamQuery.data.displayName}</h1>
-        <h2 class="text-2xl w-full opacity-65">@{$teamQuery.data.handle}</h2>
+        <!-- <h2 class="text-2xl w-full opacity-65">@{$teamQuery.data.handle}</h2> -->
     {:else}
         <Skeleton class="w-2/3 h-9 mt-[--spacing(calc(2/2.5))]" />
-        <Skeleton class="w-1/2 h-6 mt-[--spacing(calc(2/1.5))]" />
+        <!-- <Skeleton class="w-1/2 h-6 mt-[--spacing(calc(2/1.5))]" /> -->
     {/if}
 
     <Tabs.Root value="home" class="w-full mt-4">
@@ -128,7 +128,7 @@
                 </div>
             </Tabs.Content>
 
-            <Tabs.Content value="spaces">
+            <Tabs.Content value="spaces" class="flex flex-col gap-8">
                 <CreateSpace teamId={data.teamId} />
                 <SpaceList teamId={data.teamId} />
             </Tabs.Content>
