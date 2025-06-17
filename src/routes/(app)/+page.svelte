@@ -13,7 +13,7 @@
     });
 </script>
 
-<h1 class="text-left text-background text-7xl font-extrabold capitalize">
+<h1 class="text-left text-background text-7xl font-extrabold capitalize w-page">
     {#if $userQuery.isSuccess}
         <span class="font-normal text-4xl">Welcome</span><br>{
             $userQuery.data.displayName
@@ -25,7 +25,9 @@
     {/if}
 </h1>
 
-<h2 class="my-10 font-semibold text-3xl text-background">Recent Documents</h2>
+<h2 class="my-10 font-semibold text-3xl text-background w-page">
+    Recent Documents
+</h2>
 
 <div class="flex flex-wrap gap-18 justify-between mb-24 w-page">
     <!--
