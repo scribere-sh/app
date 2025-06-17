@@ -14,11 +14,11 @@
 <Card.Root class="flex flex-row items-center gap-2 animate-in fade-in">
     <div class="w-96">
         <Card.Header>
-            <Card.Title>
+            <Card.Title class="">
                 Sign In
             </Card.Title>
             <Card.Description>
-                Or use the providers to the right if you linked them.
+                Or use a provider if it is linked to your profile
             </Card.Description>
         </Card.Header>
         <Card.Content>
@@ -41,7 +41,7 @@
     <Button
         href={route("/auth/register")}
         variant="link"
-        class="text-foreground w-full"
+        class="text-background w-full"
     >
         Register
     </Button>
@@ -49,7 +49,7 @@
     <Button
         href={route("/auth/change-password")}
         variant="link"
-        class="text-foreground w-full"
+        class="text-background w-full"
     >
         Forgot Password?
     </Button>

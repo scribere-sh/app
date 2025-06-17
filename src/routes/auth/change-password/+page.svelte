@@ -30,7 +30,7 @@
     <Button
         href={route("/auth/sign-in")}
         variant="link"
-        class="text-foreground w-full"
+        class="text-background w-full"
     >
         Sign In
     </Button>
