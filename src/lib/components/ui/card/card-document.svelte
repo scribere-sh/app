@@ -3,13 +3,15 @@
         documentName: string;
         teamName: string;
         spaceName: string;
-        // teamId: string;
-        // spaceId: string;
-        // pageId: string;
+        teamId: string;
+        spaceId: string;
+        pageId: string;
     }
 </script>
 
 <script lang="ts">
+    import { route } from "$lib/routes";
+
     import * as Card from ".";
 
     import Boxes from "@lucide/svelte/icons/boxes";
@@ -19,12 +21,16 @@
         documentName,
         spaceName,
         teamName,
-        // teamId,
-        // spaceId,
-        // pageId
+        teamId,
+        spaceId,
+        pageId,
     }: DescriptionProps = $props();
 </script>
-<a href="#" class="no-underline group">
+
+<a
+    href={route("/space/[spaceId=uid]/page/[pageId=uid]", { spaceId, pageId })}
+    class="no-underline group"
+>
     <Card.Root class="w-65 flex flex-col hover:bg-foreground/100">
         <Card.Header>
             <Card.Title class="group-hover:underline">{
@@ -34,7 +40,9 @@
         <Card.Content class="mt-8">
             <div class="inline-flex flex-col gap-2">
                 <a
-                    href="#"
+                    href={route("/space/[spaceId=uid]", {
+                        spaceId,
+                    })}
                     class="inline-flex items-center gap-2 no-underline hover:underline"
                 >
                     <Users />
@@ -42,7 +50,7 @@
                 </a>
 
                 <a
-                    href="#"
+                    href={route("/teams/[teamId=uid]", { teamId })}
                     class="inline-flex items-center gap-2 no-underline hover:underline"
                 >
                     <Boxes />

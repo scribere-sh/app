@@ -80,7 +80,7 @@
     });
 </script>
 
-<h1 class="text-3xl mb-8">
+<h1 class="text-3xl mb-8 text-background">
     {#if $pageQuery.data}
         {$pageQuery.data.title}
     {:else}

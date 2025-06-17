@@ -9,11 +9,7 @@
 <script lang="ts">
     import { api, createQuery } from "$lib/hc";
 
-    import BookOpen from "@lucide/svelte/icons/book-open";
-    import ClockPlus from "@lucide/svelte/icons/clock-plus";
-
     import * as Card from "$ui/card";
-    import { route } from "$lib/routes";
     
     const {
         teamId
@@ -32,23 +28,13 @@
 <div class="w-page flex flex-row flex-wrap gap-4">
     {#if $spacesQuery.data}
         {#each $spacesQuery.data as space (space.id)}
-            <a class="no-underline group" href={route("/space/[spaceId=uid]/page/[pageId=uid]", { spaceId: space.id, pageId: space.homepage })}>
-                <Card.Root>
-                    <Card.Header>
-                        <Card.Title class="group-hover:underline">
-                            {space.title}
-                        </Card.Title>
-                    </Card.Header>
-                    <Card.Content>
-                        <div class="w-full inline-flex flex-row gap-2">
-                            <BookOpen /> {space.pageCount}
-                        </div>
-                        <div class="w-full inline-flex flex-row gap-2">
-                            <ClockPlus /> {new Date(space.createdAt).toLocaleString()}
-                        </div>
-                    </Card.Content>
-                </Card.Root>
-            </a>
+            <Card.Space 
+                spaceId={space.id}
+                spaceName={space.title}
+                homePageId={space.homepage}
+                pageCount={space.pageCount}
+                lastUpdated={new Date(space.createdAt)}
+            />
         {/each}
     {:else}
         loading...

@@ -29,7 +29,7 @@
 
 <main class="w-page flex flex-col items-start justify-center gap-2">
     {#if $teamQuery.isSuccess}
-        <h1 class="text-4xl w-full font-bold">{$teamQuery.data.displayName}</h1>
+        <h1 class="text-4xl w-full font-bold text-background">{$teamQuery.data.displayName}</h1>
         <!-- <h2 class="text-2xl w-full opacity-65">@{$teamQuery.data.handle}</h2> -->
     {:else}
         <Skeleton class="w-2/3 h-9 mt-[--spacing(calc(2/2.5))]" />

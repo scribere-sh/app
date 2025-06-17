@@ -4,14 +4,12 @@
     import CreateTeamCard from "./create-new-team.svelte";
     import TeamCard from "./team-card.svelte";
 
-    import { Space } from "$ui/card";
-
     const teamsQuery = createQuery({
         endpoint: api.teams.getUserTeams,
     });
 </script>
 
-<h1 class="text-2xl">
+<h1 class="text-2xl w-page mb-8 text-background">
     Teams
 </h1>
 
@@ -26,11 +24,3 @@
         <CreateTeamCard />
     {/if}
 </div>
-
-<Space
-    spaceName="Space Name"
-    spaceId=""
-    homePageId=""
-    pageCount={1}
-    lastUpdated={new Date("2025-06-10T00:22:37Z")}
-/>

@@ -47,7 +47,7 @@
 {/snippet}
 
 <aside class={cn(
-    "w-80 h-screen overflow-hidden fixed top-0 transition-transform bg-black/30 border-r-primary/50 border-r",
+    "w-80 h-screen overflow-hidden fixed top-0 transition-transform bg-[#354350] border-r-primary/50 border-r",
     sidebarOpen ? "left-sidebar" : "-left-sidebar"
 )}>
     <h1 class="text-2xl overflow-ellipsis overflow-hidden mx-6 mt-6">

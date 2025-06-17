@@ -11,6 +11,9 @@
 export const PAGES = {
     "/": `/`,
     "/account/settings": `/account/settings`,
+    "/space/[spaceId=uid]": (params: { spaceId: ExtractParamType<typeof import("../params/uid.ts").match> }) => {
+        return `/space/${params["spaceId"]}`;
+    },
     "/space/[spaceId=uid]/page/[pageId=uid]": (
         params: {
             spaceId: ExtractParamType<typeof import("../params/uid.ts").match>;
@@ -166,6 +169,7 @@ export type KIT_ROUTES = {
     PAGES: {
         "/": never;
         "/account/settings": never;
+        "/space/[spaceId=uid]": "spaceId";
         "/space/[spaceId=uid]/page/[pageId=uid]": "spaceId" | "pageId";
         "/teams": never;
         "/teams/[teamId=uid]": "teamId";
