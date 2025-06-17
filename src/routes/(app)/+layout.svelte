@@ -27,7 +27,7 @@
     <main class="bg-transparent h-screen z-10 overflow-y-auto min-h-screen w-screen pl-sidebar justify-start gap-12 pt-content-top text-foreground">
         <Swirl class="fixed inset-0 z-0 mt-30 pointer-events-none" />
 
-        <div class="relative z-10 mx-60">
+        <div class="relative z-10 flex flex-col items-center">
             {@render children()}
         </div>
     </main>

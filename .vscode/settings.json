@@ -31,5 +31,12 @@
     "tailwindCSS.emmetCompletions": true,
 
     "eslint.useFlatConfig": true,
-    "eslint.validate": ["javascript", "typescript", "svelte"]
+    "eslint.validate": [
+        "javascript",
+        "typescript",
+        "svelte"
+    ],
+    "[sql]": {
+        "editor.defaultFormatter": "cweijan.vscode-database-client2"
+    }
 }

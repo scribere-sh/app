@@ -3,24 +3,38 @@ import type { PageLoad } from "./$types";
 import { api, prefetchQuery } from "$lib/hc";
 
 export const load: PageLoad = async (event) => {
+    const { teamId } = event.params;
     const { client } = await event.parent();
 
-    await prefetchQuery({
-        client,
-        endpoint: api.teams.getTeamDetails,
-        input: {
-            query: {
-                team: event.params.teamId,
+    await Promise.all([
+        prefetchQuery({
+            client,
+            endpoint: api.teams.getTeamDetails,
+            input: {
+                query: {
+                    team: teamId,
+                },
             },
-        },
-        options: {
-            fetch: event.fetch,
-        },
-    });
+            options: {
+                fetch: event.fetch,
+            },
+        }),
+        prefetchQuery({
+            client,
+            endpoint: api.teams.getSpaces,
+            input: {
+                query: {
+                    team: teamId
+                }
+            },
+            options: {
+                fetch: event.fetch
+            }
+        })
+    ]);
 
     return {
-        // note: if server data gets loaded here, uncomment this or no data will be given to the component.
-        // ...event.data,
+        ...event.data,
         teamId: event.params.teamId,
     };
 };

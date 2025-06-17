@@ -1,0 +1,766 @@
+{
+    "version": "6",
+    "dialect": "sqlite",
+    "id": "869f24ed-d6da-408c-8163-9fdb93f0de74",
+    "prevId": "3da9c43b-383e-4c1d-81ed-e4a21a8ad0b9",
+    "tables": {
+        "changePasswordChallenges": {
+            "name": "changePasswordChallenges",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "blob",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "userId": {
+                    "name": "userId",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "challengeVerifier": {
+                    "name": "challengeVerifier",
+                    "type": "blob",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "emailRef": {
+                    "name": "emailRef",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "expires": {
+                    "name": "expires",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {
+                "idChangePasswordChallengesTableUniqueIndex": {
+                    "name": "idChangePasswordChallengesTableUniqueIndex",
+                    "columns": [
+                        "id"
+                    ],
+                    "isUnique": true
+                }
+            },
+            "foreignKeys": {
+                "changePasswordChallenges_userId_users_id_fk": {
+                    "name": "changePasswordChallenges_userId_users_id_fk",
+                    "tableFrom": "changePasswordChallenges",
+                    "tableTo": "users",
+                    "columnsFrom": [
+                        "userId"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "oauthProviders": {
+            "name": "oauthProviders",
+            "columns": {
+                "userId": {
+                    "name": "userId",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "provider": {
+                    "name": "provider",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "providerUserId": {
+                    "name": "providerUserId",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "oauthProviders_userId_users_id_fk": {
+                    "name": "oauthProviders_userId_users_id_fk",
+                    "tableFrom": "oauthProviders",
+                    "tableTo": "users",
+                    "columnsFrom": [
+                        "userId"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "composite": {
+                    "columns": [
+                        "userId",
+                        "provider"
+                    ],
+                    "name": "composite"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "passwords": {
+            "name": "passwords",
+            "columns": {
+                "userId": {
+                    "name": "userId",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "hash": {
+                    "name": "hash",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {
+                "userIdPasswordTableUniqueIndex": {
+                    "name": "userIdPasswordTableUniqueIndex",
+                    "columns": [
+                        "userId"
+                    ],
+                    "isUnique": true
+                }
+            },
+            "foreignKeys": {
+                "passwords_userId_users_id_fk": {
+                    "name": "passwords_userId_users_id_fk",
+                    "tableFrom": "passwords",
+                    "tableTo": "users",
+                    "columnsFrom": [
+                        "userId"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "totpSecrets": {
+            "name": "totpSecrets",
+            "columns": {
+                "userId": {
+                    "name": "userId",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "secret": {
+                    "name": "secret",
+                    "type": "blob",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "inUse": {
+                    "name": "inUse",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "recoveryKey": {
+                    "name": "recoveryKey",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {
+                "userIdTotpSecretTableUniqueIndex": {
+                    "name": "userIdTotpSecretTableUniqueIndex",
+                    "columns": [
+                        "userId"
+                    ],
+                    "isUnique": true
+                }
+            },
+            "foreignKeys": {
+                "totpSecrets_userId_users_id_fk": {
+                    "name": "totpSecrets_userId_users_id_fk",
+                    "tableFrom": "totpSecrets",
+                    "tableTo": "users",
+                    "columnsFrom": [
+                        "userId"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "emailAddresses": {
+            "name": "emailAddresses",
+            "columns": {
+                "userId": {
+                    "name": "userId",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "email": {
+                    "name": "email",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "isVerified": {
+                    "name": "isVerified",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {
+                "userIdIndex": {
+                    "name": "userIdIndex",
+                    "columns": [
+                        "userId"
+                    ],
+                    "isUnique": false
+                },
+                "emailUniqueIndex": {
+                    "name": "emailUniqueIndex",
+                    "columns": [
+                        "lower(\"email\")"
+                    ],
+                    "isUnique": true
+                }
+            },
+            "foreignKeys": {
+                "emailAddresses_userId_users_id_fk": {
+                    "name": "emailAddresses_userId_users_id_fk",
+                    "tableFrom": "emailAddresses",
+                    "tableTo": "users",
+                    "columnsFrom": [
+                        "userId"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "emailOnboardings": {
+            "name": "emailOnboardings",
+            "columns": {
+                "email": {
+                    "name": "email",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "challenge": {
+                    "name": "challenge",
+                    "type": "blob",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "emailRef": {
+                    "name": "emailRef",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "expires": {
+                    "name": "expires",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {
+                "emailValidationExpirationIndex": {
+                    "name": "emailValidationExpirationIndex",
+                    "columns": [
+                        "expires"
+                    ],
+                    "isUnique": false
+                },
+                "emailValidationsUniqueIndex": {
+                    "name": "emailValidationsUniqueIndex",
+                    "columns": [
+                        "lower(\"email\")"
+                    ],
+                    "isUnique": true
+                }
+            },
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "emailValidations": {
+            "name": "emailValidations",
+            "columns": {
+                "userId": {
+                    "name": "userId",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "email": {
+                    "name": "email",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "challenge": {
+                    "name": "challenge",
+                    "type": "blob",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "emailRef": {
+                    "name": "emailRef",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "expires": {
+                    "name": "expires",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "pages": {
+            "name": "pages",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "title": {
+                    "name": "title",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "space": {
+                    "name": "space",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "parent": {
+                    "name": "parent",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "lastUpdated": {
+                    "name": "lastUpdated",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "content": {
+                    "name": "content",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "pages_space_spaces_id_fk": {
+                    "name": "pages_space_spaces_id_fk",
+                    "tableFrom": "pages",
+                    "tableTo": "spaces",
+                    "columnsFrom": [
+                        "space"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                },
+                "pages_parent_pages_id_fk": {
+                    "name": "pages_parent_pages_id_fk",
+                    "tableFrom": "pages",
+                    "tableTo": "pages",
+                    "columnsFrom": [
+                        "parent"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "sessionDetails": {
+            "name": "sessionDetails",
+            "columns": {
+                "sessionId": {
+                    "name": "sessionId",
+                    "type": "blob",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "userIdHash": {
+                    "name": "userIdHash",
+                    "type": "blob",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "ip": {
+                    "name": "ip",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "userAgent": {
+                    "name": "userAgent",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "spaces": {
+            "name": "spaces",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "title": {
+                    "name": "title",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "team": {
+                    "name": "team",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "homepage": {
+                    "name": "homepage",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "spaces_team_teams_id_fk": {
+                    "name": "spaces_team_teams_id_fk",
+                    "tableFrom": "spaces",
+                    "tableTo": "teams",
+                    "columnsFrom": [
+                        "team"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "teamUserRelations": {
+            "name": "teamUserRelations",
+            "columns": {
+                "team": {
+                    "name": "team",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "user": {
+                    "name": "user",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "permission": {
+                    "name": "permission",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "teamUserRelations_team_teams_id_fk": {
+                    "name": "teamUserRelations_team_teams_id_fk",
+                    "tableFrom": "teamUserRelations",
+                    "tableTo": "teams",
+                    "columnsFrom": [
+                        "team"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                },
+                "teamUserRelations_user_users_id_fk": {
+                    "name": "teamUserRelations_user_users_id_fk",
+                    "tableFrom": "teamUserRelations",
+                    "tableTo": "users",
+                    "columnsFrom": [
+                        "user"
+                    ],
+                    "columnsTo": [
+                        "id"
+                    ],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "teamUserRelationsAndPermissionsPrimaryKeyIndex": {
+                    "columns": [
+                        "team",
+                        "user",
+                        "permission"
+                    ],
+                    "name": "teamUserRelationsAndPermissionsPrimaryKeyIndex"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "teams": {
+            "name": "teams",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "handle": {
+                    "name": "handle",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "displayName": {
+                    "name": "displayName",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "description": {
+                    "name": "description",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {
+                "tableIdUniqueIndex": {
+                    "name": "tableIdUniqueIndex",
+                    "columns": [
+                        "id"
+                    ],
+                    "isUnique": true
+                },
+                "tableHandleUniqueIndex": {
+                    "name": "tableHandleUniqueIndex",
+                    "columns": [
+                        "handle"
+                    ],
+                    "isUnique": true
+                }
+            },
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "users": {
+            "name": "users",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "handle": {
+                    "name": "handle",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "displayName": {
+                    "name": "displayName",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {
+                "usersIdUniqueIndex": {
+                    "name": "usersIdUniqueIndex",
+                    "columns": [
+                        "id"
+                    ],
+                    "isUnique": true
+                },
+                "usersHandleUniqueIndex": {
+                    "name": "usersHandleUniqueIndex",
+                    "columns": [
+                        "handle"
+                    ],
+                    "isUnique": true
+                }
+            },
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        }
+    },
+    "views": {},
+    "enums": {},
+    "_meta": {
+        "schemas": {},
+        "tables": {},
+        "columns": {}
+    },
+    "internal": {
+        "indexes": {
+            "emailUniqueIndex": {
+                "columns": {
+                    "lower(\"email\")": {
+                        "isExpression": true
+                    }
+                }
+            },
+            "emailValidationsUniqueIndex": {
+                "columns": {
+                    "lower(\"email\")": {
+                        "isExpression": true
+                    }
+                }
+            }
+        }
+    }
+}

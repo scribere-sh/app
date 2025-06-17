@@ -12,6 +12,8 @@
     import { api, createQuery } from "$lib/hc";
     
     import Description from "./description.svelte";
+    import SpaceList from "./space-list.svelte";
+    import CreateSpace from "./create-space.svelte";
 
     const { data }: PageProps = $props();
 
@@ -27,11 +29,11 @@
 
 <main class="w-page flex flex-col items-start justify-center gap-2">
     {#if $teamQuery.isSuccess}
-        <h1 class="text-4xl w-full font-bold">{$teamQuery.data.displayName}</h1>
-        <h2 class="text-2xl w-full opacity-65">@{$teamQuery.data.handle}</h2>
+        <h1 class="text-4xl w-full font-bold text-background">{$teamQuery.data.displayName}</h1>
+        <!-- <h2 class="text-2xl w-full opacity-65">@{$teamQuery.data.handle}</h2> -->
     {:else}
         <Skeleton class="w-2/3 h-9 mt-[--spacing(calc(2/2.5))]" />
-        <Skeleton class="w-1/2 h-6 mt-[--spacing(calc(2/1.5))]" />
+        <!-- <Skeleton class="w-1/2 h-6 mt-[--spacing(calc(2/1.5))]" /> -->
     {/if}
 
     <Tabs.Root value="home" class="w-full mt-4">
@@ -49,7 +51,7 @@
                     <!-- </Card.Header> -->
                     <Card.Content class="flex flex-col items-end">
                         {#if $teamQuery.isSuccess}
-                            <Description description={$teamQuery.data.description} teamId={data.teamId} />
+                            <Description description={$teamQuery.data.description} teamId={data.teamId} canEdit={data.userCanUpdate} />
                         {:else}
                             <Skeleton class="w-2/3 h-6" />
                         {/if}
@@ -124,6 +126,11 @@
                         </Card.Header>
                     </Card.Root>
                 </div>
+            </Tabs.Content>
+
+            <Tabs.Content value="spaces" class="flex flex-col gap-8">
+                <CreateSpace teamId={data.teamId} />
+                <SpaceList teamId={data.teamId} />
             </Tabs.Content>
         </div>
     </Tabs.Root>

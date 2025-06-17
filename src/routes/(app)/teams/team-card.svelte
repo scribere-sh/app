@@ -16,6 +16,7 @@
     import { initials } from "$lib/utils";
 
     import { route } from "$lib/routes";
+
     import BookOpenText from "@lucide/svelte/icons/book-open-text";
     import Users from "@lucide/svelte/icons/users";
 
@@ -37,7 +38,7 @@
     href={route("/teams/[teamId=uid]", { teamId: team.id })}
     class="no-underline group"
 >
-    <Card.Root class="w-96 group-hover:bg-input/50">
+    <Card.Root class="w-96 h-36 group-hover:bg-input/50">
         <Card.Header class="flex flex-row justify-between items-center">
             <div>
                 <Card.Title class="group-hover:underline">
@@ -65,7 +66,7 @@
                 )}
             {@render stat(
                     BookOpenText,
-                    `${spaceCountRand} Space${
+                    `${team.spaceCount} Space${
                         Math.abs(spaceCountRand) === 1 ? "" : "s"
                     }`,
                 )}

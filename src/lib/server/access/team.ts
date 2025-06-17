@@ -5,20 +5,6 @@ import { teamUserRelationsTable } from "$tb/teams";
 
 import { type Permission, PERMISSION_BASE } from "$lib/schema/permission";
 
-export const userIsMemberOfTeam = async (userId: string, teamId: string) => {
-    return (
-        await db.query
-            .$count(
-                teamUserRelationsTable,
-                and(
-                    eq(teamUserRelationsTable.team, teamId),
-                    eq(teamUserRelationsTable.user, userId),
-                    eq(teamUserRelationsTable.permission, PERMISSION_BASE),
-                ),
-            )
-    ) > 0;
-};
-
 export const userHasPermissionInTeam = async (userId: string, teamId: string, permission: Permission) => {
     return (
         await db.query
@@ -32,3 +18,6 @@ export const userHasPermissionInTeam = async (userId: string, teamId: string, pe
             )
     ) > 0;
 };
+
+export const userIsMemberOfTeam = (userId: string, teamId: string) =>
+    userHasPermissionInTeam(userId, teamId, PERMISSION_BASE);

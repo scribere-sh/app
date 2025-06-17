@@ -220,16 +220,19 @@
                 }
             }}
         >
-            <Select.Trigger placeholder="Unknown" class="w-48">
+            <Select.Trigger
+                placeholder="Unknown"
+                class="w-48 text-background placeholder:text-background/75"
+            >
                 {
                     currentActiveBlockHumanReadable(
                         currentActiveBlock,
                     )
                 }
             </Select.Trigger>
-            <Select.Content class="">
+            <Select.Content>
                 <Select.Group>
-                    <Select.Item value="h1">
+                    <Select.Item value="h1" class="text-foreground">
                         {
                             currentActiveBlockHumanReadable(
                                 "h1",
@@ -320,7 +323,7 @@
 <div
     class={cn(
         "prose dark:prose-invert",
-        "prose-headings:text-primary prose-p:text-primary/90 prose-em:text-primary/90 prose-strong:text-primary/90",
+        "prose-headings:text-background prose-p:text-background/90 prose-em:text-background/90 prose-strong:text-background/90",
         "whitespace-pre-wrap max-w-full w-full active:border-0",
     )}
     bind:this={editorRef}

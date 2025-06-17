@@ -11,6 +11,17 @@
 export const PAGES = {
     "/": `/`,
     "/account/settings": `/account/settings`,
+    "/space/[spaceId=uid]": (params: { spaceId: ExtractParamType<typeof import("../params/uid.ts").match> }) => {
+        return `/space/${params["spaceId"]}`;
+    },
+    "/space/[spaceId=uid]/page/[pageId=uid]": (
+        params: {
+            spaceId: ExtractParamType<typeof import("../params/uid.ts").match>;
+            pageId: ExtractParamType<typeof import("../params/uid.ts").match>;
+        },
+    ) => {
+        return `/space/${params["spaceId"]}/page/${params["pageId"]}`;
+    },
     "/teams": `/teams`,
     "/teams/[teamId=uid]": (params: { teamId: ExtractParamType<typeof import("../params/uid.ts").match> }) => {
         return `/teams/${params["teamId"]}`;
@@ -158,6 +169,8 @@ export type KIT_ROUTES = {
     PAGES: {
         "/": never;
         "/account/settings": never;
+        "/space/[spaceId=uid]": "spaceId";
+        "/space/[spaceId=uid]/page/[pageId=uid]": "spaceId" | "pageId";
         "/teams": never;
         "/teams/[teamId=uid]": "teamId";
         "/auth/change-password": never;
@@ -177,5 +190,5 @@ export type KIT_ROUTES = {
         "default /auth/sign-in": never;
     };
     LINKS: Record<string, never>;
-    Params: { "teamId": never };
+    Params: { "spaceId": never; "pageId": never; "teamId": never };
 };

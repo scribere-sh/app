@@ -56,3 +56,7 @@ export const censorEmail = (email: string): string => {
             email.substring(atSymbolPos),
         );
 };
+
+export type Unpack<T> = {
+    [K in keyof T]: T[K] extends object ? Unpack<T[K]> : T[K];
+};

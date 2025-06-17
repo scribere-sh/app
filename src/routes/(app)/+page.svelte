@@ -4,7 +4,7 @@
     // import Button, { buttonVariants } from "$ui/button";
     import { LoadingSpinner } from "$ui/loading-spinner";
 
-    import { Document } from "$ui/card";
+    // import { Document } from "$ui/card";
 
     import { api, createQuery } from "$lib/hc";
 
@@ -27,76 +27,12 @@
 
 <h2 class="my-10 font-semibold text-3xl text-background">Recent Documents</h2>
 
-<div class="flex flex-wrap gap-18 justify-between mb-24">
-    <Document
-        documentName="Document Name"
-        teamName="Team Name"
-        spaceName="Space Name"
-    />
-
-    <Document
-        documentName="Document Name"
-        teamName="Team Name"
-        spaceName="Space Name"
-    />
-
-    <Document
-        documentName="Document Name"
-        teamName="Team Name"
-        spaceName="Space Name"
-    />
-
-    <Document
-        documentName="Document Name"
-        teamName="Team Name"
-        spaceName="Space Name"
-    />
-
-    <Document
-        documentName="Document Name"
-        teamName="Team Name"
-        spaceName="Space Name"
-    />
-
-    <Document
-        documentName="Document Name"
-        teamName="Team Name"
-        spaceName="Space Name"
-    />
-
-    <Document
-        documentName="Document Name"
-        teamName="Team Name"
-        spaceName="Space Name"
-    />
-
-    <Document
-        documentName="Document Name"
-        teamName="Team Name"
-        spaceName="Space Name"
-    />
-
-    <Document
-        documentName="Document Name"
-        teamName="Team Name"
-        spaceName="Space Name"
-    />
-
-    <Document
-        documentName="Document Name"
-        teamName="Team Name"
-        spaceName="Space Name"
-    />
-
-    <Document
-        documentName="Document Name"
-        teamName="Team Name"
-        spaceName="Space Name"
-    />
-
-    <Document
-        documentName="Document Name"
-        teamName="Team Name"
-        spaceName="Space Name"
-    />
+<div class="flex flex-wrap gap-18 justify-between mb-24 w-page">
+    <!--
+        <Document
+            documentName="Document Name"
+            teamName="Team Name"
+            spaceName="Space Name"
+        />
+    -->
 </div>
