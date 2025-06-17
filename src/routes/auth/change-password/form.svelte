@@ -97,6 +97,7 @@
                 </div>
 
                 <Input
+                    class="text-foreground"
                     {...props}
                     disabled={disabled || success}
                     error={$errors.email !== undefined}
@@ -111,7 +112,10 @@
         </Form.Control>
     </Form.Field>
 
-    <Form.Button disabled={disabled || success} class="w-full">
+    <Form.Button
+        disabled={disabled || success}
+        class="w-full bg-foreground text-background hover:bg-background hover:text-foreground"
+    >
         {#if success}
             Check your Inbox!
         {:else if disabled}

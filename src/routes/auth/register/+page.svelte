@@ -39,7 +39,7 @@
             Enter your email address below to get started
         </Card.Description>
     </Card.Header>
-    <Card.Content class="w-96">
+    <Card.Content class="w-96 text-foreground">
         <RegisterForm {form} {csrf} {accepting} />
     </Card.Content>
 </Card.Root>
@@ -48,7 +48,7 @@
     <Button
         href={route("/auth/sign-in")}
         variant="link"
-        class="text-foreground w-full"
+        class="text-background w-full"
     >
         Sign In
     </Button>

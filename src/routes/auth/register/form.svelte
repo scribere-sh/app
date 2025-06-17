@@ -89,7 +89,7 @@
         <Form.Field {form} name="email">
             <Form.Control>
                 {#snippet children({ props })}
-                    <div class="flex h-6 items-center justify-between">
+                    <div class="flex h-6 items-center justify-between text-background">
                         <Form.Label
                             error={$errors.email !== undefined
                             || !accepting}
@@ -137,7 +137,7 @@
 
         <Form.Button
             disabled={disabled || success || !accepting}
-            class="w-full"
+            class="w-full bg-foreground text-background hover:bg-background hover:text-foreground"
         >
             {#if disabled}
                 <LoadingSpinner class="stroke-background" />

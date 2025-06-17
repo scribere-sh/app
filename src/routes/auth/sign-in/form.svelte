@@ -123,7 +123,10 @@
         </Form.Control>
     </Form.Field>
 
-    <Form.Button {disabled} class="w-full">
+    <Form.Button
+        {disabled}
+        class="w-full bg-foreground text-background hover:bg-background hover:text-foreground"
+    >
         {#if disabled}
             <LoadingSpinner class="stroke-background" />
         {:else}
