@@ -14,6 +14,7 @@
     import Description from "./description.svelte";
     import SpaceList from "./space-list.svelte";
     import CreateSpace from "./create-space.svelte";
+    import Management from "./management.svelte";
 
     const { data }: PageProps = $props();
 
@@ -37,10 +38,13 @@
     {/if}
 
     <Tabs.Root value="home" class="w-full mt-4">
-        <Tabs.List class="w-2/3">
+        <Tabs.List class="w-full">
             <Tabs.Trigger value="home">Home</Tabs.Trigger>
             <Tabs.Trigger value="spaces">Spaces</Tabs.Trigger>
             <Tabs.Trigger value="files">Files</Tabs.Trigger>
+            {#if data.userIsOwner}
+                <Tabs.Trigger value="permissions">Members & Permissions</Tabs.Trigger>
+            {/if}
         </Tabs.List>
 
         <div class="mt-8 w-full">
@@ -131,6 +135,28 @@
             <Tabs.Content value="spaces" class="flex flex-col gap-8">
                 <CreateSpace teamId={data.teamId} />
                 <SpaceList teamId={data.teamId} />
+            </Tabs.Content>
+
+            <Tabs.Content value="files" class="flex flex-col gap-8">
+                <Card.Root>
+                    <!-- <Card.Header>
+                        <Card.Title>Files</Card.Title>
+                    </Card.Header> -->
+                    <Card.Content>
+                        {#each [1,2,3,4,5,6,7,8,9,10] as i (i)}
+                            <div class="flex flex-row items-center gap-8 h-10 group hover:bg-foreground/20 hover:ring-2 ring-background/80 p-8 rounded-md cursor-pointer">
+                                <div class="font-bold group-hover:font-black">Asset #{i}</div>
+                                <div class="flex-[1_1_auto] transition-colors group-hover:border-2 border-background/75"></div>
+                                <div class="group-hover:font-black">Last Access 2 days ago</div>
+                            </div>
+                        {/each}
+                    </Card.Content>
+                </Card.Root>
+
+            </Tabs.Content>
+
+            <Tabs.Content value="permissions">
+                <Management teamId={data.teamId} />
             </Tabs.Content>
         </div>
     </Tabs.Root>

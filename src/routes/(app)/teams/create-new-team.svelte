@@ -1,4 +1,9 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
+    import { api, createPostMutation } from "$lib/hc";
+    import { route } from "$lib/routes";
+    import { debounce } from "$lib/utils";
+
     import * as AlertDialog from "$ui/alert-dialog";
     import * as Card from "$ui/card";
     import { Input } from "$ui/input";
@@ -8,17 +13,41 @@
 
     const uid = $props.id();
 
+    let open = $state(false);
+
     let newTeamName = $state("");
+    let newTeamNameValid = $derived(newTeamName.length > 0);
+
+    const createTeamMutation = createPostMutation({
+        endpoint: api.teams.create,
+    });
+
+    const onCreateNewTeam = async () => {
+        if (!newTeamNameValid) return;
+
+        const { teamId } = await $createTeamMutation.mutateAsync({
+            json: {
+                name: newTeamName,
+            },
+        });
+
+        goto(route("/teams/[teamId=uid]", { teamId }));
+    };
+
+    const onCancel = () => {
+        open = false;
+        newTeamName = "";
+    };
 </script>
 
-<AlertDialog.Root>
+<AlertDialog.Root bind:open>
     <AlertDialog.Trigger>
         <Card.Root class="w-96 h-36 group hover:bg-input/50 cursor-pointer">
             <Card.Content
                 class="flex flex-col gap-2 items-center justify-center"
             >
                 <Plus class="size-16 opacity-50" />
-                <div>Create a Space</div>
+                <div>Create a Team</div>
             </Card.Content>
         </Card.Root>
     </AlertDialog.Trigger>
@@ -33,13 +62,20 @@
                 id="{uid}-team-name"
                 type="text"
                 placeholder="Team Rocket"
+                disabled={$createTeamMutation.isPending}
                 bind:value={newTeamName}
             />
         </div>
 
         <AlertDialog.Footer>
-            <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-            <AlertDialog.Action>Create</AlertDialog.Action>
+            <AlertDialog.Cancel
+                disabled={$createTeamMutation.isPending}
+                onclick={debounce(onCancel, 100)}
+            >Cancel</AlertDialog.Cancel>
+            <AlertDialog.Action
+                disabled={$createTeamMutation.isPending}
+                onclick={debounce(onCreateNewTeam, 100)}
+            >Create</AlertDialog.Action>
         </AlertDialog.Footer>
     </AlertDialog.Content>
 </AlertDialog.Root>

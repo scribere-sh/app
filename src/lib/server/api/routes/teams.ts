@@ -4,18 +4,21 @@ import type { Env } from "../hono-kit";
 
 import { db } from "$srv/db";
 import { teamsTable, teamUserRelationsTable } from "$tb/teams";
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, inArray, or } from "drizzle-orm";
 
 import {
+    type Permission,
     PERMISSION_BASE,
-    PERMISSION_SPACE_OWNER,
+    PERMISSION_TEAM_OWNER,
     PERMISSION_UPDATE_TEAM,
     PERMISSION_WRITE_SPACE,
+    Permissions,
 } from "$lib/schema/permission";
 import { UidSchema } from "$lib/schema/uid";
 import { generateUid } from "$lib/uid";
 import { accessControl } from "$srv/access";
 import { userHasPermissionInTeam, userIsMemberOfTeam } from "$srv/access/team";
+import { emailAddressesTable, emailLowerCase } from "$srv/db/schema/email";
 import { pagesTable } from "$srv/db/schema/page";
 import { spacesTable } from "$srv/db/schema/space";
 import { usersTable } from "$srv/db/schema/user";
@@ -237,7 +240,7 @@ export default new Hono<Env>()
         arktypeValidator(
             "query",
             type({
-                team: "/[a-zA-Z0-9]/",
+                team: "/^[a-zA-Z0-9]+$/",
             }),
         ),
         arktypeValidator(
@@ -323,11 +326,270 @@ export default new Hono<Env>()
                             user: userId,
                         },
                         {
-                            permission: PERMISSION_SPACE_OWNER,
+                            permission: PERMISSION_TEAM_OWNER,
                             team: teamId,
                             user: userId,
                         },
                     ]),
             ]);
+
+            return c.json({
+                teamId,
+            });
+        },
+    )
+    .get(
+        "/userPermissions",
+        arktypeValidator(
+            "query",
+            type({
+                team: "/^[a-zA-Z0-9]+$/",
+            }),
+        ),
+        async (c) => {
+            const userId = c.get("user").id;
+            const teamId = c.req.valid("query").team;
+
+            await accessControl(
+                () =>
+                    userHasPermissionInTeam(
+                        userId,
+                        teamId,
+                        PERMISSION_TEAM_OWNER,
+                    ),
+            );
+
+            const permissionList = await db.query
+                .select({
+                    userId: teamUserRelationsTable.user,
+                    permission: teamUserRelationsTable.permission,
+                })
+                .from(teamUserRelationsTable)
+                .where(
+                    eq(
+                        teamUserRelationsTable.team,
+                        teamId,
+                    ),
+                );
+
+            const usersInTeam = [...new Set(permissionList.map(tup => tup.userId))];
+
+            const usersQuery = await db.query
+                .select({
+                    id: usersTable.id,
+                    displayName: usersTable.displayName,
+                    handle: usersTable.handle,
+                })
+                .from(usersTable)
+                .where(
+                    inArray(
+                        usersTable.id,
+                        usersInTeam,
+                    ),
+                );
+
+            const usersWithPermissions = usersQuery
+                .map((obj) => {
+                    return {
+                        ...obj,
+                        permissions: permissionList.filter(p => p.userId === obj.id).map(p => p.permission),
+                    };
+                });
+
+            return c.json(usersWithPermissions);
+        },
+    )
+    .post(
+        "/addUser",
+        arktypeValidator(
+            "query",
+            type({
+                team: "/^[a-zA-Z0-9]+$/",
+            }),
+        ),
+        arktypeValidator(
+            "json",
+            type({
+                identifier: "3 < string < 128",
+            }),
+        ),
+        async (c) => {
+            const requestingUserId = c.get("user").id;
+            const teamId = c.req.valid("query").team;
+
+            await accessControl(
+                () =>
+                    userHasPermissionInTeam(
+                        requestingUserId,
+                        teamId,
+                        PERMISSION_TEAM_OWNER,
+                    ),
+            );
+
+            const identifier = c.req.valid("json").identifier;
+
+            const [potentialUser] = await db.query
+                .select({
+                    userId: usersTable.id,
+                })
+                .from(usersTable)
+                .leftJoin(emailAddressesTable, eq(usersTable.id, emailAddressesTable.userId))
+                .where(
+                    or(
+                        eq(
+                            emailLowerCase(emailAddressesTable.email),
+                            identifier.toLowerCase(),
+                        ),
+                        eq(usersTable.handle, identifier),
+                    ),
+                );
+
+            if (!potentialUser) {
+                throw new HTTPException(404, { message: "User not found" });
+            }
+
+            const { userId } = potentialUser;
+
+            await db.query
+                .insert(teamUserRelationsTable)
+                .values({
+                    team: teamId,
+                    user: userId,
+                    permission: PERMISSION_BASE,
+                });
+
+            return c.json({
+                added: userId,
+            });
+        },
+    )
+    .post(
+        "/updatePermissions",
+        arktypeValidator(
+            "query",
+            type({
+                team: "/^[a-zA-Z0-9]+$/",
+            }),
+        ),
+        arktypeValidator(
+            "json",
+            type({
+                user: "/^[a-zA-Z0-9]+$/",
+                permission: "/^[a-z:]+$/",
+                enabled: "boolean",
+            }),
+        ),
+        async (c) => {
+            const requestingUserId = c.get("user").id;
+            const teamId = c.req.valid("query").team;
+
+            await accessControl(
+                () =>
+                    userHasPermissionInTeam(
+                        requestingUserId,
+                        teamId,
+                        PERMISSION_TEAM_OWNER,
+                    ),
+            );
+
+            const {
+                user,
+                permission,
+                enabled,
+            } = c.req.valid("json");
+
+            const CannotUpdatePermissionList = [PERMISSION_TEAM_OWNER];
+
+            if (!Permissions.includes(permission as Permission) && !CannotUpdatePermissionList.includes(permission)) {
+                throw new HTTPException(400, { message: "Invalid Permission" });
+            }
+
+            const userCountWithThisId = await db.query.$count(usersTable, eq(usersTable.id, user));
+
+            if (userCountWithThisId === 0) {
+                throw new HTTPException(404, { message: "No user found" });
+            }
+
+            let updated = false;
+
+            if (enabled) {
+                // insert
+                try {
+                    await db.query
+                        .insert(teamUserRelationsTable)
+                        .values({
+                            team: teamId,
+                            user,
+                            permission: permission as Permission,
+                        });
+
+                    updated = true;
+                } catch (e) {
+                    console.warn(e);
+                    // ignore error, it probably just because of a duplicate which we can ignore
+                }
+            } else {
+                // delete
+                const { length: deletedCount } = await db.query
+                    .delete(teamUserRelationsTable)
+                    .where(
+                        and(
+                            eq(teamUserRelationsTable.team, teamId),
+                            eq(teamUserRelationsTable.user, user),
+                            eq(teamUserRelationsTable.permission, permission as Permission),
+                        ),
+                    )
+                    .returning();
+
+                updated = deletedCount > 0;
+            }
+
+            return c.json({
+                updated,
+                newState: enabled,
+            });
+        },
+    )
+    .delete(
+        "/removeUser",
+        arktypeValidator(
+            "query",
+            type({
+                team: "/^[a-zA-Z0-9]+$/",
+            }),
+        ),
+        arktypeValidator(
+            "json",
+            type({
+                user: "/^[a-zA-Z0-9]+$/",
+            }),
+        ),
+        async (c) => {
+            const requestingUserId = c.get("user").id;
+            const teamId = c.req.valid("query").team;
+
+            await accessControl(
+                () =>
+                    userHasPermissionInTeam(
+                        requestingUserId,
+                        teamId,
+                        PERMISSION_TEAM_OWNER,
+                    ),
+            );
+
+            const user = c.req.valid("json").user;
+
+            await db.query
+                .delete(teamUserRelationsTable)
+                .where(
+                    and(
+                        eq(teamUserRelationsTable.team, teamId),
+                        eq(teamUserRelationsTable.user, user),
+                    ),
+                );
+
+            return c.json({
+                removed: user,
+            });
         },
     );
