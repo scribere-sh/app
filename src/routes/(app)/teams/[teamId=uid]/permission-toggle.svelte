@@ -37,7 +37,7 @@
                     team: teamId 
                 },
                 json: {
-                    enabled: potentiallyEnabled,
+                    enabled: !potentiallyEnabled,
                     user: userId,
                     permission
                 }
