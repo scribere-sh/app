@@ -26,7 +26,7 @@ import { arktypeValidator } from "@hono/arktype-validator";
 import { type } from "arktype";
 import { HTTPException } from "hono/http-exception";
 
-const EMPTY_DOC = { type: "doc", content: {} };
+const EMPTY_DOC = { type: "doc", content: [] };
 
 export default new Hono<Env>()
     .get("/getUserTeams", async (c) => {

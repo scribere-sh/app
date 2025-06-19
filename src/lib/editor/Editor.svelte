@@ -324,7 +324,7 @@
     class={cn(
         "prose dark:prose-invert",
         "prose-headings:text-background prose-p:text-background/90 prose-em:text-background/90 prose-strong:text-background/90",
-        "whitespace-pre-wrap max-w-full w-full active:border-0",
+        "whitespace-pre-wrap max-w-full w-full min-h-16 active:border-0 z-50",
     )}
     bind:this={editorRef}
 >
