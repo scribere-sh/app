@@ -9,7 +9,7 @@
     });
 </script>
 
-<h1 class="text-2xl w-page mb-8 text-background">
+<h1 class="font-normal text-4xl w-page mb-8 text-background">
     Teams
 </h1>
 
