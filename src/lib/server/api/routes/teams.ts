@@ -332,6 +332,10 @@ export default new Hono<Env>()
                         },
                     ]),
             ]);
+
+            return c.json({
+                teamId,
+            });
         },
     )
     .get(
