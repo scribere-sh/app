@@ -57,15 +57,15 @@
     </AlertDialog.Trigger>
     <AlertDialog.Content>
         <AlertDialog.Header>
-            <AlertDialog.Title class="text-foreground text-2xl"
+            <AlertDialog.Title class="text-background text-2xl"
             >Create a Team</AlertDialog.Title>
         </AlertDialog.Header>
 
         <div class="w-4/5 flex flex-col py-8 px-2 mx-auto gap-4">
-            <Label class="text-foreground" for="{uid}-team-name"
+            <Label class="text-background" for="{uid}-team-name"
             >Team Name</Label>
             <Input
-                class="text-background bg-foreground"
+                class="text-foreground bg-background"
                 id="{uid}-team-name"
                 type="text"
                 placeholder="Team Rocket"

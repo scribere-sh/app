@@ -11,7 +11,7 @@
     let {
         ref = $bindable(null),
         class: className,
-        variant,
+        variant = "confirm",
         size,
         ...rest
     }: AlertDialogPrimitive.ActionProps & {
