@@ -42,23 +42,30 @@
 
 <AlertDialog.Root bind:open>
     <AlertDialog.Trigger>
-        <Card.Root class="w-96 h-36 group hover:bg-input/50 cursor-pointer">
+        <Card.Root
+            class="w-96 h-36 group hover:bg-foreground/100 cursor-pointer"
+        >
             <Card.Content
                 class="flex flex-col gap-2 items-center justify-center"
             >
-                <Plus class="size-16 opacity-50" />
-                <div>Create a Team</div>
+                <Plus class="size-16 opacity-70 group-hover:opacity-100" />
+                <div class="text-2xl font-extrabold opacity-70 group-hover:opacity-100">
+                    Create a Team
+                </div>
             </Card.Content>
         </Card.Root>
     </AlertDialog.Trigger>
     <AlertDialog.Content>
         <AlertDialog.Header>
-            <AlertDialog.Title>Create a Team</AlertDialog.Title>
+            <AlertDialog.Title class="text-background text-2xl"
+            >Create a Team</AlertDialog.Title>
         </AlertDialog.Header>
 
         <div class="w-4/5 flex flex-col py-8 px-2 mx-auto gap-4">
-            <Label for="{uid}-team-name">Team Name</Label>
+            <Label class="text-background" for="{uid}-team-name"
+            >Team Name</Label>
             <Input
+                class="text-foreground bg-background"
                 id="{uid}-team-name"
                 type="text"
                 placeholder="Team Rocket"

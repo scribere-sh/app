@@ -17,6 +17,8 @@ export const buttonVariants = tv({
             secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/90",
             ghost: "hover:bg-input hover:text-accent-foreground",
             link: "text-primary underline-offset-4 hover:underline",
+            cancel: "bg-foreground text-background border-2 border-background hover:bg-background/15",
+            confirm: "bg-background text-foreground hover:bg-background/85",
         },
         rounded: {
             default: "rounded-md",

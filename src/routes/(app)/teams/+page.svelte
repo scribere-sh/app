@@ -9,8 +9,9 @@
     });
 </script>
 
-<h1 class="text-2xl w-page mb-8 text-background">
-    Teams
+<h1 class="text-left text-background text-7xl font-extrabold w-page mb-8">
+    <span class="font-normal text-4xl">Your</span>
+    <br>Teams
 </h1>
 
 <div class="w-page flex flex-wrap gap-8 items-start">

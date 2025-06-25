@@ -38,15 +38,17 @@
     href={route("/teams/[teamId=uid]", { teamId: team.id })}
     class="no-underline group"
 >
-    <Card.Root class="w-96 h-36 group-hover:bg-input/50">
+    <Card.Root class="w-96 h-36 group-hover:bg-foreground/100">
         <Card.Header class="flex flex-row justify-between items-center">
             <div>
                 <Card.Title class="group-hover:underline">
                     {team.displayName}
                 </Card.Title>
-                <Card.Description class="opacity-75 font-normal">
-                    @{team.handle}
-                </Card.Description>
+                <!--
+                    <Card.Description class="opacity-75 font-normal">
+                        @{team.handle}
+                    </Card.Description>
+                -->
             </div>
 
             <Avatar.Root>
