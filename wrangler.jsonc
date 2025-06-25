@@ -41,6 +41,8 @@
 
         // for use in the public area
         "PUBLIC_ORIGIN": "https://app.scribere.sh",
+
+        "ACCEPTING_REGISTRATIONS": "true",
     },
 
     // Binding to our ARGON2 Worker
