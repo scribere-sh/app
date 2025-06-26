@@ -40,7 +40,9 @@
     <Tabs.Root value="home" class="w-full mt-4">
         <Tabs.List class="w-full">
             <Tabs.Trigger value="home">Home</Tabs.Trigger>
-            <Tabs.Trigger value="spaces">Spaces</Tabs.Trigger>
+            {#if data.userCanRead}
+                <Tabs.Trigger value="spaces">Spaces</Tabs.Trigger>
+            {/if}
             <Tabs.Trigger value="files">Files</Tabs.Trigger>
             {#if data.userIsOwner}
                 <Tabs.Trigger value="permissions">Members & Permissions</Tabs.Trigger>

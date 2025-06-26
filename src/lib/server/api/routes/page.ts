@@ -77,6 +77,8 @@ export default new Hono<Env>()
 
             if (!page) throw new HTTPException(404, { message: "page not found" });
 
+            console.log("access control");
+
             await accessControl(
                 () =>
                     userHasPermissionForSpace(
@@ -85,6 +87,8 @@ export default new Hono<Env>()
                         PERMISSION_WRITE_SPACE,
                     ),
             );
+
+            console.log("access control passed");
 
             await db.query
                 .update(pagesTable)

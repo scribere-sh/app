@@ -13,9 +13,15 @@ export * as team from "./team";
 //     await next();
 // });
 
+// this mf isn't running the checks
+
 export const accessControl = async (...checks: (() => Promise<boolean> | boolean)[]) => {
+    console.log(checks);
+
     for (const check of checks) {
+        console.log("running access control check");
         if (!(await check())) {
+            console.log("access control failed");
             throw new HTTPException(401, { message: "Access Denied" });
         }
     }
